@@ -19,19 +19,19 @@
  */
 
 /*
- * * both obj and data should not be NULL. they should point to some valid
+ * * both bytes and data should not be NULL. they should point to some valid
  *   space such as the following:
  *   * heap space allocated by some malloc implementation
  *   * stack space
  * * should do a deep copy
  */
-typedef int (*tloCopyConstructFunction)(void *obj, const void *data);
+typedef int (*tloCopyConstructFunction)(void *bytes, const void *data);
 
 /*
- * * does nothing if obj is NULL
+ * * does nothing if bytes is NULL
  * * should not fail
  */
-typedef void (*tloDestructFunction)(void *obj);
+typedef void (*tloDestructFunction)(void *bytes);
 
 
 typedef struct tloType {
@@ -42,8 +42,8 @@ typedef struct tloType {
 
 bool tloTypeIsValid(const tloType *type);
 
-int tloIntTypeCopyConstruct(void *obj, const void *data);
-void tloIntTypeDestruct(void *obj);
+int tloIntTypeCopyConstruct(void *bytes, const void *data);
+void tloIntTypeDestruct(void *bytes);
 extern const tloType tloIntType;
 
 typedef void *(*tloMallocFunction)(size_t byteCount);

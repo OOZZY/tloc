@@ -12,17 +12,17 @@ bool tloTypeIsValid(const tloType *type) {
   );
 }
 
-int tloIntTypeCopyConstruct(void *obj, const void *data) {
-  assert(obj);
+int tloIntTypeCopyConstruct(void *bytes, const void *data) {
+  assert(bytes);
   assert(data);
 
-  memcpy(obj, data, sizeof(int));
+  memcpy(bytes, data, sizeof(int));
 
   return 0;
 }
 
-void tloIntTypeDestruct(void *obj) {
-  (void)obj;
+void tloIntTypeDestruct(void *bytes) {
+  (void)bytes;
 }
 
 const tloType tloIntType = {
