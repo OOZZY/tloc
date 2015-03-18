@@ -186,6 +186,7 @@ const tloType *tloDArrayGetType(const tloDArray *array) {
 
   return array->type;
 }
+
 const tloAllocator *tloDArrayGetAllocator(const tloDArray *array) {
   assert(tloDArrayIsValid(array));
 
