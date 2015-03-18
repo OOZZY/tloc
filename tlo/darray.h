@@ -28,7 +28,7 @@ void tloDArrayDestruct(tloDArray *array);
 tloDArray *tloDArrayMake(const tloType *type, const tloAllocator *allocator);
 
 /*
- * * allocator->malloc then tloDArrayCopyConstruct
+ * * other->allocator->malloc then tloDArrayCopyConstruct
  */
 tloDArray *tloDArrayMakeCopy(const tloDArray *other);
 
