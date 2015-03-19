@@ -110,8 +110,7 @@ void tloDArrayDestruct(tloDArray *array) {
   array->bytes = NULL;
 }
 
-tloDArray *tloDArrayMake(const tloType *type, const tloAllocator *allocator)
-{
+tloDArray *tloDArrayMake(const tloType *type, const tloAllocator *allocator) {
   assert(tloTypeIsValid(type));
   assert(tloAllocatorIsValid(allocator));
 
