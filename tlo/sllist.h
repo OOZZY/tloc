@@ -17,6 +17,7 @@ typedef struct tloSLList {
   const tloType *type;
   const tloAllocator *allocator;
   tloSLListNode *head;
+  tloSLListNode *tail;
   size_t size;
 } tloSLList;
 

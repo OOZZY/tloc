@@ -6,7 +6,9 @@ bool tloSLListIsValid(const tloSLList *list) {
     (list) &&
     (tloTypeIsValid(list->type)) &&
     (tloAllocatorIsValid(list->allocator)) &&
-    ((list->head == NULL) == (list->size == 0))
+    ((list->head == NULL) == (list->size == 0)) &&
+    ((list->tail == NULL) == (list->size == 0)) &&
+    ((list->head == NULL) == (list->tail == NULL))
   );
 }
 
@@ -20,6 +22,7 @@ int tloSLListConstruct(tloSLList *list, const tloType *type,
   list->type = type;
   list->allocator = allocator;
   list->head = NULL;
+  list->tail = NULL;
   list->size = 0;
 
   return 0;
@@ -54,6 +57,7 @@ void tloSLListDestruct(tloSLList *list) {
   freeAllNodes(list);
 
   list->head = NULL;
+  list->tail = NULL;
 }
 
 tloSLList *tloSLListMake(const tloType *type, const tloAllocator *allocator) {
