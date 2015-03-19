@@ -56,6 +56,35 @@ void tloSLListDestruct(tloSLList *list) {
   list->head = NULL;
 }
 
+tloSLList *tloSLListMake(const tloType *type, const tloAllocator *allocator) {
+  assert(tloTypeIsValid(type));
+  assert(tloAllocatorIsValid(allocator));
+
+  tloSLList *list = allocator->malloc(sizeof(*list));
+  if (!list) {
+    return NULL;
+  }
+
+  if (tloSLListConstruct(list, type, allocator)) {
+    allocator->free(list);
+    return NULL;
+  }
+
+  return list;
+}
+
+void tloSLListDelete(tloSLList *list) {
+  if (!list) {
+    return;
+  }
+
+  assert(tloSLListIsValid(list));
+
+  tloSLListDestruct(list);
+  tloFreeFunction free = list->allocator->free;
+  free(list);
+}
+
 const tloType *tloSLListGetType(const tloSLList *list) {
   assert(tloSLListIsValid(list));
 

@@ -21,12 +21,27 @@ void testSLListIntConstructDestruct(void) {
   ints = NULL;
 }
 
+void testSLListIntMakeDelete(void) {
+  tloSLList *ints = tloSLListMake(&tloIntType, &tloCountingAllocator);
+  assert(ints);
+
+  assert(tloSLListGetSize(ints) == 0);
+  assert(tloSLListIsEmpty(ints));
+  assert(tloSLListGetType(ints) == &tloIntType);
+  assert(tloSLListGetAllocator(ints) == &tloCountingAllocator);
+
+  tloSLListDelete(ints);
+
+  ints = NULL;
+}
+
 int main(void) {
   printf("sizeof(tloSLList): %zu\n", sizeof(tloSLList));
   assert(tloCountingAllocatorMallocCount == 0);
   assert(tloCountingAllocatorMallocCount == tloCountingAllocatorFreeCount);
 
   testSLListIntConstructDestruct();
+  testSLListIntMakeDelete();
 
   printf("malloc count: %lu; free count: %lu\n",
          tloCountingAllocatorMallocCount,

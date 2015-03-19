@@ -24,6 +24,17 @@ bool tloSLListIsValid(const tloSLList *list);
 int tloSLListConstruct(tloSLList *list, const tloType *type,
                        const tloAllocator *allocator);
 void tloSLListDestruct(tloSLList *list);
+
+/*
+ * * allocator->malloc then tloSLListConstruct
+ */
+tloSLList *tloSLListMake(const tloType *type, const tloAllocator *allocator);
+
+/*
+ * * tloSLListDestruct then list->allocator->free
+ */
+void tloSLListDelete(tloSLList *list);
+
 const tloType *tloSLListGetType(const tloSLList *list);
 const tloAllocator *tloSLListGetAllocator(const tloSLList *list);
 size_t tloSLListGetSize(const tloSLList *list);
