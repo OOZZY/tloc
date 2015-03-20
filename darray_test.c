@@ -3,6 +3,8 @@
 #include <assert.h>
 #include <stdio.h>
 
+#define SOME_NUMBER 42
+
 void testDArrayIntConstructDestruct(void) {
   tloDArray *ints = malloc(sizeof(*ints));
   assert(ints);
@@ -44,7 +46,7 @@ void testDArrayIntPushBackCopyOnce(void) {
   int error = tloDArrayConstruct(ints, &tloIntType, &tloCountingAllocator);
   assert(!error);
 
-  error = tloDArrayPushBackCopy(ints, &(int){42});
+  error = tloDArrayPushBackCopy(ints, &(int){SOME_NUMBER});
   assert(!error);
 
   assert(tloDArrayGetSize(ints) == 1);
@@ -53,12 +55,12 @@ void testDArrayIntPushBackCopyOnce(void) {
   assert(tloDArrayGetType(ints) == &tloIntType);
   assert(tloDArrayGetAllocator(ints) == &tloCountingAllocator);
 
-  assert(*(const int *)tloDArrayGetElementReadOnly(ints, 0) == 42);
-  assert(*(int *)tloDArrayGetElementReadWrite(ints, 0) == 42);
-  assert(*(const int *)tloDArrayGetFrontReadOnly(ints) == 42);
-  assert(*(int *)tloDArrayGetFrontReadWrite(ints) == 42);
-  assert(*(const int *)tloDArrayGetBackReadOnly(ints) == 42);
-  assert(*(int *)tloDArrayGetBackReadWrite(ints) == 42);
+  assert(*(const int *)tloDArrayGetElementReadOnly(ints, 0) == SOME_NUMBER);
+  assert(*(int *)tloDArrayGetElementReadWrite(ints, 0) == SOME_NUMBER);
+  assert(*(const int *)tloDArrayGetFrontReadOnly(ints) == SOME_NUMBER);
+  assert(*(int *)tloDArrayGetFrontReadWrite(ints) == SOME_NUMBER);
+  assert(*(const int *)tloDArrayGetBackReadOnly(ints) == SOME_NUMBER);
+  assert(*(int *)tloDArrayGetBackReadWrite(ints) == SOME_NUMBER);
 
   tloDArrayDestruct(ints);
   free(ints);
@@ -73,7 +75,7 @@ void testDArrayIntPushBackMoveOnce(void) {
   int error = tloDArrayConstruct(ints, &tloIntType, &tloCountingAllocator);
   assert(!error);
 
-  int value = 42;
+  int value = SOME_NUMBER;
   error = tloDArrayPushBackMove(ints, &value);
   assert(!error);
 
@@ -84,12 +86,12 @@ void testDArrayIntPushBackMoveOnce(void) {
   assert(tloDArrayGetType(ints) == &tloIntType);
   assert(tloDArrayGetAllocator(ints) == &tloCountingAllocator);
 
-  assert(*(const int *)tloDArrayGetElementReadOnly(ints, 0) == 42);
-  assert(*(int *)tloDArrayGetElementReadWrite(ints, 0) == 42);
-  assert(*(const int *)tloDArrayGetFrontReadOnly(ints) == 42);
-  assert(*(int *)tloDArrayGetFrontReadWrite(ints) == 42);
-  assert(*(const int *)tloDArrayGetBackReadOnly(ints) == 42);
-  assert(*(int *)tloDArrayGetBackReadWrite(ints) == 42);
+  assert(*(const int *)tloDArrayGetElementReadOnly(ints, 0) == SOME_NUMBER);
+  assert(*(int *)tloDArrayGetElementReadWrite(ints, 0) == SOME_NUMBER);
+  assert(*(const int *)tloDArrayGetFrontReadOnly(ints) == SOME_NUMBER);
+  assert(*(int *)tloDArrayGetFrontReadWrite(ints) == SOME_NUMBER);
+  assert(*(const int *)tloDArrayGetBackReadOnly(ints) == SOME_NUMBER);
+  assert(*(int *)tloDArrayGetBackReadWrite(ints) == SOME_NUMBER);
 
   tloDArrayDestruct(ints);
   free(ints);
@@ -104,7 +106,7 @@ void testDArrayIntPushBackCopyOncePopBackOnce(void) {
   int error = tloDArrayConstruct(ints, &tloIntType, &tloCountingAllocator);
   assert(!error);
 
-  error = tloDArrayPushBackCopy(ints, &(int){42});
+  error = tloDArrayPushBackCopy(ints, &(int){SOME_NUMBER});
   assert(!error);
 
   tloDArrayPopBack(ints);
@@ -128,7 +130,7 @@ void testDArrayIntPushBackCopyUntilResize(void) {
   int error = tloDArrayConstruct(ints, &tloIntType, &tloCountingAllocator);
   assert(!error);
 
-  for (size_t i = 0; i < 42; ++i) {
+  for (size_t i = 0; i < SOME_NUMBER; ++i) {
     error = tloDArrayPushBackCopy(ints, &(int){i});
     assert(!error);
 
@@ -159,12 +161,12 @@ void testDArrayIntPushBackCopyUntilResizePopBackUntilEmpty(void) {
   int error = tloDArrayConstruct(ints, &tloIntType, &tloCountingAllocator);
   assert(!error);
 
-  for (size_t i = 0; i < 42; ++i) {
+  for (size_t i = 0; i < SOME_NUMBER; ++i) {
     error = tloDArrayPushBackCopy(ints, &(int){i});
     assert(!error);
   }
 
-  for (size_t i = 41; i <= 41; --i) {
+  for (size_t i = SOME_NUMBER - 1; i <= SOME_NUMBER - 1; --i) {
     assert(tloDArrayGetSize(ints) == i + 1);
     assert(tloDArrayGetCapacity(ints) >= i + 1);
     assert(!tloDArrayIsEmpty(ints));
@@ -200,7 +202,7 @@ void testDArrayIntPushBackMoveUntilResize(void) {
   int error = tloDArrayConstruct(ints, &tloIntType, &tloCountingAllocator);
   assert(!error);
 
-  for (size_t i = 0; i < 42; ++i) {
+  for (size_t i = 0; i < SOME_NUMBER; ++i) {
     int value = (int)i;
     error = tloDArrayPushBackMove(ints, &value);
     assert(!error);
@@ -230,7 +232,7 @@ void testDArrayIntCopy(void) {
   tloDArray *ints = tloDArrayMake(&tloIntType, &tloCountingAllocator);
   assert(ints);
 
-  for (int i = 0; i < 42; ++i) {
+  for (int i = 0; i < SOME_NUMBER; ++i) {
     int error = tloDArrayPushBackCopy(ints, &i);
     assert(!error);
   }
@@ -265,7 +267,7 @@ void testDArrayIntCopyConstruct(void) {
   tloDArray *ints = tloDArrayMake(&tloIntType, &tloCountingAllocator);
   assert(ints);
 
-  for (int i = 0; i < 42; ++i) {
+  for (int i = 0; i < SOME_NUMBER; ++i) {
     int error = tloDArrayPushBackCopy(ints, &i);
     assert(!error);
   }
@@ -302,7 +304,7 @@ void testDArrayIntMakeCopy(void) {
   tloDArray *ints = tloDArrayMake(&tloIntType, &tloCountingAllocator);
   assert(ints);
 
-  for (int i = 0; i < 42; ++i) {
+  for (int i = 0; i < SOME_NUMBER; ++i) {
     int error = tloDArrayPushBackCopy(ints, &i);
     assert(!error);
   }
