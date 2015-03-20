@@ -154,6 +154,39 @@ void testDArrayIntPushBackCopyUntilResize(void) {
   ints = NULL;
 }
 
+void testDArrayIntPushBackMoveUntilResize(void) {
+  tloDArray *ints = malloc(sizeof(*ints));
+  assert(ints);
+
+  int error = tloDArrayConstruct(ints, &tloIntType, &tloCountingAllocator);
+  assert(!error);
+
+  for (size_t i = 0; i < SOME_NUMBER; ++i) {
+    int value = (int)i;
+    error = tloDArrayPushBackMove(ints, &value);
+    assert(!error);
+
+    assert(value == 0);
+    assert(tloDArrayGetSize(ints) == i + 1);
+    assert(tloDArrayGetCapacity(ints) >= tloDArrayGetSize(ints));
+    assert(!tloDArrayIsEmpty(ints));
+    assert(tloDArrayGetType(ints) == &tloIntType);
+    assert(tloDArrayGetAllocator(ints) == &tloCountingAllocator);
+
+    assert(*(const int *)tloDArrayGetElementReadOnly(ints, i) == (int){i});
+    assert(*(int *)tloDArrayGetElementReadWrite(ints, i) == (int){i});
+    assert(*(const int *)tloDArrayGetFrontReadOnly(ints) == 0);
+    assert(*(int *)tloDArrayGetFrontReadWrite(ints) == 0);
+    assert(*(const int *)tloDArrayGetBackReadOnly(ints) == (int){i});
+    assert(*(int *)tloDArrayGetBackReadWrite(ints) == (int){i});
+  }
+
+  tloDArrayDestruct(ints);
+  free(ints);
+
+  ints = NULL;
+}
+
 void testDArrayIntPushBackCopyUntilResizePopBackUntilEmpty(void) {
   tloDArray *ints = malloc(sizeof(*ints));
   assert(ints);
@@ -188,39 +221,6 @@ void testDArrayIntPushBackCopyUntilResizePopBackUntilEmpty(void) {
   assert(tloDArrayIsEmpty(ints));
   assert(tloDArrayGetType(ints) == &tloIntType);
   assert(tloDArrayGetAllocator(ints) == &tloCountingAllocator);
-
-  tloDArrayDestruct(ints);
-  free(ints);
-
-  ints = NULL;
-}
-
-void testDArrayIntPushBackMoveUntilResize(void) {
-  tloDArray *ints = malloc(sizeof(*ints));
-  assert(ints);
-
-  int error = tloDArrayConstruct(ints, &tloIntType, &tloCountingAllocator);
-  assert(!error);
-
-  for (size_t i = 0; i < SOME_NUMBER; ++i) {
-    int value = (int)i;
-    error = tloDArrayPushBackMove(ints, &value);
-    assert(!error);
-
-    assert(value == 0);
-    assert(tloDArrayGetSize(ints) == i + 1);
-    assert(tloDArrayGetCapacity(ints) >= tloDArrayGetSize(ints));
-    assert(!tloDArrayIsEmpty(ints));
-    assert(tloDArrayGetType(ints) == &tloIntType);
-    assert(tloDArrayGetAllocator(ints) == &tloCountingAllocator);
-
-    assert(*(const int *)tloDArrayGetElementReadOnly(ints, i) == (int){i});
-    assert(*(int *)tloDArrayGetElementReadWrite(ints, i) == (int){i});
-    assert(*(const int *)tloDArrayGetFrontReadOnly(ints) == 0);
-    assert(*(int *)tloDArrayGetFrontReadWrite(ints) == 0);
-    assert(*(const int *)tloDArrayGetBackReadOnly(ints) == (int){i});
-    assert(*(int *)tloDArrayGetBackReadWrite(ints) == (int){i});
-  }
 
   tloDArrayDestruct(ints);
   free(ints);
