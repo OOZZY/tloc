@@ -30,8 +30,8 @@ int tloSLListConstruct(tloSLList *list, const tloType *type,
 }
 
 static void freeAllNodes(tloSLList *list) {
-  tloSLListNode *previous = NULL;
-  tloSLListNode *current = list->head;
+  tloSLLNode *previous = NULL;
+  tloSLLNode *current = list->head;
 
   while (current) {
     list->type->destruct(current->bytes);
@@ -147,10 +147,8 @@ void *tloSLListGetBackReadWrite(tloSLList *list) {
   return list->tail->bytes;
 }
 
-static tloSLListNode *makeNodeWithCopiedData(tloSLList *list,
-                                             const void *data)
-{
-  tloSLListNode *node = list->allocator->malloc(sizeof(*node));
+static tloSLLNode *makeNodeWithCopiedData(tloSLList *list, const void *data) {
+  tloSLLNode *node = list->allocator->malloc(sizeof(*node));
   if (!node) {
     return NULL;
   }
@@ -171,8 +169,8 @@ static tloSLListNode *makeNodeWithCopiedData(tloSLList *list,
   return node;
 }
 
-static tloSLListNode *makeNodeWithMovedData(tloSLList *list, void *data) {
-  tloSLListNode *node = list->allocator->malloc(sizeof(*node));
+static tloSLLNode *makeNodeWithMovedData(tloSLList *list, void *data) {
+  tloSLLNode *node = list->allocator->malloc(sizeof(*node));
   if (!node) {
     return NULL;
   }
@@ -190,7 +188,7 @@ static tloSLListNode *makeNodeWithMovedData(tloSLList *list, void *data) {
   return node;
 }
 
-static void pushBackNode(tloSLList *list, tloSLListNode *node) {
+static void pushBackNode(tloSLList *list, tloSLLNode *node) {
   if (!list->head) {
     list->head = node;
     list->tail = list->head;
@@ -206,7 +204,7 @@ int tloSLListPushBackCopy(tloSLList *list, const void *data) {
   assert(tloSLListIsValid(list));
   assert(data);
 
-  tloSLListNode *newNode = makeNodeWithCopiedData(list, data);
+  tloSLLNode *newNode = makeNodeWithCopiedData(list, data);
   if (!newNode) {
     return 1;
   }
@@ -220,7 +218,7 @@ int tloSLListPushBackMove(tloSLList *list, void *data) {
   assert(tloSLListIsValid(list));
   assert(data);
 
-  tloSLListNode *newNode = makeNodeWithMovedData(list, data);
+  tloSLLNode *newNode = makeNodeWithMovedData(list, data);
   if (!newNode) {
     return 1;
   }

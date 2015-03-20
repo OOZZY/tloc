@@ -8,16 +8,16 @@
  * * all operations are transactional
  */
 
-typedef struct tloSLListNode {
+typedef struct tloSLLNode {
   void *bytes;
-  struct tloSLListNode *next;
-} tloSLListNode;
+  struct tloSLLNode *next;
+} tloSLLNode;
 
 typedef struct tloSLList {
   const tloType *type;
   const tloAllocator *allocator;
-  tloSLListNode *head;
-  tloSLListNode *tail;
+  tloSLLNode *head;
+  tloSLLNode *tail;
   size_t size;
 } tloSLList;
 
