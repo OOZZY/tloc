@@ -299,6 +299,18 @@ static int pushBackCopy(tloDArray *array, const void *data) {
   return 0;
 }
 
+static int pushBackMove(tloDArray *array, void *data) {
+  void *destination =
+    getElementReadWrite(array->bytes, array->size, array->type->sizeOf);
+
+  memcpy(destination, data, array->type->sizeOf);
+  memset(data, 0, array->type->sizeOf);
+
+  ++array->size;
+
+  return 0;
+}
+
 int tloDArrayPushBackCopy(tloDArray *array, const void *data) {
   assert(tloDArrayIsValid(array));
   assert(data);
@@ -314,18 +326,6 @@ int tloDArrayPushBackCopy(tloDArray *array, const void *data) {
   if (pushBackCopy(array, data)) {
     return 1;
   }
-
-  return 0;
-}
-
-static int pushBackMove(tloDArray *array, void *data) {
-  void *destination =
-    getElementReadWrite(array->bytes, array->size, array->type->sizeOf);
-
-  memcpy(destination, data, array->type->sizeOf);
-  memset(data, 0, array->type->sizeOf);
-
-  ++array->size;
 
   return 0;
 }
