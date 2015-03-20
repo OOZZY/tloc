@@ -309,7 +309,7 @@ static int pushBackMovedData(tloDArray *array, void *data) {
   return 0;
 }
 
-int tloDArrayPushBackCopy(tloDArray *array, const void *data) {
+int tloDArrayPushBack(tloDArray *array, const void *data) {
   assert(tloDArrayIsValid(array));
   assert(data);
 

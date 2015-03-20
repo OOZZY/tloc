@@ -48,7 +48,7 @@ void *tloSLListGetBackReadWrite(tloSLList *list);
 /*
  * * deep copies data using list->type->copy
  */
-int tloSLListPushBackCopy(tloSLList *list, const void *data);
+int tloSLListPushBack(tloSLList *list, const void *data);
 
 /*
  * * shallow copies data using memcpy then zeroes out data using memset

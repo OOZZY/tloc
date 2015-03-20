@@ -47,14 +47,14 @@ void testDArrayDeleteWithNull(void) {
   tloDArrayDelete(NULL);
 }
 
-void testDArrayIntPushBackCopyOnce(void) {
+void testDArrayIntPushBackOnce(void) {
   tloDArray *ints = malloc(sizeof(*ints));
   assert(ints);
 
   int error = tloDArrayConstruct(ints, &tloIntType, &tloCountingAllocator);
   assert(!error);
 
-  error = tloDArrayPushBackCopy(ints, &(int){SOME_NUMBER});
+  error = tloDArrayPushBack(ints, &(int){SOME_NUMBER});
   assert(!error);
 
   assert(tloDArrayGetSize(ints) == 1);
@@ -107,14 +107,14 @@ void testDArrayIntPushBackMoveOnce(void) {
   ints = NULL;
 }
 
-void testDArrayIntPushBackCopyOncePopBackOnce(void) {
+void testDArrayIntPushBackOncePopBackOnce(void) {
   tloDArray *ints = malloc(sizeof(*ints));
   assert(ints);
 
   int error = tloDArrayConstruct(ints, &tloIntType, &tloCountingAllocator);
   assert(!error);
 
-  error = tloDArrayPushBackCopy(ints, &(int){SOME_NUMBER});
+  error = tloDArrayPushBack(ints, &(int){SOME_NUMBER});
   assert(!error);
 
   tloDArrayPopBack(ints);
@@ -131,7 +131,7 @@ void testDArrayIntPushBackCopyOncePopBackOnce(void) {
   ints = NULL;
 }
 
-void testDArrayIntPushBackCopyUntilResize(void) {
+void testDArrayIntPushBackUntilResize(void) {
   tloDArray *ints = malloc(sizeof(*ints));
   assert(ints);
 
@@ -139,7 +139,7 @@ void testDArrayIntPushBackCopyUntilResize(void) {
   assert(!error);
 
   for (size_t i = 0; i < SOME_NUMBER; ++i) {
-    error = tloDArrayPushBackCopy(ints, &(int){i});
+    error = tloDArrayPushBack(ints, &(int){i});
     assert(!error);
 
     assert(tloDArrayGetSize(ints) == i + 1);
@@ -195,7 +195,7 @@ void testDArrayIntPushBackMoveUntilResize(void) {
   ints = NULL;
 }
 
-void testDArrayIntPushBackCopyUntilResizePopBackUntilEmpty(void) {
+void testDArrayIntPushBackUntilResizePopBackUntilEmpty(void) {
   tloDArray *ints = malloc(sizeof(*ints));
   assert(ints);
 
@@ -203,7 +203,7 @@ void testDArrayIntPushBackCopyUntilResizePopBackUntilEmpty(void) {
   assert(!error);
 
   for (size_t i = 0; i < SOME_NUMBER; ++i) {
-    error = tloDArrayPushBackCopy(ints, &(int){i});
+    error = tloDArrayPushBack(ints, &(int){i});
     assert(!error);
   }
 
@@ -241,7 +241,7 @@ void testDArrayIntCopyConstruct(void) {
   assert(ints);
 
   for (int i = 0; i < SOME_NUMBER; ++i) {
-    int error = tloDArrayPushBackCopy(ints, &i);
+    int error = tloDArrayPushBack(ints, &i);
     assert(!error);
   }
 
@@ -278,7 +278,7 @@ void testDArrayIntMakeCopy(void) {
   assert(ints);
 
   for (int i = 0; i < SOME_NUMBER; ++i) {
-    int error = tloDArrayPushBackCopy(ints, &i);
+    int error = tloDArrayPushBack(ints, &i);
     assert(!error);
   }
 
@@ -310,7 +310,7 @@ void testDArrayIntCopy(void) {
   assert(ints);
 
   for (int i = 0; i < SOME_NUMBER; ++i) {
-    int error = tloDArrayPushBackCopy(ints, &i);
+    int error = tloDArrayPushBack(ints, &i);
     assert(!error);
   }
 
@@ -349,12 +349,12 @@ int main(void) {
   testDArrayIntMakeDelete();
   testDArrayDestructWithNull();
   testDArrayDeleteWithNull();
-  testDArrayIntPushBackCopyOnce();
+  testDArrayIntPushBackOnce();
   testDArrayIntPushBackMoveOnce();
-  testDArrayIntPushBackCopyOncePopBackOnce();
-  testDArrayIntPushBackCopyUntilResize();
+  testDArrayIntPushBackOncePopBackOnce();
+  testDArrayIntPushBackUntilResize();
   testDArrayIntPushBackMoveUntilResize();
-  testDArrayIntPushBackCopyUntilResizePopBackUntilEmpty();
+  testDArrayIntPushBackUntilResizePopBackUntilEmpty();
   testDArrayIntCopyConstruct();
   testDArrayIntMakeCopy();
   testDArrayIntCopy();

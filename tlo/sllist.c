@@ -200,7 +200,7 @@ static void pushBackNode(tloSLList *list, tloSLLNode *node) {
   ++list->size;
 }
 
-int tloSLListPushBackCopy(tloSLList *list, const void *data) {
+int tloSLListPushBack(tloSLList *list, const void *data) {
   assert(tloSLListIsValid(list));
   assert(data);
 

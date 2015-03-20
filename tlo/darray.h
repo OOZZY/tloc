@@ -53,7 +53,7 @@ void *tloDArrayGetBackReadWrite(tloDArray *array);
 /*
  * * deep copies data using array->type->copy
  */
-int tloDArrayPushBackCopy(tloDArray *array, const void *data);
+int tloDArrayPushBack(tloDArray *array, const void *data);
 
 /*
  * * shallow copies data using memcpy then zeroes out data using memset
