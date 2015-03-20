@@ -61,9 +61,9 @@ void testSLListIntPushBackOnce(void) {
   assert(tloSLListGetAllocator(ints) == &tloCountingAllocator);
 
   assert(*(const int *)tloSLListGetFront(ints) == SOME_NUMBER);
-  assert(*(int *)tloSLListGetFrontReadWrite(ints) == SOME_NUMBER);
+  assert(*(int *)tloSLListGetFrontRW(ints) == SOME_NUMBER);
   assert(*(const int *)tloSLListGetBack(ints) == SOME_NUMBER);
-  assert(*(int *)tloSLListGetBackReadWrite(ints) == SOME_NUMBER);
+  assert(*(int *)tloSLListGetBackRW(ints) == SOME_NUMBER);
 
   tloSLListDestruct(ints);
   free(ints);
@@ -89,9 +89,9 @@ void testSLListIntPushBackMoveOnce(void) {
   assert(tloSLListGetAllocator(ints) == &tloCountingAllocator);
 
   assert(*(const int *)tloSLListGetFront(ints) == SOME_NUMBER);
-  assert(*(int *)tloSLListGetFrontReadWrite(ints) == SOME_NUMBER);
+  assert(*(int *)tloSLListGetFrontRW(ints) == SOME_NUMBER);
   assert(*(const int *)tloSLListGetBack(ints) == SOME_NUMBER);
-  assert(*(int *)tloSLListGetBackReadWrite(ints) == SOME_NUMBER);
+  assert(*(int *)tloSLListGetBackRW(ints) == SOME_NUMBER);
 
   tloSLListDestruct(ints);
   free(ints);
@@ -116,9 +116,9 @@ void testSLListIntPushBackManyTimes(void) {
     assert(tloSLListGetAllocator(ints) == &tloCountingAllocator);
 
     assert(*(const int *)tloSLListGetFront(ints) == 0);
-    assert(*(int *)tloSLListGetFrontReadWrite(ints) == 0);
+    assert(*(int *)tloSLListGetFrontRW(ints) == 0);
     assert(*(const int *)tloSLListGetBack(ints) == (int){i});
-    assert(*(int *)tloSLListGetBackReadWrite(ints) == (int){i});
+    assert(*(int *)tloSLListGetBackRW(ints) == (int){i});
   }
 
   tloSLListDestruct(ints);
@@ -146,9 +146,9 @@ void testSLListIntPushBackMoveManyTimes(void) {
     assert(tloSLListGetAllocator(ints) == &tloCountingAllocator);
 
     assert(*(const int *)tloSLListGetFront(ints) == 0);
-    assert(*(int *)tloSLListGetFrontReadWrite(ints) == 0);
+    assert(*(int *)tloSLListGetFrontRW(ints) == 0);
     assert(*(const int *)tloSLListGetBack(ints) == (int){i});
-    assert(*(int *)tloSLListGetBackReadWrite(ints) == (int){i});
+    assert(*(int *)tloSLListGetBackRW(ints) == (int){i});
   }
 
   tloSLListDestruct(ints);

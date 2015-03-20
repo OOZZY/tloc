@@ -41,9 +41,9 @@ const tloAllocator *tloSLListGetAllocator(const tloSLList *list);
 size_t tloSLListGetSize(const tloSLList *list);
 bool tloSLListIsEmpty(const tloSLList *list);
 const void *tloSLListGetFront(const tloSLList *list);
-void *tloSLListGetFrontReadWrite(tloSLList *list);
+void *tloSLListGetFrontRW(tloSLList *list);
 const void *tloSLListGetBack(const tloSLList *list);
-void *tloSLListGetBackReadWrite(tloSLList *list);
+void *tloSLListGetBackRW(tloSLList *list);
 
 /*
  * * deep copies data using list->type->copy
@@ -57,10 +57,10 @@ int tloSLListPushBackMove(tloSLList *list, void *data);
 
 bool tloSLLNodeIsValid(const tloSLLNode *node);
 const tloSLLNode *tloSLLNodeGetHead(const tloSLList *list);
-tloSLLNode *tloSLLNodeGetHeadReadWrite(tloSLList *list);
+tloSLLNode *tloSLLNodeGetHeadRW(tloSLList *list);
 const void *tloSLLNodeGetElement(const tloSLLNode *node);
-void *tloSLLNodeGetElementReadWrite(tloSLLNode *node);
+void *tloSLLNodeGetElementRW(tloSLLNode *node);
 const tloSLLNode *tloSLLNodeGetNext(const tloSLLNode *node);
-tloSLLNode *tloSLLNodeGetNextReadWrite(tloSLLNode *node);
+tloSLLNode *tloSLLNodeGetNextRW(tloSLLNode *node);
 
 #endif // TLO_SLLIST_H

@@ -126,7 +126,7 @@ const void *tloSLListGetFront(const tloSLList *list) {
   return list->head->bytes;
 }
 
-void *tloSLListGetFrontReadWrite(tloSLList *list) {
+void *tloSLListGetFrontRW(tloSLList *list) {
   assert(tloSLListIsValid(list));
   assert(!tloSLListIsEmpty(list));
 
@@ -140,7 +140,7 @@ const void *tloSLListGetBack(const tloSLList *list) {
   return list->tail->bytes;
 }
 
-void *tloSLListGetBackReadWrite(tloSLList *list) {
+void *tloSLListGetBackRW(tloSLList *list) {
   assert(tloSLListIsValid(list));
   assert(!tloSLListIsEmpty(list));
 
@@ -241,7 +241,7 @@ const tloSLLNode *tloSLLNodeGetHead(const tloSLList *list) {
   return list->head;
 }
 
-tloSLLNode *tloSLLNodeGetHeadReadWrite(tloSLList *list) {
+tloSLLNode *tloSLLNodeGetHeadRW(tloSLList *list) {
   assert(tloSLListIsValid(list));
 
   return list->head;
@@ -253,7 +253,7 @@ const void *tloSLLNodeGetElement(const tloSLLNode *node) {
   return node->bytes;
 }
 
-void *tloSLLNodeGetElementReadWrite(tloSLLNode *node) {
+void *tloSLLNodeGetElementRW(tloSLLNode *node) {
   assert(tloSLLNodeIsValid(node));
 
   return node->bytes;
@@ -265,7 +265,7 @@ const tloSLLNode *tloSLLNodeGetNext(const tloSLLNode *node) {
   return node->next;
 }
 
-tloSLLNode *tloSLLNodeGetNextReadWrite(tloSLLNode *node) {
+tloSLLNode *tloSLLNodeGetNextRW(tloSLLNode *node) {
   assert(tloSLLNodeIsValid(node));
 
   return node->next;

@@ -33,9 +33,7 @@ static const void *getElement(const void *bytes, size_t index,
   return (const char *)bytes + index * sizeOfElement;
 }
 
-static void *getElementReadWrite(void *bytes, size_t index,
-                                 size_t sizeOfElement)
-{
+static void *getElementRW(void *bytes, size_t index, size_t sizeOfElement) {
   return (char *)bytes + index * sizeOfElement;
 }
 
@@ -44,14 +42,14 @@ static void destructElements(void *bytes, size_t elementCount,
                              tloDestructFunction destruct)
 {
   for (size_t i = 0; i < elementCount; ++i) {
-    void *element = getElementReadWrite(bytes, i, sizeOfElement);
+    void *element = getElementRW(bytes, i, sizeOfElement);
     destruct(element);
   }
 }
 
 static int deepCopyAllElements(void *newBytes, const tloDArray *other) {
   for (size_t i = 0; i < other->size; ++i) {
-    void *destination = getElementReadWrite(newBytes, i, other->type->sizeOf);
+    void *destination = getElementRW(newBytes, i, other->type->sizeOf);
     const void *source = getElement(other->bytes, i, other->type->sizeOf);
 
     if (other->type->copyConstruct(destination, source)) {
@@ -216,12 +214,12 @@ const void *tloDArrayGetElement(const tloDArray *array, size_t index) {
   return getElement(array->bytes, index, array->type->sizeOf);
 }
 
-void *tloDArrayGetElementReadWrite(tloDArray *array, size_t index) {
+void *tloDArrayGetElementRW(tloDArray *array, size_t index) {
   assert(tloDArrayIsValid(array));
   assert(!tloDArrayIsEmpty(array));
   assert(index < array->size);
 
-  return getElementReadWrite(array->bytes, index, array->type->sizeOf);
+  return getElementRW(array->bytes, index, array->type->sizeOf);
 }
 
 const void *tloDArrayGetFront(const tloDArray *array) {
@@ -231,11 +229,11 @@ const void *tloDArrayGetFront(const tloDArray *array) {
   return tloDArrayGetElement(array, 0);
 }
 
-void *tloDArrayGetFrontReadWrite(tloDArray *array) {
+void *tloDArrayGetFrontRW(tloDArray *array) {
   assert(tloDArrayIsValid(array));
   assert(!tloDArrayIsEmpty(array));
 
-  return tloDArrayGetElementReadWrite(array, 0);
+  return tloDArrayGetElementRW(array, 0);
 }
 
 const void *tloDArrayGetBack(const tloDArray *array) {
@@ -245,11 +243,11 @@ const void *tloDArrayGetBack(const tloDArray *array) {
   return tloDArrayGetElement(array, array->size - 1);
 }
 
-void *tloDArrayGetBackReadWrite(tloDArray *array) {
+void *tloDArrayGetBackRW(tloDArray *array) {
   assert(tloDArrayIsValid(array));
   assert(!tloDArrayIsEmpty(array));
 
-  return tloDArrayGetElementReadWrite(array, array->size - 1);
+  return tloDArrayGetElementRW(array, array->size - 1);
 }
 
 #define STARTING_CAPACITY 2
@@ -286,7 +284,7 @@ static int resizeBytesIfNeeded(tloDArray *array) {
 
 static int pushBackCopiedData(tloDArray *array, const void *data) {
   void *destination =
-    getElementReadWrite(array->bytes, array->size, array->type->sizeOf);
+    getElementRW(array->bytes, array->size, array->type->sizeOf);
 
   if (array->type->copyConstruct(destination, data)) {
     return 1;
@@ -299,7 +297,7 @@ static int pushBackCopiedData(tloDArray *array, const void *data) {
 
 static int pushBackMovedData(tloDArray *array, void *data) {
   void *destination =
-    getElementReadWrite(array->bytes, array->size, array->type->sizeOf);
+    getElementRW(array->bytes, array->size, array->type->sizeOf);
 
   memcpy(destination, data, array->type->sizeOf);
   memset(data, 0, array->type->sizeOf);
@@ -350,8 +348,7 @@ int tloDArrayPushBackMove(tloDArray *array, void *data) {
 void tloDArrayPopBack(tloDArray *array) {
   assert(tloDArrayIsValid(array));
 
-  void *back =
-    getElementReadWrite(array->bytes, array->size, array->type->sizeOf);
+  void *back = getElementRW(array->bytes, array->size, array->type->sizeOf);
   array->type->destruct(back);
   --array->size;
 }

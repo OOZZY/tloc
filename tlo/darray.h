@@ -44,11 +44,11 @@ size_t tloDArrayGetSize(const tloDArray *array);
 size_t tloDArrayGetCapacity(const tloDArray *array);
 bool tloDArrayIsEmpty(const tloDArray *array);
 const void *tloDArrayGetElement(const tloDArray *array, size_t index);
-void *tloDArrayGetElementReadWrite(tloDArray *array, size_t index);
+void *tloDArrayGetElementRW(tloDArray *array, size_t index);
 const void *tloDArrayGetFront(const tloDArray *array);
-void *tloDArrayGetFrontReadWrite(tloDArray *array);
+void *tloDArrayGetFrontRW(tloDArray *array);
 const void *tloDArrayGetBack(const tloDArray *array);
-void *tloDArrayGetBackReadWrite(tloDArray *array);
+void *tloDArrayGetBackRW(tloDArray *array);
 
 /*
  * * deep copies data using array->type->copy
