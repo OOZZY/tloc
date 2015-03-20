@@ -60,10 +60,6 @@ int tloDArrayPushBackCopy(tloDArray *array, const void *data);
  */
 int tloDArrayPushBackMove(tloDArray *array, void *data);
 
-/*
-tloDArrayPopBack
-tloDArrayInsert
-tloDArrayRemove
-*/
+void tloDArrayPopBack(tloDArray *array);
 
 #endif // TLO_DARRAY_H

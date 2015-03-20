@@ -7,7 +7,6 @@ bool tloDArrayIsValid(const tloDArray *array) {
     (array) &&
     (tloTypeIsValid(array->type)) &&
     (tloAllocatorIsValid(array->allocator)) &&
-    ((array->bytes == NULL) == (array->size == 0)) &&
     (array->size <= array->capacity)
   );
 }
@@ -347,4 +346,13 @@ int tloDArrayPushBackMove(tloDArray *array, void *data) {
   }
 
   return 0;
+}
+
+void tloDArrayPopBack(tloDArray *array) {
+  assert(tloDArrayIsValid(array));
+
+  void *back =
+    getElementReadWrite(array->bytes, array->size, array->type->sizeOf);
+  array->type->destruct(back);
+  --array->size;
 }
