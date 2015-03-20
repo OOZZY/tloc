@@ -39,6 +39,14 @@ void testDArrayIntMakeDelete(void) {
   ints = NULL;
 }
 
+void testDArrayDestructWithNull(void) {
+  tloDArrayDestruct(NULL);
+}
+
+void testDArrayDeleteWithNull(void) {
+  tloDArrayDelete(NULL);
+}
+
 void testDArrayIntPushBackCopyOnce(void) {
   tloDArray *ints = malloc(sizeof(*ints));
   assert(ints);
@@ -332,14 +340,6 @@ void testDArrayIntMakeCopy(void) {
   intsCopy = NULL;
 }
 
-void testDArrayDestructWithNull(void) {
-  tloDArrayDestruct(NULL);
-}
-
-void testDArrayDeleteWithNull(void) {
-  tloDArrayDelete(NULL);
-}
-
 int main(void) {
   printf("sizeof(tloDArray): %zu\n", sizeof(tloDArray));
   assert(tloCountingAllocatorMallocCount == 0);
@@ -347,6 +347,8 @@ int main(void) {
 
   testDArrayIntConstructDestruct();
   testDArrayIntMakeDelete();
+  testDArrayDestructWithNull();
+  testDArrayDeleteWithNull();
   testDArrayIntPushBackCopyOnce();
   testDArrayIntPushBackMoveOnce();
   testDArrayIntPushBackCopyOncePopBackOnce();
@@ -356,8 +358,6 @@ int main(void) {
   testDArrayIntCopy();
   testDArrayIntCopyConstruct();
   testDArrayIntMakeCopy();
-  testDArrayDestructWithNull();
-  testDArrayDeleteWithNull();
 
   printf("malloc count: %lu; free count: %lu\n",
          tloCountingAllocatorMallocCount,
