@@ -104,6 +104,6 @@ int main(void) {
   printf("malloc count: %lu; free count: %lu\n",
          tloCountingAllocatorMallocCount,
          tloCountingAllocatorFreeCount);
-  // assert(tloCountingAllocatorMallocCount > 0);
+  assert(tloCountingAllocatorMallocCount > 0);
   assert(tloCountingAllocatorMallocCount == tloCountingAllocatorFreeCount);
 }
