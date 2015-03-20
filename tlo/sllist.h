@@ -55,4 +55,12 @@ int tloSLListPushBackCopy(tloSLList *list, const void *data);
  */
 int tloSLListPushBackMove(tloSLList *list, void *data);
 
+bool tloSLLNodeIsValid(const tloSLLNode *node);
+const tloSLLNode *tloSLLNodeGetHeadReadOnly(const tloSLList *list);
+tloSLLNode *tloSLLNodeGetHeadReadWrite(tloSLList *list);
+const void *tloSLLNodeGetElementReadOnly(const tloSLLNode *node);
+void *tloSLLNodeGetElementReadWrite(tloSLLNode *node);
+const tloSLLNode *tloSLLNodeGetNextReadOnly(const tloSLLNode *node);
+tloSLLNode *tloSLLNodeGetNextReadWrite(tloSLLNode *node);
+
 #endif // TLO_SLLIST_H

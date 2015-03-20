@@ -227,3 +227,46 @@ int tloSLListPushBackMove(tloSLList *list, void *data) {
 
   return 0;
 }
+
+bool tloSLLNodeIsValid(const tloSLLNode *node) {
+  return (
+    (node) &&
+    (node->bytes)
+  );
+}
+
+const tloSLLNode *tloSLLNodeGetHeadReadOnly(const tloSLList *list) {
+  assert(tloSLListIsValid(list));
+
+  return list->head;
+}
+
+tloSLLNode *tloSLLNodeGetHeadReadWrite(tloSLList *list) {
+  assert(tloSLListIsValid(list));
+
+  return list->head;
+}
+
+const void *tloSLLNodeGetElementReadOnly(const tloSLLNode *node) {
+  assert(tloSLLNodeIsValid(node));
+
+  return node->bytes;
+}
+
+void *tloSLLNodeGetElementReadWrite(tloSLLNode *node) {
+  assert(tloSLLNodeIsValid(node));
+
+  return node->bytes;
+}
+
+const tloSLLNode *tloSLLNodeGetNextReadOnly(const tloSLLNode *node) {
+  assert(tloSLLNodeIsValid(node));
+
+  return node->next;
+}
+
+tloSLLNode *tloSLLNodeGetNextReadWrite(tloSLLNode *node) {
+  assert(tloSLLNodeIsValid(node));
+
+  return node->next;
+}
