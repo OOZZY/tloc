@@ -45,6 +45,118 @@ void testSLListDeleteWithNull(void) {
   tloSLListDelete(NULL);
 }
 
+void testSLListIntPushFrontOnce(void) {
+  tloSLList *ints = malloc(sizeof(*ints));
+  assert(ints);
+
+  int error = tloSLListConstruct(ints, &tloIntType, &tloCountingAllocator);
+  assert(!error);
+
+  error = tloSLListPushFront(ints, &(int){SOME_NUMBER});
+  assert(!error);
+
+  assert(tloSLListGetSize(ints) == 1);
+  assert(!tloSLListIsEmpty(ints));
+  assert(tloSLListGetType(ints) == &tloIntType);
+  assert(tloSLListGetAllocator(ints) == &tloCountingAllocator);
+
+  assert(*(const int *)tloSLListGetFront(ints) == SOME_NUMBER);
+  assert(*(int *)tloSLListGetFrontRW(ints) == SOME_NUMBER);
+  assert(*(const int *)tloSLListGetBack(ints) == SOME_NUMBER);
+  assert(*(int *)tloSLListGetBackRW(ints) == SOME_NUMBER);
+
+  tloSLListDestruct(ints);
+  free(ints);
+
+  ints = NULL;
+}
+
+void testSLListIntPushFrontMoveOnce(void) {
+  tloSLList *ints = malloc(sizeof(*ints));
+  assert(ints);
+
+  int error = tloSLListConstruct(ints, &tloIntType, &tloCountingAllocator);
+  assert(!error);
+
+  int value = SOME_NUMBER;
+  error = tloSLListPushFrontMove(ints, &value);
+  assert(!error);
+
+  assert(value == 0);
+  assert(tloSLListGetSize(ints) == 1);
+  assert(!tloSLListIsEmpty(ints));
+  assert(tloSLListGetType(ints) == &tloIntType);
+  assert(tloSLListGetAllocator(ints) == &tloCountingAllocator);
+
+  assert(*(const int *)tloSLListGetFront(ints) == SOME_NUMBER);
+  assert(*(int *)tloSLListGetFrontRW(ints) == SOME_NUMBER);
+  assert(*(const int *)tloSLListGetBack(ints) == SOME_NUMBER);
+  assert(*(int *)tloSLListGetBackRW(ints) == SOME_NUMBER);
+
+  tloSLListDestruct(ints);
+  free(ints);
+
+  ints = NULL;
+}
+
+void testSLListIntPushFrontManyTimes(void) {
+  tloSLList *ints = malloc(sizeof(*ints));
+  assert(ints);
+
+  int error = tloSLListConstruct(ints, &tloIntType, &tloCountingAllocator);
+  assert(!error);
+
+  for (size_t i = 0; i < SOME_NUMBER; ++i) {
+    error = tloSLListPushFront(ints, &(int){i});
+    assert(!error);
+
+    assert(tloSLListGetSize(ints) == i + 1);
+    assert(!tloSLListIsEmpty(ints));
+    assert(tloSLListGetType(ints) == &tloIntType);
+    assert(tloSLListGetAllocator(ints) == &tloCountingAllocator);
+
+    assert(*(const int *)tloSLListGetFront(ints) == (int){i});
+    assert(*(int *)tloSLListGetFrontRW(ints) == (int){i});
+    assert(*(const int *)tloSLListGetBack(ints) == 0);
+    assert(*(int *)tloSLListGetBackRW(ints) == 0);
+  }
+
+  tloSLListDestruct(ints);
+  free(ints);
+
+  ints = NULL;
+}
+
+void testSLListIntPushFrontMoveManyTimes(void) {
+  tloSLList *ints = malloc(sizeof(*ints));
+  assert(ints);
+
+  int error = tloSLListConstruct(ints, &tloIntType, &tloCountingAllocator);
+  assert(!error);
+
+  for (size_t i = 0; i < SOME_NUMBER; ++i) {
+    int value = (int)i;
+    error = tloSLListPushFrontMove(ints, &value);
+    assert(!error);
+
+    assert(value == 0);
+    assert(tloSLListGetSize(ints) == i + 1);
+    assert(!tloSLListIsEmpty(ints));
+    assert(tloSLListGetType(ints) == &tloIntType);
+    assert(tloSLListGetAllocator(ints) == &tloCountingAllocator);
+
+    assert(*(const int *)tloSLListGetFront(ints) == (int){i});
+    assert(*(int *)tloSLListGetFrontRW(ints) == (int){i});
+    assert(*(const int *)tloSLListGetBack(ints) == 0);
+    assert(*(int *)tloSLListGetBackRW(ints) == 0);
+  }
+
+  tloSLListDestruct(ints);
+  free(ints);
+
+  ints = NULL;
+}
+
 void testSLListIntPushBackOnce(void) {
   tloSLList *ints = malloc(sizeof(*ints));
   assert(ints);
@@ -166,6 +278,10 @@ int main(void) {
   testSLListIntMakeDelete();
   testSLListDestructWithNull();
   testSLListDeleteWithNull();
+  testSLListIntPushFrontOnce();
+  testSLListIntPushFrontMoveOnce();
+  testSLListIntPushFrontManyTimes();
+  testSLListIntPushFrontMoveManyTimes();
   testSLListIntPushBackOnce();
   testSLListIntPushBackMoveOnce();
   testSLListIntPushBackManyTimes();

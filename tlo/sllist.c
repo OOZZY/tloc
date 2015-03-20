@@ -188,6 +188,18 @@ static tloSLLNode *makeNodeWithMovedData(tloSLList *list, void *data) {
   return node;
 }
 
+static void pushFrontNode(tloSLList *list, tloSLLNode *node) {
+  if (!list->head) {
+    list->head = node;
+    list->tail = list->head;
+  } else {
+    node->next = list->head;
+    list->head = node;
+  }
+
+  ++list->size;
+}
+
 static void pushBackNode(tloSLList *list, tloSLLNode *node) {
   if (!list->head) {
     list->head = node;
@@ -198,6 +210,34 @@ static void pushBackNode(tloSLList *list, tloSLLNode *node) {
   }
 
   ++list->size;
+}
+
+int tloSLListPushFront(tloSLList *list, const void *data) {
+  assert(tloSLListIsValid(list));
+  assert(data);
+
+  tloSLLNode *newNode = makeNodeWithCopiedData(list, data);
+  if (!newNode) {
+    return 1;
+  }
+
+  pushFrontNode(list, newNode);
+
+  return 0;
+}
+
+int tloSLListPushFrontMove(tloSLList *list, void *data) {
+  assert(tloSLListIsValid(list));
+  assert(data);
+
+  tloSLLNode *newNode = makeNodeWithMovedData(list, data);
+  if (!newNode) {
+    return 1;
+  }
+
+  pushFrontNode(list, newNode);
+
+  return 0;
 }
 
 int tloSLListPushBack(tloSLList *list, const void *data) {
