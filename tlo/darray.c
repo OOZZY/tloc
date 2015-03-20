@@ -50,7 +50,7 @@ static void destructElements(void *bytes, size_t elementCount,
   }
 }
 
-static int copyUnderlyingArray(void *newBytes, const tloDArray *other) {
+static int deepCopyAllElements(void *newBytes, const tloDArray *other) {
   for (size_t i = 0; i < other->size; ++i) {
     void *destination = getElementReadWrite(newBytes, i, other->type->sizeOf);
     const void *source =
@@ -75,7 +75,7 @@ int tloDArrayCopyConstruct(tloDArray *array, const tloDArray *other) {
     return 1;
   }
 
-  if (copyUnderlyingArray(newBytes, other)) {
+  if (deepCopyAllElements(newBytes, other)) {
     return 1;
   }
 
@@ -165,7 +165,7 @@ int tloDArrayCopy(tloDArray *array, const tloDArray *other) {
     return 1;
   }
 
-  if (copyUnderlyingArray(newBytes, other)) {
+  if (deepCopyAllElements(newBytes, other)) {
     return 1;
   }
 
@@ -256,7 +256,7 @@ void *tloDArrayGetBackReadWrite(tloDArray *array) {
 
 #define STARTING_CAPACITY 2
 
-static int allocateIfNeeded(tloDArray *array) {
+static int allocateBytesIfNeeded(tloDArray *array) {
   if (!array->bytes) {
     array->capacity = STARTING_CAPACITY;
     array->bytes =
@@ -268,7 +268,7 @@ static int allocateIfNeeded(tloDArray *array) {
   return 0;
 }
 
-static int resizeIfNeeded(tloDArray *array) {
+static int resizeBytesIfNeeded(tloDArray *array) {
   if (array->size == array->capacity) {
     size_t newCapacity = array->capacity * 2;
     void *newBytes =
@@ -286,7 +286,7 @@ static int resizeIfNeeded(tloDArray *array) {
   return 0;
 }
 
-static int pushBackCopy(tloDArray *array, const void *data) {
+static int pushBackCopiedData(tloDArray *array, const void *data) {
   void *destination =
     getElementReadWrite(array->bytes, array->size, array->type->sizeOf);
 
@@ -299,7 +299,7 @@ static int pushBackCopy(tloDArray *array, const void *data) {
   return 0;
 }
 
-static int pushBackMove(tloDArray *array, void *data) {
+static int pushBackMovedData(tloDArray *array, void *data) {
   void *destination =
     getElementReadWrite(array->bytes, array->size, array->type->sizeOf);
 
@@ -315,15 +315,15 @@ int tloDArrayPushBackCopy(tloDArray *array, const void *data) {
   assert(tloDArrayIsValid(array));
   assert(data);
 
-  if (allocateIfNeeded(array)) {
+  if (allocateBytesIfNeeded(array)) {
     return 1;
   }
 
-  if (resizeIfNeeded(array)) {
+  if (resizeBytesIfNeeded(array)) {
     return 1;
   }
 
-  if (pushBackCopy(array, data)) {
+  if (pushBackCopiedData(array, data)) {
     return 1;
   }
 
@@ -334,15 +334,15 @@ int tloDArrayPushBackMove(tloDArray *array, void *data) {
   assert(tloDArrayIsValid(array));
   assert(data);
 
-  if (allocateIfNeeded(array)) {
+  if (allocateBytesIfNeeded(array)) {
     return 1;
   }
 
-  if (resizeIfNeeded(array)) {
+  if (resizeBytesIfNeeded(array)) {
     return 1;
   }
 
-  if (pushBackMove(array, data)) {
+  if (pushBackMovedData(array, data)) {
     return 1;
   }
 
