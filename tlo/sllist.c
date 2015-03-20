@@ -159,7 +159,7 @@ static tloSLLNode *makeNodeWithCopiedData(tloSLList *list, const void *data) {
     return NULL;
   }
 
-  if (list->type->copyConstruct(node->bytes, data)) {
+  if (list->type->constructCopy(node->bytes, data)) {
     list->allocator->free(node->bytes);
     list->allocator->free(node);
     return NULL;

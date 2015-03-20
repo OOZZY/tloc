@@ -25,7 +25,7 @@
  *   * stack space
  * * should do a deep copy
  */
-typedef int (*tloCopyConstructFunction)(void *bytes, const void *data);
+typedef int (*tloConstructCopyFunction)(void *bytes, const void *data);
 
 /*
  * * does nothing if bytes is NULL
@@ -36,13 +36,13 @@ typedef void (*tloDestructFunction)(void *bytes);
 
 typedef struct tloType {
   size_t sizeOf;
-  tloCopyConstructFunction copyConstruct;
+  tloConstructCopyFunction constructCopy;
   tloDestructFunction destruct;
 } tloType;
 
 bool tloTypeIsValid(const tloType *type);
 
-int tloIntTypeCopyConstruct(void *bytes, const void *data);
+int tloIntTypeConstructCopy(void *bytes, const void *data);
 void tloIntTypeDestruct(void *bytes);
 extern const tloType tloIntType;
 

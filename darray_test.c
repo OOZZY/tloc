@@ -236,7 +236,7 @@ void testDArrayIntPushBackUntilResizePopBackUntilEmpty(void) {
   ints = NULL;
 }
 
-void testDArrayIntCopyConstruct(void) {
+void testDArrayIntConstructCopy(void) {
   tloDArray *ints = tloDArrayMake(&tloIntType, &tloCountingAllocator);
   assert(ints);
 
@@ -248,7 +248,7 @@ void testDArrayIntCopyConstruct(void) {
   tloDArray *intsCopy = malloc(sizeof(*intsCopy));
   assert(intsCopy);
 
-  int error = tloDArrayCopyConstruct(intsCopy, ints);
+  int error = tloDArrayConstructCopy(intsCopy, ints);
   assert(!error);
 
   assert(tloDArrayGetSize(ints) == tloDArrayGetSize(intsCopy));
@@ -355,7 +355,7 @@ int main(void) {
   testDArrayIntPushBackUntilResize();
   testDArrayIntPushBackMoveUntilResize();
   testDArrayIntPushBackUntilResizePopBackUntilEmpty();
-  testDArrayIntCopyConstruct();
+  testDArrayIntConstructCopy();
   testDArrayIntMakeCopy();
   testDArrayIntCopy();
 

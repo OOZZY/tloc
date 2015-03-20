@@ -7,12 +7,12 @@ bool tloTypeIsValid(const tloType *type) {
   return (
     (type) &&
     (type->sizeOf) &&
-    (type->copyConstruct) &&
+    (type->constructCopy) &&
     (type->destruct)
   );
 }
 
-int tloIntTypeCopyConstruct(void *bytes, const void *data) {
+int tloIntTypeConstructCopy(void *bytes, const void *data) {
   assert(bytes);
   assert(data);
 
@@ -27,7 +27,7 @@ void tloIntTypeDestruct(void *bytes) {
 
 const tloType tloIntType = {
   .sizeOf = sizeof(int),
-  .copyConstruct = tloIntTypeCopyConstruct,
+  .constructCopy = tloIntTypeConstructCopy,
   .destruct = tloIntTypeDestruct
 };
 

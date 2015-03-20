@@ -19,7 +19,7 @@ typedef struct tloDArray {
 bool tloDArrayIsValid(const tloDArray *array);
 int tloDArrayConstruct(tloDArray *array, const tloType *type,
                        const tloAllocator *allocator);
-int tloDArrayCopyConstruct(tloDArray *array, const tloDArray *other);
+int tloDArrayConstructCopy(tloDArray *array, const tloDArray *other);
 void tloDArrayDestruct(tloDArray *array);
 
 /*
@@ -28,7 +28,7 @@ void tloDArrayDestruct(tloDArray *array);
 tloDArray *tloDArrayMake(const tloType *type, const tloAllocator *allocator);
 
 /*
- * * other->allocator->malloc then tloDArrayCopyConstruct
+ * * other->allocator->malloc then tloDArrayConstructCopy
  */
 tloDArray *tloDArrayMakeCopy(const tloDArray *other);
 

@@ -52,7 +52,7 @@ static int deepCopyAllElements(void *newBytes, const tloDArray *other) {
     void *destination = getElementRW(newBytes, i, other->type->sizeOf);
     const void *source = getElement(other->bytes, i, other->type->sizeOf);
 
-    if (other->type->copyConstruct(destination, source)) {
+    if (other->type->constructCopy(destination, source)) {
       destructElements(newBytes, i, other->type->sizeOf, other->type->destruct);
       return 1;
     }
@@ -61,7 +61,7 @@ static int deepCopyAllElements(void *newBytes, const tloDArray *other) {
   return 0;
 }
 
-int tloDArrayCopyConstruct(tloDArray *array, const tloDArray *other) {
+int tloDArrayConstructCopy(tloDArray *array, const tloDArray *other) {
   assert(array);
   assert(tloDArrayIsValid(other));
 
@@ -131,7 +131,7 @@ tloDArray *tloDArrayMakeCopy(const tloDArray *other) {
     return NULL;
   }
 
-  if (tloDArrayCopyConstruct(array, other)) {
+  if (tloDArrayConstructCopy(array, other)) {
     other->allocator->free(array);
     return NULL;
   }
@@ -286,7 +286,7 @@ static int pushBackCopiedData(tloDArray *array, const void *data) {
   void *destination =
     getElementRW(array->bytes, array->size, array->type->sizeOf);
 
-  if (array->type->copyConstruct(destination, data)) {
+  if (array->type->constructCopy(destination, data)) {
     return 1;
   }
 
