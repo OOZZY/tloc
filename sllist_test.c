@@ -99,6 +99,64 @@ void testSLListIntPushBackMoveOnce(void) {
   ints = NULL;
 }
 
+void testSLListIntPushBackCopyManyTimes(void) {
+  tloSLList *ints = malloc(sizeof(*ints));
+  assert(ints);
+
+  int error = tloSLListConstruct(ints, &tloIntType, &tloCountingAllocator);
+  assert(!error);
+
+  for (size_t i = 0; i < SOME_NUMBER; ++i) {
+    error = tloSLListPushBackCopy(ints, &(int){i});
+    assert(!error);
+
+    assert(tloSLListGetSize(ints) == i + 1);
+    assert(!tloSLListIsEmpty(ints));
+    assert(tloSLListGetType(ints) == &tloIntType);
+    assert(tloSLListGetAllocator(ints) == &tloCountingAllocator);
+
+    assert(*(const int *)tloSLListGetFrontReadOnly(ints) == 0);
+    assert(*(int *)tloSLListGetFrontReadWrite(ints) == 0);
+    assert(*(const int *)tloSLListGetBackReadOnly(ints) == (int){i});
+    assert(*(int *)tloSLListGetBackReadWrite(ints) == (int){i});
+  }
+
+  tloSLListDestruct(ints);
+  free(ints);
+
+  ints = NULL;
+}
+
+void testSLListIntPushBackMoveManyTimes(void) {
+  tloSLList *ints = malloc(sizeof(*ints));
+  assert(ints);
+
+  int error = tloSLListConstruct(ints, &tloIntType, &tloCountingAllocator);
+  assert(!error);
+
+  for (size_t i = 0; i < SOME_NUMBER; ++i) {
+    int value = (int)i;
+    error = tloSLListPushBackMove(ints, &value);
+    assert(!error);
+
+    assert(value == 0);
+    assert(tloSLListGetSize(ints) == i + 1);
+    assert(!tloSLListIsEmpty(ints));
+    assert(tloSLListGetType(ints) == &tloIntType);
+    assert(tloSLListGetAllocator(ints) == &tloCountingAllocator);
+
+    assert(*(const int *)tloSLListGetFrontReadOnly(ints) == 0);
+    assert(*(int *)tloSLListGetFrontReadWrite(ints) == 0);
+    assert(*(const int *)tloSLListGetBackReadOnly(ints) == (int){i});
+    assert(*(int *)tloSLListGetBackReadWrite(ints) == (int){i});
+  }
+
+  tloSLListDestruct(ints);
+  free(ints);
+
+  ints = NULL;
+}
+
 int main(void) {
   printf("sizeof(tloSLList): %zu\n", sizeof(tloSLList));
   assert(tloCountingAllocatorMallocCount == 0);
@@ -110,6 +168,8 @@ int main(void) {
   testSLListDeleteWithNull();
   testSLListIntPushBackCopyOnce();
   testSLListIntPushBackMoveOnce();
+  testSLListIntPushBackCopyManyTimes();
+  testSLListIntPushBackMoveManyTimes();
 
   printf("malloc count: %lu; free count: %lu\n",
          tloCountingAllocatorMallocCount,
