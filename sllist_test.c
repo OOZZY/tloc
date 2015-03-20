@@ -91,6 +91,14 @@ void testSLListIntPushBackMoveOnce(void) {
   ints = NULL;
 }
 
+void testSLListDestructWithNull(void) {
+  tloSLListDestruct(NULL);
+}
+
+void testSLListDeleteWithNull(void) {
+  tloSLListDelete(NULL);
+}
+
 int main(void) {
   printf("sizeof(tloSLList): %zu\n", sizeof(tloSLList));
   assert(tloCountingAllocatorMallocCount == 0);
@@ -100,6 +108,8 @@ int main(void) {
   testSLListIntMakeDelete();
   testSLListIntPushBackCopyOnce();
   testSLListIntPushBackMoveOnce();
+  testSLListDestructWithNull();
+  testSLListDeleteWithNull();
 
   printf("malloc count: %lu; free count: %lu\n",
          tloCountingAllocatorMallocCount,
