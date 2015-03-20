@@ -40,9 +40,9 @@ const tloType *tloSLListGetType(const tloSLList *list);
 const tloAllocator *tloSLListGetAllocator(const tloSLList *list);
 size_t tloSLListGetSize(const tloSLList *list);
 bool tloSLListIsEmpty(const tloSLList *list);
-const void *tloSLListGetFrontReadOnly(const tloSLList *list);
+const void *tloSLListGetFront(const tloSLList *list);
 void *tloSLListGetFrontReadWrite(tloSLList *list);
-const void *tloSLListGetBackReadOnly(const tloSLList *list);
+const void *tloSLListGetBack(const tloSLList *list);
 void *tloSLListGetBackReadWrite(tloSLList *list);
 
 /*
@@ -56,11 +56,11 @@ int tloSLListPushBackCopy(tloSLList *list, const void *data);
 int tloSLListPushBackMove(tloSLList *list, void *data);
 
 bool tloSLLNodeIsValid(const tloSLLNode *node);
-const tloSLLNode *tloSLLNodeGetHeadReadOnly(const tloSLList *list);
+const tloSLLNode *tloSLLNodeGetHead(const tloSLList *list);
 tloSLLNode *tloSLLNodeGetHeadReadWrite(tloSLList *list);
-const void *tloSLLNodeGetElementReadOnly(const tloSLLNode *node);
+const void *tloSLLNodeGetElement(const tloSLLNode *node);
 void *tloSLLNodeGetElementReadWrite(tloSLLNode *node);
-const tloSLLNode *tloSLLNodeGetNextReadOnly(const tloSLLNode *node);
+const tloSLLNode *tloSLLNodeGetNext(const tloSLLNode *node);
 tloSLLNode *tloSLLNodeGetNextReadWrite(tloSLLNode *node);
 
 #endif // TLO_SLLIST_H

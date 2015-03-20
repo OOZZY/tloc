@@ -60,9 +60,9 @@ void testSLListIntPushBackCopyOnce(void) {
   assert(tloSLListGetType(ints) == &tloIntType);
   assert(tloSLListGetAllocator(ints) == &tloCountingAllocator);
 
-  assert(*(const int *)tloSLListGetFrontReadOnly(ints) == SOME_NUMBER);
+  assert(*(const int *)tloSLListGetFront(ints) == SOME_NUMBER);
   assert(*(int *)tloSLListGetFrontReadWrite(ints) == SOME_NUMBER);
-  assert(*(const int *)tloSLListGetBackReadOnly(ints) == SOME_NUMBER);
+  assert(*(const int *)tloSLListGetBack(ints) == SOME_NUMBER);
   assert(*(int *)tloSLListGetBackReadWrite(ints) == SOME_NUMBER);
 
   tloSLListDestruct(ints);
@@ -88,9 +88,9 @@ void testSLListIntPushBackMoveOnce(void) {
   assert(tloSLListGetType(ints) == &tloIntType);
   assert(tloSLListGetAllocator(ints) == &tloCountingAllocator);
 
-  assert(*(const int *)tloSLListGetFrontReadOnly(ints) == SOME_NUMBER);
+  assert(*(const int *)tloSLListGetFront(ints) == SOME_NUMBER);
   assert(*(int *)tloSLListGetFrontReadWrite(ints) == SOME_NUMBER);
-  assert(*(const int *)tloSLListGetBackReadOnly(ints) == SOME_NUMBER);
+  assert(*(const int *)tloSLListGetBack(ints) == SOME_NUMBER);
   assert(*(int *)tloSLListGetBackReadWrite(ints) == SOME_NUMBER);
 
   tloSLListDestruct(ints);
@@ -115,9 +115,9 @@ void testSLListIntPushBackCopyManyTimes(void) {
     assert(tloSLListGetType(ints) == &tloIntType);
     assert(tloSLListGetAllocator(ints) == &tloCountingAllocator);
 
-    assert(*(const int *)tloSLListGetFrontReadOnly(ints) == 0);
+    assert(*(const int *)tloSLListGetFront(ints) == 0);
     assert(*(int *)tloSLListGetFrontReadWrite(ints) == 0);
-    assert(*(const int *)tloSLListGetBackReadOnly(ints) == (int){i});
+    assert(*(const int *)tloSLListGetBack(ints) == (int){i});
     assert(*(int *)tloSLListGetBackReadWrite(ints) == (int){i});
   }
 
@@ -145,9 +145,9 @@ void testSLListIntPushBackMoveManyTimes(void) {
     assert(tloSLListGetType(ints) == &tloIntType);
     assert(tloSLListGetAllocator(ints) == &tloCountingAllocator);
 
-    assert(*(const int *)tloSLListGetFrontReadOnly(ints) == 0);
+    assert(*(const int *)tloSLListGetFront(ints) == 0);
     assert(*(int *)tloSLListGetFrontReadWrite(ints) == 0);
-    assert(*(const int *)tloSLListGetBackReadOnly(ints) == (int){i});
+    assert(*(const int *)tloSLListGetBack(ints) == (int){i});
     assert(*(int *)tloSLListGetBackReadWrite(ints) == (int){i});
   }
 

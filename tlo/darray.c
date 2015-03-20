@@ -27,8 +27,8 @@ int tloDArrayConstruct(tloDArray *array, const tloType *type,
   return 0;
 }
 
-static const void *getElementReadOnly(const void *bytes, size_t index,
-                                      size_t sizeOfElement)
+static const void *getElement(const void *bytes, size_t index,
+                              size_t sizeOfElement)
 {
   return (const char *)bytes + index * sizeOfElement;
 }
@@ -52,8 +52,7 @@ static void destructElements(void *bytes, size_t elementCount,
 static int deepCopyAllElements(void *newBytes, const tloDArray *other) {
   for (size_t i = 0; i < other->size; ++i) {
     void *destination = getElementReadWrite(newBytes, i, other->type->sizeOf);
-    const void *source =
-      getElementReadOnly(other->bytes, i, other->type->sizeOf);
+    const void *source = getElement(other->bytes, i, other->type->sizeOf);
 
     if (other->type->copyConstruct(destination, source)) {
       destructElements(newBytes, i, other->type->sizeOf, other->type->destruct);
@@ -209,12 +208,12 @@ bool tloDArrayIsEmpty(const tloDArray *array) {
   return array->size == 0;
 }
 
-const void *tloDArrayGetElementReadOnly(const tloDArray *array, size_t index) {
+const void *tloDArrayGetElement(const tloDArray *array, size_t index) {
   assert(tloDArrayIsValid(array));
   assert(!tloDArrayIsEmpty(array));
   assert(index < array->size);
 
-  return getElementReadOnly(array->bytes, index, array->type->sizeOf);
+  return getElement(array->bytes, index, array->type->sizeOf);
 }
 
 void *tloDArrayGetElementReadWrite(tloDArray *array, size_t index) {
@@ -225,11 +224,11 @@ void *tloDArrayGetElementReadWrite(tloDArray *array, size_t index) {
   return getElementReadWrite(array->bytes, index, array->type->sizeOf);
 }
 
-const void *tloDArrayGetFrontReadOnly(const tloDArray *array) {
+const void *tloDArrayGetFront(const tloDArray *array) {
   assert(tloDArrayIsValid(array));
   assert(!tloDArrayIsEmpty(array));
 
-  return tloDArrayGetElementReadOnly(array, 0);
+  return tloDArrayGetElement(array, 0);
 }
 
 void *tloDArrayGetFrontReadWrite(tloDArray *array) {
@@ -239,11 +238,11 @@ void *tloDArrayGetFrontReadWrite(tloDArray *array) {
   return tloDArrayGetElementReadWrite(array, 0);
 }
 
-const void *tloDArrayGetBackReadOnly(const tloDArray *array) {
+const void *tloDArrayGetBack(const tloDArray *array) {
   assert(tloDArrayIsValid(array));
   assert(!tloDArrayIsEmpty(array));
 
-  return tloDArrayGetElementReadOnly(array, array->size - 1);
+  return tloDArrayGetElement(array, array->size - 1);
 }
 
 void *tloDArrayGetBackReadWrite(tloDArray *array) {

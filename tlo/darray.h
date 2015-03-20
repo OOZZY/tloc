@@ -43,11 +43,11 @@ const tloAllocator *tloDArrayGetAllocator(const tloDArray *array);
 size_t tloDArrayGetSize(const tloDArray *array);
 size_t tloDArrayGetCapacity(const tloDArray *array);
 bool tloDArrayIsEmpty(const tloDArray *array);
-const void *tloDArrayGetElementReadOnly(const tloDArray *array, size_t index);
+const void *tloDArrayGetElement(const tloDArray *array, size_t index);
 void *tloDArrayGetElementReadWrite(tloDArray *array, size_t index);
-const void *tloDArrayGetFrontReadOnly(const tloDArray *array);
+const void *tloDArrayGetFront(const tloDArray *array);
 void *tloDArrayGetFrontReadWrite(tloDArray *array);
-const void *tloDArrayGetBackReadOnly(const tloDArray *array);
+const void *tloDArrayGetBack(const tloDArray *array);
 void *tloDArrayGetBackReadWrite(tloDArray *array);
 
 /*
