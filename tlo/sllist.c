@@ -2,7 +2,7 @@
 #include <assert.h>
 #include <string.h>
 
-static void freeAllNodes(tloSLList *list) {
+static void destructAllElementsAndFreeAllNodes(tloSLList *list) {
   tloSLLNode *previous = NULL;
   tloSLLNode *current = list->head;
 
@@ -125,7 +125,7 @@ void tloSLListDestruct(tloSLList *list) {
     return;
   }
 
-  freeAllNodes(list);
+  destructAllElementsAndFreeAllNodes(list);
 
   list->head = NULL;
   list->tail = NULL;
