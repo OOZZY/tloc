@@ -9,6 +9,7 @@
  */
 
 typedef struct tloDArray {
+  // private
   const tloType *type;
   const tloAllocator *allocator;
   void *bytes;

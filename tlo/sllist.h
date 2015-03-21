@@ -9,11 +9,13 @@
  */
 
 typedef struct tloSLLNode {
+  // private
   void *bytes;
   struct tloSLLNode *next;
 } tloSLLNode;
 
 typedef struct tloSLList {
+  // private
   const tloType *type;
   const tloAllocator *allocator;
   tloSLLNode *head;

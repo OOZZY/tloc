@@ -35,6 +35,7 @@ typedef void (*tloDestructFunction)(void *bytes);
 
 
 typedef struct tloType {
+  // public
   size_t sizeOf;
   tloConstructCopyFunction constructCopy;
   tloDestructFunction destruct;
@@ -50,6 +51,7 @@ typedef void *(*tloMallocFunction)(size_t byteCount);
 typedef void (*tloFreeFunction)(void *bytes);
 
 typedef struct tloAllocator {
+  // public
   tloMallocFunction malloc;
   tloFreeFunction free;
 } tloAllocator;
