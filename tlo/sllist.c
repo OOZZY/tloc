@@ -87,6 +87,18 @@ static void pushBackNode(tloSLList *list, tloSLLNode *node) {
   ++list->size;
 }
 
+static int pushBackElementsOfOther(tloSLList *list, const tloSLList *other) {
+  for (tloSLLNode *node = other->head; node; node = node->next) {
+    const void *element = node->bytes;
+    if (tloSLListPushBack(list, element)) {
+      tloSLListDestruct(list);
+      return 1;
+    }
+  }
+
+  return 0;
+}
+
 bool tloSLListIsValid(const tloSLList *list) {
   return (
     (list) &&
@@ -112,6 +124,21 @@ int tloSLListConstruct(tloSLList *list, const tloType *type,
   list->head = NULL;
   list->tail = NULL;
   list->size = 0;
+
+  return 0;
+}
+
+int tloSLListConstructCopy(tloSLList *list, const tloSLList *other) {
+  assert(list);
+  assert(tloSLListIsValid(other));
+
+  if (tloSLListConstruct(list, other->type, other->allocator)) {
+    return 1;
+  }
+
+  if (pushBackElementsOfOther(list, other)) {
+    return 1;
+  }
 
   return 0;
 }
@@ -150,6 +177,22 @@ tloSLList *tloSLListMake(const tloType *type, const tloAllocator *allocator) {
   return list;
 }
 
+tloSLList *tloSLListMakeCopy(const tloSLList *other) {
+  assert(tloSLListIsValid(other));
+
+  tloSLList *list = other->allocator->malloc(sizeof(*list));
+  if (!list) {
+    return NULL;
+  }
+
+  if (tloSLListConstructCopy(list, other)) {
+    other->allocator->free(list);
+    return NULL;
+  }
+
+  return list;
+}
+
 void tloSLListDelete(tloSLList *list) {
   if (!list) {
     return;
@@ -160,6 +203,21 @@ void tloSLListDelete(tloSLList *list) {
   tloSLListDestruct(list);
   tloFreeFunction free = list->allocator->free;
   free(list);
+}
+
+int tloSLListCopy(tloSLList *list, const tloSLList *other) {
+  assert(tloSLListIsValid(list));
+  assert(tloSLListIsValid(other));
+
+  tloSLList copy;
+  if (tloSLListConstructCopy(&copy, other)) {
+    return 1;
+  }
+
+  tloSLListDestruct(list);
+  memcpy(list, &copy, sizeof(tloSLList));
+
+  return 0;
 }
 
 const tloType *tloSLListGetType(const tloSLList *list) {

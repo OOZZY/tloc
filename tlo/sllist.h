@@ -24,6 +24,7 @@ typedef struct tloSLList {
 bool tloSLListIsValid(const tloSLList *list);
 int tloSLListConstruct(tloSLList *list, const tloType *type,
                        const tloAllocator *allocator);
+int tloSLListConstructCopy(tloSLList *list, const tloSLList *other);
 void tloSLListDestruct(tloSLList *list);
 
 /*
@@ -32,10 +33,16 @@ void tloSLListDestruct(tloSLList *list);
 tloSLList *tloSLListMake(const tloType *type, const tloAllocator *allocator);
 
 /*
+ * * other->allocator->malloc then tloSLListConstructCopy
+ */
+tloSLList *tloSLListMakeCopy(const tloSLList *other);
+
+/*
  * * tloSLListDestruct then list->allocator->free
  */
 void tloSLListDelete(tloSLList *list);
 
+int tloSLListCopy(tloSLList *list, const tloSLList *other);
 const tloType *tloSLListGetType(const tloSLList *list);
 const tloAllocator *tloSLListGetAllocator(const tloSLList *list);
 size_t tloSLListGetSize(const tloSLList *list);

@@ -329,6 +329,122 @@ void testSLListIntPushBackMoveManyTimes(void) {
   ints = NULL;
 }
 
+void testSLListIntConstructCopy(void) {
+  tloSLList *ints = tloSLListMake(&tloIntType, &tloCountingAllocator);
+  assert(ints);
+
+  for (int i = 0; i < SOME_NUMBER; ++i) {
+    int error = tloSLListPushBack(ints, &i);
+    assert(!error);
+  }
+
+  tloSLList *intsCopy = malloc(sizeof(*intsCopy));
+  assert(intsCopy);
+
+  int error = tloSLListConstructCopy(intsCopy, ints);
+  assert(!error);
+
+  assert(tloSLListGetSize(ints) == tloSLListGetSize(intsCopy));
+  assert(tloSLListIsEmpty(ints) == tloSLListIsEmpty(intsCopy));
+  assert(tloSLListGetType(ints) == tloSLListGetType(intsCopy));
+  assert(tloSLListGetAllocator(ints) == tloSLListGetAllocator(intsCopy));
+
+  const tloSLLNode *node1 = tloSLLNodeGetHead(ints);
+  const tloSLLNode *node2 = tloSLLNodeGetHead(intsCopy);
+  while (node1) {
+    assert(node2);
+    const int *elem1 = tloSLLNodeGetElement(node1);
+    const int *elem2 = tloSLLNodeGetElement(node2);
+    assert(elem1 != elem2);
+    assert(*elem1 == *elem2);
+    node1 = tloSLLNodeGetNext(node1);
+    node2 = tloSLLNodeGetNext(node2);
+  }
+
+  tloSLListDelete(ints);
+
+  tloSLListDestruct(intsCopy);
+  free(intsCopy);
+
+  ints = NULL;
+  intsCopy = NULL;
+}
+
+void testSLListIntMakeCopy(void) {
+  tloSLList *ints = tloSLListMake(&tloIntType, &tloCountingAllocator);
+  assert(ints);
+
+  for (int i = 0; i < SOME_NUMBER; ++i) {
+    int error = tloSLListPushBack(ints, &i);
+    assert(!error);
+  }
+
+  tloSLList *intsCopy = tloSLListMakeCopy(ints);
+  assert(intsCopy);
+
+  assert(tloSLListGetSize(ints) == tloSLListGetSize(intsCopy));
+  assert(tloSLListIsEmpty(ints) == tloSLListIsEmpty(intsCopy));
+  assert(tloSLListGetType(ints) == tloSLListGetType(intsCopy));
+  assert(tloSLListGetAllocator(ints) == tloSLListGetAllocator(intsCopy));
+
+  const tloSLLNode *node1 = tloSLLNodeGetHead(ints);
+  const tloSLLNode *node2 = tloSLLNodeGetHead(intsCopy);
+  while (node1) {
+    assert(node2);
+    const int *elem1 = tloSLLNodeGetElement(node1);
+    const int *elem2 = tloSLLNodeGetElement(node2);
+    assert(elem1 != elem2);
+    assert(*elem1 == *elem2);
+    node1 = tloSLLNodeGetNext(node1);
+    node2 = tloSLLNodeGetNext(node2);
+  }
+
+  tloSLListDelete(ints);
+  tloSLListDelete(intsCopy);
+
+  ints = NULL;
+  intsCopy = NULL;
+}
+
+void testSLListIntCopy(void) {
+  tloSLList *ints = tloSLListMake(&tloIntType, &tloCountingAllocator);
+  assert(ints);
+
+  for (int i = 0; i < SOME_NUMBER; ++i) {
+    int error = tloSLListPushBack(ints, &i);
+    assert(!error);
+  }
+
+  tloSLList *intsCopy = tloSLListMake(&tloIntType, &tloCountingAllocator);
+  assert(intsCopy);
+
+  int error = tloSLListCopy(intsCopy, ints);
+  assert(!error);
+
+  assert(tloSLListGetSize(ints) == tloSLListGetSize(intsCopy));
+  assert(tloSLListIsEmpty(ints) == tloSLListIsEmpty(intsCopy));
+  assert(tloSLListGetType(ints) == tloSLListGetType(intsCopy));
+  assert(tloSLListGetAllocator(ints) == tloSLListGetAllocator(intsCopy));
+
+  const tloSLLNode *node1 = tloSLLNodeGetHead(ints);
+  const tloSLLNode *node2 = tloSLLNodeGetHead(intsCopy);
+  while (node1) {
+    assert(node2);
+    const int *elem1 = tloSLLNodeGetElement(node1);
+    const int *elem2 = tloSLLNodeGetElement(node2);
+    assert(elem1 != elem2);
+    assert(*elem1 == *elem2);
+    node1 = tloSLLNodeGetNext(node1);
+    node2 = tloSLLNodeGetNext(node2);
+  }
+
+  tloSLListDelete(ints);
+  tloSLListDelete(intsCopy);
+
+  ints = NULL;
+  intsCopy = NULL;
+}
+
 int main(void) {
   printf("sizeof(tloSLList): %zu\n", sizeof(tloSLList));
   assert(tloCountingAllocatorMallocCount == 0);
@@ -348,6 +464,9 @@ int main(void) {
   testSLListIntPushBackMoveOnce();
   testSLListIntPushBackManyTimes();
   testSLListIntPushBackMoveManyTimes();
+  testSLListIntConstructCopy();
+  testSLListIntMakeCopy();
+  testSLListIntCopy();
 
   printf("malloc count: %lu; free count: %lu\n",
          tloCountingAllocatorMallocCount,
