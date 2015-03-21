@@ -397,9 +397,10 @@ int main(void) {
   testDArrayIntMakeCopy();
   testDArrayIntCopy();
 
-  printf("malloc count: %lu; free count: %lu\n",
+  printf("malloc count: %lu\nfree count: %lu\ntotal bytes allocated: %lu\n",
          tloCountingAllocatorMallocCount,
-         tloCountingAllocatorFreeCount);
+         tloCountingAllocatorFreeCount,
+         tloCountingAllocatorTotalByteCount);
   assert(tloCountingAllocatorMallocCount > 0);
   assert(tloCountingAllocatorMallocCount == tloCountingAllocatorFreeCount);
 }

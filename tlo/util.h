@@ -62,6 +62,7 @@ extern const tloAllocator tloCStdLibAllocator;
 
 extern unsigned long tloCountingAllocatorMallocCount;
 extern unsigned long tloCountingAllocatorFreeCount;
+extern unsigned long tloCountingAllocatorTotalByteCount;
 void *tloCountingAllocatorMalloc(size_t byteCount);
 void tloCountingAllocatorFree(void *bytes);
 extern const tloAllocator tloCountingAllocator;

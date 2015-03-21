@@ -46,9 +46,11 @@ const tloAllocator tloCStdLibAllocator = {
 
 unsigned long tloCountingAllocatorMallocCount = 0;
 unsigned long tloCountingAllocatorFreeCount = 0;
+unsigned long tloCountingAllocatorTotalByteCount = 0;
 
 void *tloCountingAllocatorMalloc(size_t byteCount) {
   ++tloCountingAllocatorMallocCount;
+  tloCountingAllocatorTotalByteCount += byteCount;
   return malloc(byteCount);
 }
 
