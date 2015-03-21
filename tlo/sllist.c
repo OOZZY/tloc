@@ -242,6 +242,22 @@ int tloSLListPushFrontMove(tloSLList *list, void *data) {
   return 0;
 }
 
+void tloSLListPopFront(tloSLList *list) {
+  assert(tloSLListIsValid(list));
+  assert(!tloSLListIsEmpty(list));
+
+  tloSLLNode *frontNode = list->head;
+  list->head = list->head->next;
+  list->type->destruct(frontNode->bytes);
+  list->allocator->free(frontNode->bytes);
+  list->allocator->free(frontNode);
+  --list->size;
+
+  if (!list->head) {
+    list->tail = NULL;
+  }
+}
+
 int tloSLListPushBack(tloSLList *list, const void *data) {
   assert(tloSLListIsValid(list));
   assert(data);

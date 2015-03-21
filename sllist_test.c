@@ -157,6 +157,66 @@ void testSLListIntPushFrontMoveManyTimes(void) {
   ints = NULL;
 }
 
+void testSLListIntPushFrontOncePopFrontOnce(void) {
+  tloSLList *ints = malloc(sizeof(*ints));
+  assert(ints);
+
+  int error = tloSLListConstruct(ints, &tloIntType, &tloCountingAllocator);
+  assert(!error);
+
+  error = tloSLListPushFront(ints, &(int){SOME_NUMBER});
+  assert(!error);
+
+  tloSLListPopFront(ints);
+
+  assert(tloSLListGetSize(ints) == 0);
+  assert(tloSLListIsEmpty(ints));
+  assert(tloSLListGetType(ints) == &tloIntType);
+  assert(tloSLListGetAllocator(ints) == &tloCountingAllocator);
+
+  tloSLListDestruct(ints);
+  free(ints);
+
+  ints = NULL;
+}
+
+void testSLListIntPushFrontManyTimesPopFrontUntilEmpty(void) {
+  tloSLList *ints = malloc(sizeof(*ints));
+  assert(ints);
+
+  int error = tloSLListConstruct(ints, &tloIntType, &tloCountingAllocator);
+  assert(!error);
+
+  for (size_t i = 0; i < SOME_NUMBER; ++i) {
+    error = tloSLListPushFront(ints, &(int){i});
+    assert(!error);
+  }
+
+  for (size_t i = SOME_NUMBER - 1; i <= SOME_NUMBER - 1; --i) {
+    assert(tloSLListGetSize(ints) == i + 1);
+    assert(!tloSLListIsEmpty(ints));
+    assert(tloSLListGetType(ints) == &tloIntType);
+    assert(tloSLListGetAllocator(ints) == &tloCountingAllocator);
+
+    assert(*(const int *)tloSLListGetFront(ints) == (int){i});
+    assert(*(int *)tloSLListGetFrontRW(ints) == (int){i});
+    assert(*(const int *)tloSLListGetBack(ints) == 0);
+    assert(*(int *)tloSLListGetBackRW(ints) == 0);
+
+    tloSLListPopFront(ints);
+  }
+
+  assert(tloSLListGetSize(ints) == 0);
+  assert(tloSLListIsEmpty(ints));
+  assert(tloSLListGetType(ints) == &tloIntType);
+  assert(tloSLListGetAllocator(ints) == &tloCountingAllocator);
+
+  tloSLListDestruct(ints);
+  free(ints);
+
+  ints = NULL;
+}
+
 void testSLListIntPushBackOnce(void) {
   tloSLList *ints = malloc(sizeof(*ints));
   assert(ints);
@@ -282,6 +342,8 @@ int main(void) {
   testSLListIntPushFrontMoveOnce();
   testSLListIntPushFrontManyTimes();
   testSLListIntPushFrontMoveManyTimes();
+  testSLListIntPushFrontOncePopFrontOnce();
+  testSLListIntPushFrontManyTimesPopFrontUntilEmpty();
   testSLListIntPushBackOnce();
   testSLListIntPushBackMoveOnce();
   testSLListIntPushBackManyTimes();

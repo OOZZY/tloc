@@ -55,6 +55,8 @@ int tloSLListPushFront(tloSLList *list, const void *data);
  */
 int tloSLListPushFrontMove(tloSLList *list, void *data);
 
+void tloSLListPopFront(tloSLList *list);
+
 /*
  * * deep copies data using list->type->copy
  */
