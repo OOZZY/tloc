@@ -371,6 +371,7 @@ int tloDArrayPushBackMove(tloDArray *array, void *data) {
 
 void tloDArrayPopBack(tloDArray *array) {
   assert(tloDArrayIsValid(array));
+  assert(!tloDArrayIsEmpty(array));
 
   void *back = getElementRW(array->bytes, array->size, array->type->sizeOf);
   array->type->destruct(back);
