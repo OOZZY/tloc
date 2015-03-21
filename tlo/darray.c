@@ -254,23 +254,13 @@ int tloDArrayCopy(tloDArray *array, const tloDArray *other) {
   assert(tloDArrayIsValid(array));
   assert(tloDArrayIsValid(other));
 
-  void *newBytes =
-    other->allocator->malloc(other->capacity * other->type->sizeOf);
-  if (!newBytes) {
-    return 1;
-  }
-
-  if (deepCopyAllElements(newBytes, other)) {
+  tloDArray copy;
+  if (tloDArrayConstructCopy(&copy, other)) {
     return 1;
   }
 
   tloDArrayDestruct(array);
-
-  array->bytes = newBytes;
-  array->type = other->type;
-  array->allocator = other->allocator;
-  array->size = other->size;
-  array->capacity = other->capacity;
+  memcpy(array, &copy, sizeof(tloDArray));
 
   return 0;
 }
