@@ -94,7 +94,9 @@ bool tloSLListIsValid(const tloSLList *list) {
     (tloAllocatorIsValid(list->allocator)) &&
     ((list->head == NULL) == (list->size == 0)) &&
     ((list->tail == NULL) == (list->size == 0)) &&
-    ((list->head == NULL) == (list->tail == NULL))
+    ((list->head == NULL) == (list->tail == NULL)) &&
+    ((list->size == 0 || list->size == 1) ?
+      (list->head == list->tail) : (list->head != list->tail))
   );
 }
 
