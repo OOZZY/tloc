@@ -2,6 +2,91 @@
 #include <assert.h>
 #include <string.h>
 
+static void freeAllNodes(tloSLList *list) {
+  tloSLLNode *previous = NULL;
+  tloSLLNode *current = list->head;
+
+  while (current) {
+    list->type->destruct(current->bytes);
+    list->allocator->free(current->bytes);
+    if (previous) {
+      list->allocator->free(previous);
+    }
+
+    previous = current;
+    current = current->next;
+  }
+
+  if (previous) {
+    list->allocator->free(previous);
+  }
+}
+
+static tloSLLNode *makeNodeWithCopiedData(tloSLList *list, const void *data) {
+  tloSLLNode *node = list->allocator->malloc(sizeof(*node));
+  if (!node) {
+    return NULL;
+  }
+
+  node->bytes = list->allocator->malloc(list->type->sizeOf);
+  if (!node->bytes) {
+    list->allocator->free(node);
+    return NULL;
+  }
+
+  if (list->type->constructCopy(node->bytes, data)) {
+    list->allocator->free(node->bytes);
+    list->allocator->free(node);
+    return NULL;
+  }
+
+  node->next = NULL;
+  return node;
+}
+
+static tloSLLNode *makeNodeWithMovedData(tloSLList *list, void *data) {
+  tloSLLNode *node = list->allocator->malloc(sizeof(*node));
+  if (!node) {
+    return NULL;
+  }
+
+  node->bytes = list->allocator->malloc(list->type->sizeOf);
+  if (!node->bytes) {
+    list->allocator->free(node);
+    return NULL;
+  }
+
+  memcpy(node->bytes, data, list->type->sizeOf);
+  memset(data, 0, list->type->sizeOf);
+
+  node->next = NULL;
+  return node;
+}
+
+static void pushFrontNode(tloSLList *list, tloSLLNode *node) {
+  if (!list->head) {
+    list->head = node;
+    list->tail = list->head;
+  } else {
+    node->next = list->head;
+    list->head = node;
+  }
+
+  ++list->size;
+}
+
+static void pushBackNode(tloSLList *list, tloSLLNode *node) {
+  if (!list->head) {
+    list->head = node;
+    list->tail = list->head;
+  } else {
+    list->tail->next = node;
+    list->tail = list->tail->next;
+  }
+
+  ++list->size;
+}
+
 bool tloSLListIsValid(const tloSLList *list) {
   return (
     (list) &&
@@ -27,26 +112,6 @@ int tloSLListConstruct(tloSLList *list, const tloType *type,
   list->size = 0;
 
   return 0;
-}
-
-static void freeAllNodes(tloSLList *list) {
-  tloSLLNode *previous = NULL;
-  tloSLLNode *current = list->head;
-
-  while (current) {
-    list->type->destruct(current->bytes);
-    list->allocator->free(current->bytes);
-    if (previous) {
-      list->allocator->free(previous);
-    }
-
-    previous = current;
-    current = current->next;
-  }
-
-  if (previous) {
-    list->allocator->free(previous);
-  }
 }
 
 void tloSLListDestruct(tloSLList *list) {
@@ -145,71 +210,6 @@ void *tloSLListGetBackRW(tloSLList *list) {
   assert(!tloSLListIsEmpty(list));
 
   return list->tail->bytes;
-}
-
-static tloSLLNode *makeNodeWithCopiedData(tloSLList *list, const void *data) {
-  tloSLLNode *node = list->allocator->malloc(sizeof(*node));
-  if (!node) {
-    return NULL;
-  }
-
-  node->bytes = list->allocator->malloc(list->type->sizeOf);
-  if (!node->bytes) {
-    list->allocator->free(node);
-    return NULL;
-  }
-
-  if (list->type->constructCopy(node->bytes, data)) {
-    list->allocator->free(node->bytes);
-    list->allocator->free(node);
-    return NULL;
-  }
-
-  node->next = NULL;
-  return node;
-}
-
-static tloSLLNode *makeNodeWithMovedData(tloSLList *list, void *data) {
-  tloSLLNode *node = list->allocator->malloc(sizeof(*node));
-  if (!node) {
-    return NULL;
-  }
-
-  node->bytes = list->allocator->malloc(list->type->sizeOf);
-  if (!node->bytes) {
-    list->allocator->free(node);
-    return NULL;
-  }
-
-  memcpy(node->bytes, data, list->type->sizeOf);
-  memset(data, 0, list->type->sizeOf);
-
-  node->next = NULL;
-  return node;
-}
-
-static void pushFrontNode(tloSLList *list, tloSLLNode *node) {
-  if (!list->head) {
-    list->head = node;
-    list->tail = list->head;
-  } else {
-    node->next = list->head;
-    list->head = node;
-  }
-
-  ++list->size;
-}
-
-static void pushBackNode(tloSLList *list, tloSLLNode *node) {
-  if (!list->head) {
-    list->head = node;
-    list->tail = list->head;
-  } else {
-    list->tail->next = node;
-    list->tail = list->tail->next;
-  }
-
-  ++list->size;
 }
 
 int tloSLListPushFront(tloSLList *list, const void *data) {
