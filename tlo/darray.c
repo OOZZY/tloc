@@ -27,20 +27,6 @@ static void destructAllElements(tloDArray *array) {
                    array->type->destruct);
 }
 
-static int deepCopyAllElements(void *newBytes, const tloDArray *other) {
-  for (size_t i = 0; i < other->size; ++i) {
-    void *destination = getElementRW(newBytes, i, other->type->sizeOf);
-    const void *source = getElement(other->bytes, i, other->type->sizeOf);
-
-    if (other->type->constructCopy(destination, source)) {
-      destructElements(newBytes, i, other->type->sizeOf, other->type->destruct);
-      return 1;
-    }
-  }
-
-  return 0;
-}
-
 #define STARTING_CAPACITY 2
 
 static int allocateBytesIfNeeded(tloDArray *array) {
@@ -98,6 +84,18 @@ static int pushBackMovedData(tloDArray *array, void *data) {
   return 0;
 }
 
+static int pushBackElementsOfOther(tloDArray *array, const tloDArray *other) {
+  for (size_t i = 0; i < other->size; ++i) {
+    const void *element = getElement(other->bytes, i, other->type->sizeOf);
+    if (tloDArrayPushBack(array, element)) {
+      tloDArrayDestruct(array);
+      return 1;
+    }
+  }
+
+  return 0;
+}
+
 bool tloDArrayIsValid(const tloDArray *array) {
   return (
     (array) &&
@@ -149,21 +147,15 @@ int tloDArrayConstructCopy(tloDArray *array, const tloDArray *other) {
   assert(array);
   assert(tloDArrayIsValid(other));
 
-  void *newBytes =
-    other->allocator->malloc(other->capacity * other->type->sizeOf);
-  if (!newBytes) {
+  if (tloDArrayConstructWithCapacity(array, other->type, other->allocator,
+                                     other->capacity))
+  {
     return 1;
   }
 
-  if (deepCopyAllElements(newBytes, other)) {
+  if (pushBackElementsOfOther(array, other)) {
     return 1;
   }
-
-  array->bytes = newBytes;
-  array->type = other->type;
-  array->allocator = other->allocator;
-  array->size = other->size;
-  array->capacity = other->capacity;
 
   return 0;
 }
