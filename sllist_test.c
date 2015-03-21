@@ -450,6 +450,7 @@ int main(void) {
   printf("sizeof(tloSLLNode): %zu\n", sizeof(tloSLLNode));
   assert(tloCountingAllocatorMallocCount == 0);
   assert(tloCountingAllocatorMallocCount == tloCountingAllocatorFreeCount);
+  assert(tloCountingAllocatorTotalByteCount == 0);
 
   testSLListIntConstructDestruct();
   testSLListIntMakeDelete();
@@ -475,4 +476,5 @@ int main(void) {
          tloCountingAllocatorTotalByteCount);
   assert(tloCountingAllocatorMallocCount > 0);
   assert(tloCountingAllocatorMallocCount == tloCountingAllocatorFreeCount);
+  assert(tloCountingAllocatorTotalByteCount > 0);
 }

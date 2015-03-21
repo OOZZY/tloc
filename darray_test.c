@@ -381,6 +381,7 @@ int main(void) {
   printf("sizeof(tloDArray): %zu\n", sizeof(tloDArray));
   assert(tloCountingAllocatorMallocCount == 0);
   assert(tloCountingAllocatorMallocCount == tloCountingAllocatorFreeCount);
+  assert(tloCountingAllocatorTotalByteCount == 0);
 
   testDArrayIntConstructDestruct();
   testDArrayIntConstructWithCapacityDestruct();
@@ -404,4 +405,5 @@ int main(void) {
          tloCountingAllocatorTotalByteCount);
   assert(tloCountingAllocatorMallocCount > 0);
   assert(tloCountingAllocatorMallocCount == tloCountingAllocatorFreeCount);
+  assert(tloCountingAllocatorTotalByteCount > 0);
 }
