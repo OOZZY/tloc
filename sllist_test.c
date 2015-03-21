@@ -447,6 +447,7 @@ void testSLListIntCopy(void) {
 
 int main(void) {
   printf("sizeof(tloSLList): %zu\n", sizeof(tloSLList));
+  printf("sizeof(tloSLLNode): %zu\n", sizeof(tloSLLNode));
   assert(tloCountingAllocatorMallocCount == 0);
   assert(tloCountingAllocatorMallocCount == tloCountingAllocatorFreeCount);
 
