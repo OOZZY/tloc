@@ -144,30 +144,6 @@ void testDArrayIntPushBackMoveOnce(void) {
   ints = NULL;
 }
 
-void testDArrayIntPushBackOncePopBackOnce(void) {
-  tloDArray *ints = malloc(sizeof(*ints));
-  assert(ints);
-
-  int error = tloDArrayConstruct(ints, &tloIntType, &tloCountingAllocator);
-  assert(!error);
-
-  error = tloDArrayPushBack(ints, &(int){SOME_NUMBER});
-  assert(!error);
-
-  tloDArrayPopBack(ints);
-
-  assert(tloDArrayGetSize(ints) == 0);
-  assert(tloDArrayGetCapacity(ints) >= tloDArrayGetSize(ints));
-  assert(tloDArrayIsEmpty(ints));
-  assert(tloDArrayGetType(ints) == &tloIntType);
-  assert(tloDArrayGetAllocator(ints) == &tloCountingAllocator);
-
-  tloDArrayDestruct(ints);
-  free(ints);
-
-  ints = NULL;
-}
-
 void testDArrayIntPushBackUntilResize(void) {
   tloDArray *ints = malloc(sizeof(*ints));
   assert(ints);
@@ -225,6 +201,30 @@ void testDArrayIntPushBackMoveUntilResize(void) {
     assert(*(const int *)tloDArrayGetBack(ints) == (int){i});
     assert(*(int *)tloDArrayGetBackRW(ints) == (int){i});
   }
+
+  tloDArrayDestruct(ints);
+  free(ints);
+
+  ints = NULL;
+}
+
+void testDArrayIntPushBackOncePopBackOnce(void) {
+  tloDArray *ints = malloc(sizeof(*ints));
+  assert(ints);
+
+  int error = tloDArrayConstruct(ints, &tloIntType, &tloCountingAllocator);
+  assert(!error);
+
+  error = tloDArrayPushBack(ints, &(int){SOME_NUMBER});
+  assert(!error);
+
+  tloDArrayPopBack(ints);
+
+  assert(tloDArrayGetSize(ints) == 0);
+  assert(tloDArrayGetCapacity(ints) >= tloDArrayGetSize(ints));
+  assert(tloDArrayIsEmpty(ints));
+  assert(tloDArrayGetType(ints) == &tloIntType);
+  assert(tloDArrayGetAllocator(ints) == &tloCountingAllocator);
 
   tloDArrayDestruct(ints);
   free(ints);
@@ -390,9 +390,9 @@ int main(void) {
   testDArrayDeleteWithNull();
   testDArrayIntPushBackOnce();
   testDArrayIntPushBackMoveOnce();
-  testDArrayIntPushBackOncePopBackOnce();
   testDArrayIntPushBackUntilResize();
   testDArrayIntPushBackMoveUntilResize();
+  testDArrayIntPushBackOncePopBackOnce();
   testDArrayIntPushBackUntilResizePopBackUntilEmpty();
   testDArrayIntConstructCopy();
   testDArrayIntMakeCopy();
