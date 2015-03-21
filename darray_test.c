@@ -24,12 +24,49 @@ void testDArrayIntConstructDestruct(void) {
   ints = NULL;
 }
 
+void testDArrayIntConstructWithCapacityDestruct(void) {
+  tloDArray *ints = malloc(sizeof(*ints));
+  assert(ints);
+
+  int error =
+    tloDArrayConstructWithCapacity(ints, &tloIntType, &tloCountingAllocator,
+                                   SOME_NUMBER);
+  assert(!error);
+
+  assert(tloDArrayGetSize(ints) == 0);
+  assert(tloDArrayGetCapacity(ints) == SOME_NUMBER);
+  assert(tloDArrayIsEmpty(ints));
+  assert(tloDArrayGetType(ints) == &tloIntType);
+  assert(tloDArrayGetAllocator(ints) == &tloCountingAllocator);
+
+  tloDArrayDestruct(ints);
+  free(ints);
+
+  ints = NULL;
+}
+
 void testDArrayIntMakeDelete(void) {
   tloDArray *ints = tloDArrayMake(&tloIntType, &tloCountingAllocator);
   assert(ints);
 
   assert(tloDArrayGetSize(ints) == 0);
   assert(tloDArrayGetCapacity(ints) >= tloDArrayGetSize(ints));
+  assert(tloDArrayIsEmpty(ints));
+  assert(tloDArrayGetType(ints) == &tloIntType);
+  assert(tloDArrayGetAllocator(ints) == &tloCountingAllocator);
+
+  tloDArrayDelete(ints);
+
+  ints = NULL;
+}
+
+void testDArrayIntMakeWithCapacityDelete(void) {
+  tloDArray *ints =
+    tloDArrayMakeWithCapacity(&tloIntType, &tloCountingAllocator, SOME_NUMBER);
+  assert(ints);
+
+  assert(tloDArrayGetSize(ints) == 0);
+  assert(tloDArrayGetCapacity(ints) == SOME_NUMBER);
   assert(tloDArrayIsEmpty(ints));
   assert(tloDArrayGetType(ints) == &tloIntType);
   assert(tloDArrayGetAllocator(ints) == &tloCountingAllocator);
@@ -346,7 +383,9 @@ int main(void) {
   assert(tloCountingAllocatorMallocCount == tloCountingAllocatorFreeCount);
 
   testDArrayIntConstructDestruct();
+  testDArrayIntConstructWithCapacityDestruct();
   testDArrayIntMakeDelete();
+  testDArrayIntMakeWithCapacityDelete();
   testDArrayDestructWithNull();
   testDArrayDeleteWithNull();
   testDArrayIntPushBackOnce();

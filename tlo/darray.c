@@ -123,6 +123,28 @@ int tloDArrayConstruct(tloDArray *array, const tloType *type,
   return 0;
 }
 
+int tloDArrayConstructWithCapacity(tloDArray *array, const tloType *type,
+                                  const tloAllocator *allocator,
+                                  size_t capacity)
+{
+  assert(array);
+  assert(tloTypeIsValid(type));
+  assert(tloAllocatorIsValid(allocator));
+
+  void *newBytes = allocator->malloc(capacity * type->sizeOf);
+  if (!newBytes) {
+    return 1;
+  }
+
+  array->type = type;
+  array->allocator = allocator;
+  array->bytes = newBytes;
+  array->size = 0;
+  array->capacity = capacity;
+
+  return 0;
+}
+
 int tloDArrayConstructCopy(tloDArray *array, const tloDArray *other) {
   assert(array);
   assert(tloDArrayIsValid(other));
@@ -173,6 +195,26 @@ tloDArray *tloDArrayMake(const tloType *type, const tloAllocator *allocator) {
   }
 
   if (tloDArrayConstruct(array, type, allocator)) {
+    allocator->free(array);
+    return NULL;
+  }
+
+  return array;
+}
+
+tloDArray *tloDArrayMakeWithCapacity(const tloType *type,
+                                     const tloAllocator *allocator,
+                                     size_t capacity)
+{
+  assert(tloTypeIsValid(type));
+  assert(tloAllocatorIsValid(allocator));
+
+  tloDArray *array = allocator->malloc(sizeof(*array));
+  if (!array) {
+    return NULL;
+  }
+
+  if (tloDArrayConstructWithCapacity(array, type, allocator, capacity)) {
     allocator->free(array);
     return NULL;
   }
