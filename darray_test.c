@@ -1,11 +1,12 @@
 #include <tlo/darray.h>
+#include <stdlib.h>
 #include <assert.h>
 #include <stdio.h>
 
 #define SOME_NUMBER 42
 
 void testDArrayIntConstructDestruct(void) {
-  tloDArray *ints = tloCountingAllocator.malloc(sizeof(*ints));
+  tloDArray *ints = malloc(sizeof(*ints));
   assert(ints);
 
   int error = tloDArrayConstruct(ints, &tloIntType, &tloCountingAllocator);
@@ -18,13 +19,13 @@ void testDArrayIntConstructDestruct(void) {
   assert(tloDArrayGetAllocator(ints) == &tloCountingAllocator);
 
   tloDArrayDestruct(ints);
-  tloCountingAllocator.free(ints);
+  free(ints);
 
   ints = NULL;
 }
 
 void testDArrayIntConstructWithCapacityDestruct(void) {
-  tloDArray *ints = tloCountingAllocator.malloc(sizeof(*ints));
+  tloDArray *ints = malloc(sizeof(*ints));
   assert(ints);
 
   int error =
@@ -39,7 +40,7 @@ void testDArrayIntConstructWithCapacityDestruct(void) {
   assert(tloDArrayGetAllocator(ints) == &tloCountingAllocator);
 
   tloDArrayDestruct(ints);
-  tloCountingAllocator.free(ints);
+  free(ints);
 
   ints = NULL;
 }
@@ -84,7 +85,7 @@ void testDArrayDeleteWithNull(void) {
 }
 
 void testDArrayIntPushBackOnce(void) {
-  tloDArray *ints = tloCountingAllocator.malloc(sizeof(*ints));
+  tloDArray *ints = malloc(sizeof(*ints));
   assert(ints);
 
   int error = tloDArrayConstruct(ints, &tloIntType, &tloCountingAllocator);
@@ -107,13 +108,13 @@ void testDArrayIntPushBackOnce(void) {
   assert(*(int *)tloDArrayGetBackRW(ints) == SOME_NUMBER);
 
   tloDArrayDestruct(ints);
-  tloCountingAllocator.free(ints);
+  free(ints);
 
   ints = NULL;
 }
 
 void testDArrayIntPushBackMoveOnce(void) {
-  tloDArray *ints = tloCountingAllocator.malloc(sizeof(*ints));
+  tloDArray *ints = malloc(sizeof(*ints));
   assert(ints);
 
   int error = tloDArrayConstruct(ints, &tloIntType, &tloCountingAllocator);
@@ -138,13 +139,13 @@ void testDArrayIntPushBackMoveOnce(void) {
   assert(*(int *)tloDArrayGetBackRW(ints) == SOME_NUMBER);
 
   tloDArrayDestruct(ints);
-  tloCountingAllocator.free(ints);
+  free(ints);
 
   ints = NULL;
 }
 
 void testDArrayIntPushBackUntilResize(void) {
-  tloDArray *ints = tloCountingAllocator.malloc(sizeof(*ints));
+  tloDArray *ints = malloc(sizeof(*ints));
   assert(ints);
 
   int error = tloDArrayConstruct(ints, &tloIntType, &tloCountingAllocator);
@@ -169,13 +170,13 @@ void testDArrayIntPushBackUntilResize(void) {
   }
 
   tloDArrayDestruct(ints);
-  tloCountingAllocator.free(ints);
+  free(ints);
 
   ints = NULL;
 }
 
 void testDArrayIntPushBackMoveUntilResize(void) {
-  tloDArray *ints = tloCountingAllocator.malloc(sizeof(*ints));
+  tloDArray *ints = malloc(sizeof(*ints));
   assert(ints);
 
   int error = tloDArrayConstruct(ints, &tloIntType, &tloCountingAllocator);
@@ -202,13 +203,13 @@ void testDArrayIntPushBackMoveUntilResize(void) {
   }
 
   tloDArrayDestruct(ints);
-  tloCountingAllocator.free(ints);
+  free(ints);
 
   ints = NULL;
 }
 
 void testDArrayIntPushBackOncePopBackOnce(void) {
-  tloDArray *ints = tloCountingAllocator.malloc(sizeof(*ints));
+  tloDArray *ints = malloc(sizeof(*ints));
   assert(ints);
 
   int error = tloDArrayConstruct(ints, &tloIntType, &tloCountingAllocator);
@@ -226,13 +227,13 @@ void testDArrayIntPushBackOncePopBackOnce(void) {
   assert(tloDArrayGetAllocator(ints) == &tloCountingAllocator);
 
   tloDArrayDestruct(ints);
-  tloCountingAllocator.free(ints);
+  free(ints);
 
   ints = NULL;
 }
 
 void testDArrayIntPushBackUntilResizePopBackUntilEmpty(void) {
-  tloDArray *ints = tloCountingAllocator.malloc(sizeof(*ints));
+  tloDArray *ints = malloc(sizeof(*ints));
   assert(ints);
 
   int error = tloDArrayConstruct(ints, &tloIntType, &tloCountingAllocator);
@@ -267,7 +268,7 @@ void testDArrayIntPushBackUntilResizePopBackUntilEmpty(void) {
   assert(tloDArrayGetAllocator(ints) == &tloCountingAllocator);
 
   tloDArrayDestruct(ints);
-  tloCountingAllocator.free(ints);
+  free(ints);
 
   ints = NULL;
 }
@@ -281,7 +282,7 @@ void testDArrayIntConstructCopy(void) {
     assert(!error);
   }
 
-  tloDArray *intsCopy = tloCountingAllocator.malloc(sizeof(*intsCopy));
+  tloDArray *intsCopy = malloc(sizeof(*intsCopy));
   assert(intsCopy);
 
   int error = tloDArrayConstructCopy(intsCopy, ints);
@@ -303,7 +304,7 @@ void testDArrayIntConstructCopy(void) {
   tloDArrayDelete(ints);
 
   tloDArrayDestruct(intsCopy);
-  tloCountingAllocator.free(intsCopy);
+  free(intsCopy);
 
   ints = NULL;
   intsCopy = NULL;
