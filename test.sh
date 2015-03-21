@@ -2,12 +2,15 @@
 
 # ./test.sh; echo $?
 
+CFLAGS="-std=c11 -pedantic -Wall -Wextra -Werror -g -I. tlo/*.c"
+VALGRIND_FLAGS="--tool=memcheck --leak-check=yes --track-origins=yes"
+
 set -xe
 
-clang -std=c11 -pedantic -Wall -Wextra -Werror -g -I. darray_test.c tlo/*.c -o darray_test
-gcc -std=c11 -pedantic -Wall -Wextra -Werror -g -I. darray_test.c tlo/*.c -o darray_test-gcc
-clang -std=c11 -pedantic -Wall -Wextra -Werror -g -I. sllist_test.c tlo/*.c -o sllist_test
-gcc -std=c11 -pedantic -Wall -Wextra -Werror -g -I. sllist_test.c tlo/*.c -o sllist_test-gcc
+clang ${CFLAGS} darray_test.c -o darray_test
+gcc ${CFLAGS} darray_test.c -o darray_test-gcc
+clang ${CFLAGS} sllist_test.c -o sllist_test
+gcc ${CFLAGS} sllist_test.c -o sllist_test-gcc
 
-valgrind --tool=memcheck --leak-check=yes --track-origins=yes ./darray_test
-valgrind --tool=memcheck --leak-check=yes --track-origins=yes ./sllist_test
+valgrind ${VALGRIND_FLAGS} ./darray_test
+valgrind ${VALGRIND_FLAGS} ./sllist_test
