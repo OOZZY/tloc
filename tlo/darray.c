@@ -2,9 +2,9 @@
 #include <assert.h>
 #include <string.h>
 
-static const void *getElement(const void *bytes, size_t index,
-                              size_t sizeOfElement)
-{
+static const void *getElement(
+  const void *bytes, size_t index, size_t sizeOfElement
+) {
   return (const char *)bytes + index * sizeOfElement;
 }
 
@@ -12,10 +12,10 @@ static void *getElementRW(void *bytes, size_t index, size_t sizeOfElement) {
   return (char *)bytes + index * sizeOfElement;
 }
 
-static void destructElements(void *bytes, size_t elementCount,
-                             size_t sizeOfElement,
-                             tloDestructFunction destruct)
-{
+static void destructElements(
+  void *bytes, size_t elementCount, size_t sizeOfElement,
+  tloDestructFunction destruct
+) {
   for (size_t i = 0; i < elementCount; ++i) {
     void *element = getElementRW(bytes, i, sizeOfElement);
     destruct(element);
@@ -105,9 +105,9 @@ bool tloDArrayIsValid(const tloDArray *array) {
   );
 }
 
-int tloDArrayConstruct(tloDArray *array, const tloType *type,
-                       const tloAllocator *allocator)
-{
+int tloDArrayConstruct(
+  tloDArray *array, const tloType *type, const tloAllocator *allocator
+) {
   assert(array);
   assert(tloTypeIsValid(type));
   assert(tloAllocatorIsValid(allocator));
@@ -121,10 +121,10 @@ int tloDArrayConstruct(tloDArray *array, const tloType *type,
   return 0;
 }
 
-int tloDArrayConstructWithCapacity(tloDArray *array, const tloType *type,
-                                  const tloAllocator *allocator,
-                                  size_t capacity)
-{
+int tloDArrayConstructWithCapacity(
+  tloDArray *array, const tloType *type, const tloAllocator *allocator,
+  size_t capacity
+) {
   assert(array);
   assert(tloTypeIsValid(type));
   assert(tloAllocatorIsValid(allocator));
@@ -194,10 +194,9 @@ tloDArray *tloDArrayMake(const tloType *type, const tloAllocator *allocator) {
   return array;
 }
 
-tloDArray *tloDArrayMakeWithCapacity(const tloType *type,
-                                     const tloAllocator *allocator,
-                                     size_t capacity)
-{
+tloDArray *tloDArrayMakeWithCapacity(
+  const tloType *type, const tloAllocator *allocator, size_t capacity
+) {
   assert(tloTypeIsValid(type));
   assert(tloAllocatorIsValid(allocator));
 

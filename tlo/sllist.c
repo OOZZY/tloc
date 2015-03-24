@@ -112,9 +112,9 @@ bool tloSLListIsValid(const tloSLList *list) {
   );
 }
 
-int tloSLListConstruct(tloSLList *list, const tloType *type,
-                       const tloAllocator *allocator)
-{
+int tloSLListConstruct(
+  tloSLList *list, const tloType *type, const tloAllocator *allocator
+) {
   assert(list);
   assert(tloTypeIsValid(type));
   assert(tloAllocatorIsValid(allocator));

@@ -24,8 +24,9 @@ typedef struct tloSLList {
 } tloSLList;
 
 bool tloSLListIsValid(const tloSLList *list);
-int tloSLListConstruct(tloSLList *list, const tloType *type,
-                       const tloAllocator *allocator);
+int tloSLListConstruct(
+  tloSLList *list, const tloType *type, const tloAllocator *allocator
+);
 int tloSLListConstructCopy(tloSLList *list, const tloSLList *other);
 void tloSLListDestruct(tloSLList *list);
 
