@@ -147,9 +147,11 @@ int tloDArrayConstructCopy(tloDArray *array, const tloDArray *other) {
   assert(array);
   assert(tloDArrayIsValid(other));
 
-  if (tloDArrayConstructWithCapacity(array, other->type, other->allocator,
-                                     other->capacity))
-  {
+  if (
+    tloDArrayConstructWithCapacity(
+      array, other->type, other->allocator, other->capacity
+    )
+  ) {
     return 1;
   }
 
