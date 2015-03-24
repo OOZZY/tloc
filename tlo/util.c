@@ -50,8 +50,11 @@ unsigned long tloCountingAllocatorTotalByteCount = 0;
 
 void *tloCountingAllocatorMalloc(size_t byteCount) {
   ++tloCountingAllocatorMallocCount;
-  tloCountingAllocatorTotalByteCount += byteCount;
-  return malloc(byteCount);
+  void *bytes = malloc(byteCount);
+  if (bytes) {
+    tloCountingAllocatorTotalByteCount += byteCount;
+  }
+  return bytes;
 }
 
 void tloCountingAllocatorFree(void *bytes) {
