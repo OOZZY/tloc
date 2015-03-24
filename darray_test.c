@@ -29,8 +29,9 @@ void testDArrayIntConstructWithCapacityDestructHeapSpace(void) {
   assert(ints);
 
   int error =
-    tloDArrayConstructWithCapacity(ints, &tloIntType, &tloCountingAllocator,
-                                   SOME_NUMBER);
+    tloDArrayConstructWithCapacity(
+      ints, &tloIntType, &tloCountingAllocator, SOME_NUMBER
+    );
   assert(!error);
 
   assert(tloDArrayGetSize(ints) == 0);
