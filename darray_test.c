@@ -5,6 +5,21 @@
 
 #define SOME_NUMBER 42
 
+void testDArrayIntConstructDestructStackSpace(void) {
+  tloDArray ints;
+
+  int error = tloDArrayConstruct(&ints, &tloIntType, &tloCountingAllocator);
+  assert(!error);
+
+  assert(tloDArrayGetSize(&ints) == 0);
+  assert(tloDArrayGetCapacity(&ints) >= tloDArrayGetSize(&ints));
+  assert(tloDArrayIsEmpty(&ints));
+  assert(tloDArrayGetType(&ints) == &tloIntType);
+  assert(tloDArrayGetAllocator(&ints) == &tloCountingAllocator);
+
+  tloDArrayDestruct(&ints);
+}
+
 void testDArrayIntConstructDestructHeapSpace(void) {
   tloDArray *ints = malloc(sizeof(*ints));
   assert(ints);
@@ -22,6 +37,24 @@ void testDArrayIntConstructDestructHeapSpace(void) {
   free(ints);
 
   ints = NULL;
+}
+
+void testDArrayIntConstructWithCapacityDestructStackSpace(void) {
+  tloDArray ints;
+
+  int error =
+    tloDArrayConstructWithCapacity(
+      &ints, &tloIntType, &tloCountingAllocator, SOME_NUMBER
+    );
+  assert(!error);
+
+  assert(tloDArrayGetSize(&ints) == 0);
+  assert(tloDArrayGetCapacity(&ints) == SOME_NUMBER);
+  assert(tloDArrayIsEmpty(&ints));
+  assert(tloDArrayGetType(&ints) == &tloIntType);
+  assert(tloDArrayGetAllocator(&ints) == &tloCountingAllocator);
+
+  tloDArrayDestruct(&ints);
 }
 
 void testDArrayIntConstructWithCapacityDestructHeapSpace(void) {
@@ -384,7 +417,9 @@ int main(void) {
   assert(tloCountingAllocatorMallocCount == tloCountingAllocatorFreeCount);
   assert(tloCountingAllocatorTotalByteCount == 0);
 
+  testDArrayIntConstructDestructStackSpace();
   testDArrayIntConstructDestructHeapSpace();
+  testDArrayIntConstructWithCapacityDestructStackSpace();
   testDArrayIntConstructWithCapacityDestructHeapSpace();
   testDArrayIntMakeDelete();
   testDArrayIntMakeWithCapacityDelete();

@@ -5,6 +5,20 @@
 
 #define SOME_NUMBER 42
 
+void testSLListIntConstructDestructStackSpace(void) {
+  tloSLList ints;
+
+  int error = tloSLListConstruct(&ints, &tloIntType, &tloCountingAllocator);
+  assert(!error);
+
+  assert(tloSLListGetSize(&ints) == 0);
+  assert(tloSLListIsEmpty(&ints));
+  assert(tloSLListGetType(&ints) == &tloIntType);
+  assert(tloSLListGetAllocator(&ints) == &tloCountingAllocator);
+
+  tloSLListDestruct(&ints);
+}
+
 void testSLListIntConstructDestructHeapSpace(void) {
   tloSLList *ints = malloc(sizeof(*ints));
   assert(ints);
@@ -452,6 +466,7 @@ int main(void) {
   assert(tloCountingAllocatorMallocCount == tloCountingAllocatorFreeCount);
   assert(tloCountingAllocatorTotalByteCount == 0);
 
+  testSLListIntConstructDestructStackSpace();
   testSLListIntConstructDestructHeapSpace();
   testSLListIntMakeDelete();
   testSLListDestructWithNull();
