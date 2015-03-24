@@ -33,7 +33,6 @@ typedef int (*tloConstructCopyFunction)(void *bytes, const void *data);
  */
 typedef void (*tloDestructFunction)(void *bytes);
 
-
 typedef struct tloType {
   // public
   size_t sizeOf;
