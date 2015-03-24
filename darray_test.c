@@ -5,7 +5,7 @@
 
 #define SOME_NUMBER 42
 
-void testDArrayIntConstructDestruct(void) {
+void testDArrayIntConstructDestructHeapSpace(void) {
   tloDArray *ints = malloc(sizeof(*ints));
   assert(ints);
 
@@ -24,7 +24,7 @@ void testDArrayIntConstructDestruct(void) {
   ints = NULL;
 }
 
-void testDArrayIntConstructWithCapacityDestruct(void) {
+void testDArrayIntConstructWithCapacityDestructHeapSpace(void) {
   tloDArray *ints = malloc(sizeof(*ints));
   assert(ints);
 
@@ -383,8 +383,8 @@ int main(void) {
   assert(tloCountingAllocatorMallocCount == tloCountingAllocatorFreeCount);
   assert(tloCountingAllocatorTotalByteCount == 0);
 
-  testDArrayIntConstructDestruct();
-  testDArrayIntConstructWithCapacityDestruct();
+  testDArrayIntConstructDestructHeapSpace();
+  testDArrayIntConstructWithCapacityDestructHeapSpace();
   testDArrayIntMakeDelete();
   testDArrayIntMakeWithCapacityDelete();
   testDArrayDestructWithNull();

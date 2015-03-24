@@ -5,7 +5,7 @@
 
 #define SOME_NUMBER 42
 
-void testSLListIntConstructDestruct(void) {
+void testSLListIntConstructDestructHeapSpace(void) {
   tloSLList *ints = malloc(sizeof(*ints));
   assert(ints);
 
@@ -452,7 +452,7 @@ int main(void) {
   assert(tloCountingAllocatorMallocCount == tloCountingAllocatorFreeCount);
   assert(tloCountingAllocatorTotalByteCount == 0);
 
-  testSLListIntConstructDestruct();
+  testSLListIntConstructDestructHeapSpace();
   testSLListIntMakeDelete();
   testSLListDestructWithNull();
   testSLListDeleteWithNull();
