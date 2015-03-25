@@ -35,7 +35,6 @@ void testDArrayIntConstructDestructHeapSpace(void) {
 
   tloDArrayDestruct(ints);
   free(ints);
-
   ints = NULL;
 }
 
@@ -75,7 +74,6 @@ void testDArrayIntConstructWithCapacityDestructHeapSpace(void) {
 
   tloDArrayDestruct(ints);
   free(ints);
-
   ints = NULL;
 }
 
@@ -90,7 +88,6 @@ void testDArrayIntMakeDelete(void) {
   assert(tloDArrayGetAllocator(ints) == &tloCountingAllocator);
 
   tloDArrayDelete(ints);
-
   ints = NULL;
 }
 
@@ -106,7 +103,6 @@ void testDArrayIntMakeWithCapacityDelete(void) {
   assert(tloDArrayGetAllocator(ints) == &tloCountingAllocator);
 
   tloDArrayDelete(ints);
-
   ints = NULL;
 }
 
@@ -306,11 +302,10 @@ void testDArrayIntConstructCopy(void) {
   }
 
   tloDArrayDelete(ints);
+  ints = NULL;
 
   tloDArrayDestruct(intsCopy);
   free(intsCopy);
-
-  ints = NULL;
   intsCopy = NULL;
 }
 
@@ -340,9 +335,9 @@ void testDArrayIntMakeCopy(void) {
   }
 
   tloDArrayDelete(ints);
-  tloDArrayDelete(intsCopy);
-
   ints = NULL;
+
+  tloDArrayDelete(intsCopy);
   intsCopy = NULL;
 }
 
@@ -375,9 +370,9 @@ void testDArrayIntCopy(void) {
   }
 
   tloDArrayDelete(ints);
-  tloDArrayDelete(intsCopy);
-
   ints = NULL;
+
+  tloDArrayDelete(intsCopy);
   intsCopy = NULL;
 }
 

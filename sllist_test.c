@@ -33,7 +33,6 @@ void testSLListIntConstructDestructHeapSpace(void) {
 
   tloSLListDestruct(ints);
   free(ints);
-
   ints = NULL;
 }
 
@@ -47,7 +46,6 @@ void testSLListIntMakeDelete(void) {
   assert(tloSLListGetAllocator(ints) == &tloCountingAllocator);
 
   tloSLListDelete(ints);
-
   ints = NULL;
 }
 
@@ -326,11 +324,10 @@ void testSLListIntConstructCopy(void) {
   }
 
   tloSLListDelete(ints);
+  ints = NULL;
 
   tloSLListDestruct(intsCopy);
   free(intsCopy);
-
-  ints = NULL;
   intsCopy = NULL;
 }
 
@@ -364,9 +361,9 @@ void testSLListIntMakeCopy(void) {
   }
 
   tloSLListDelete(ints);
-  tloSLListDelete(intsCopy);
-
   ints = NULL;
+
+  tloSLListDelete(intsCopy);
   intsCopy = NULL;
 }
 
@@ -403,9 +400,9 @@ void testSLListIntCopy(void) {
   }
 
   tloSLListDelete(ints);
-  tloSLListDelete(intsCopy);
-
   ints = NULL;
+
+  tloSLListDelete(intsCopy);
   intsCopy = NULL;
 }
 
