@@ -300,19 +300,19 @@ void testSLListIntConstructCopy(void) {
     assert(!error);
   }
 
-  tloSLList *intsCopy = malloc(sizeof(*intsCopy));
-  assert(intsCopy);
+  tloSLList *copy = malloc(sizeof(*copy));
+  assert(copy);
 
-  int error = tloSLListConstructCopy(intsCopy, ints);
+  int error = tloSLListConstructCopy(copy, ints);
   assert(!error);
 
-  assert(tloSLListGetSize(ints) == tloSLListGetSize(intsCopy));
-  assert(tloSLListIsEmpty(ints) == tloSLListIsEmpty(intsCopy));
-  assert(tloSLListGetType(ints) == tloSLListGetType(intsCopy));
-  assert(tloSLListGetAllocator(ints) == tloSLListGetAllocator(intsCopy));
+  assert(tloSLListGetSize(ints) == tloSLListGetSize(copy));
+  assert(tloSLListIsEmpty(ints) == tloSLListIsEmpty(copy));
+  assert(tloSLListGetType(ints) == tloSLListGetType(copy));
+  assert(tloSLListGetAllocator(ints) == tloSLListGetAllocator(copy));
 
   const tloSLLNode *node1 = tloSLLNodeGetHead(ints);
-  const tloSLLNode *node2 = tloSLLNodeGetHead(intsCopy);
+  const tloSLLNode *node2 = tloSLLNodeGetHead(copy);
   while (node1) {
     assert(node2);
     const int *elem1 = tloSLLNodeGetElement(node1);
@@ -326,9 +326,9 @@ void testSLListIntConstructCopy(void) {
   tloSLListDelete(ints);
   ints = NULL;
 
-  tloSLListDestruct(intsCopy);
-  free(intsCopy);
-  intsCopy = NULL;
+  tloSLListDestruct(copy);
+  free(copy);
+  copy = NULL;
 }
 
 void testSLListIntMakeCopy(void) {
@@ -340,16 +340,16 @@ void testSLListIntMakeCopy(void) {
     assert(!error);
   }
 
-  tloSLList *intsCopy = tloSLListMakeCopy(ints);
-  assert(intsCopy);
+  tloSLList *copy = tloSLListMakeCopy(ints);
+  assert(copy);
 
-  assert(tloSLListGetSize(ints) == tloSLListGetSize(intsCopy));
-  assert(tloSLListIsEmpty(ints) == tloSLListIsEmpty(intsCopy));
-  assert(tloSLListGetType(ints) == tloSLListGetType(intsCopy));
-  assert(tloSLListGetAllocator(ints) == tloSLListGetAllocator(intsCopy));
+  assert(tloSLListGetSize(ints) == tloSLListGetSize(copy));
+  assert(tloSLListIsEmpty(ints) == tloSLListIsEmpty(copy));
+  assert(tloSLListGetType(ints) == tloSLListGetType(copy));
+  assert(tloSLListGetAllocator(ints) == tloSLListGetAllocator(copy));
 
   const tloSLLNode *node1 = tloSLLNodeGetHead(ints);
-  const tloSLLNode *node2 = tloSLLNodeGetHead(intsCopy);
+  const tloSLLNode *node2 = tloSLLNodeGetHead(copy);
   while (node1) {
     assert(node2);
     const int *elem1 = tloSLLNodeGetElement(node1);
@@ -363,8 +363,8 @@ void testSLListIntMakeCopy(void) {
   tloSLListDelete(ints);
   ints = NULL;
 
-  tloSLListDelete(intsCopy);
-  intsCopy = NULL;
+  tloSLListDelete(copy);
+  copy = NULL;
 }
 
 void testSLListIntCopy(void) {
@@ -376,19 +376,19 @@ void testSLListIntCopy(void) {
     assert(!error);
   }
 
-  tloSLList *intsCopy = tloSLListMake(&tloIntType, &tloCountingAllocator);
-  assert(intsCopy);
+  tloSLList *copy = tloSLListMake(&tloIntType, &tloCountingAllocator);
+  assert(copy);
 
-  int error = tloSLListCopy(intsCopy, ints);
+  int error = tloSLListCopy(copy, ints);
   assert(!error);
 
-  assert(tloSLListGetSize(ints) == tloSLListGetSize(intsCopy));
-  assert(tloSLListIsEmpty(ints) == tloSLListIsEmpty(intsCopy));
-  assert(tloSLListGetType(ints) == tloSLListGetType(intsCopy));
-  assert(tloSLListGetAllocator(ints) == tloSLListGetAllocator(intsCopy));
+  assert(tloSLListGetSize(ints) == tloSLListGetSize(copy));
+  assert(tloSLListIsEmpty(ints) == tloSLListIsEmpty(copy));
+  assert(tloSLListGetType(ints) == tloSLListGetType(copy));
+  assert(tloSLListGetAllocator(ints) == tloSLListGetAllocator(copy));
 
   const tloSLLNode *node1 = tloSLLNodeGetHead(ints);
-  const tloSLLNode *node2 = tloSLLNodeGetHead(intsCopy);
+  const tloSLLNode *node2 = tloSLLNodeGetHead(copy);
   while (node1) {
     assert(node2);
     const int *elem1 = tloSLLNodeGetElement(node1);
@@ -402,8 +402,8 @@ void testSLListIntCopy(void) {
   tloSLListDelete(ints);
   ints = NULL;
 
-  tloSLListDelete(intsCopy);
-  intsCopy = NULL;
+  tloSLListDelete(copy);
+  copy = NULL;
 }
 
 int main(void) {

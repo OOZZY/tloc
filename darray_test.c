@@ -282,21 +282,21 @@ void testDArrayIntConstructCopy(void) {
     assert(!error);
   }
 
-  tloDArray *intsCopy = malloc(sizeof(*intsCopy));
-  assert(intsCopy);
+  tloDArray *copy = malloc(sizeof(*copy));
+  assert(copy);
 
-  int error = tloDArrayConstructCopy(intsCopy, ints);
+  int error = tloDArrayConstructCopy(copy, ints);
   assert(!error);
 
-  assert(tloDArrayGetSize(ints) == tloDArrayGetSize(intsCopy));
-  assert(tloDArrayGetCapacity(ints) == tloDArrayGetCapacity(intsCopy));
-  assert(tloDArrayIsEmpty(ints) == tloDArrayIsEmpty(intsCopy));
-  assert(tloDArrayGetType(ints) == tloDArrayGetType(intsCopy));
-  assert(tloDArrayGetAllocator(ints) == tloDArrayGetAllocator(intsCopy));
+  assert(tloDArrayGetSize(ints) == tloDArrayGetSize(copy));
+  assert(tloDArrayGetCapacity(ints) == tloDArrayGetCapacity(copy));
+  assert(tloDArrayIsEmpty(ints) == tloDArrayIsEmpty(copy));
+  assert(tloDArrayGetType(ints) == tloDArrayGetType(copy));
+  assert(tloDArrayGetAllocator(ints) == tloDArrayGetAllocator(copy));
 
   for (size_t i = 0; i < tloDArrayGetSize(ints); ++i) {
     const int *elem1 = tloDArrayGetElement(ints, i);
-    const int *elem2 = tloDArrayGetElement(intsCopy, i);
+    const int *elem2 = tloDArrayGetElement(copy, i);
     assert(elem1 != elem2);
     assert(*elem1 == *elem2);
   }
@@ -304,9 +304,9 @@ void testDArrayIntConstructCopy(void) {
   tloDArrayDelete(ints);
   ints = NULL;
 
-  tloDArrayDestruct(intsCopy);
-  free(intsCopy);
-  intsCopy = NULL;
+  tloDArrayDestruct(copy);
+  free(copy);
+  copy = NULL;
 }
 
 void testDArrayIntMakeCopy(void) {
@@ -318,18 +318,18 @@ void testDArrayIntMakeCopy(void) {
     assert(!error);
   }
 
-  tloDArray *intsCopy = tloDArrayMakeCopy(ints);
-  assert(intsCopy);
+  tloDArray *copy = tloDArrayMakeCopy(ints);
+  assert(copy);
 
-  assert(tloDArrayGetSize(ints) == tloDArrayGetSize(intsCopy));
-  assert(tloDArrayGetCapacity(ints) == tloDArrayGetCapacity(intsCopy));
-  assert(tloDArrayIsEmpty(ints) == tloDArrayIsEmpty(intsCopy));
-  assert(tloDArrayGetType(ints) == tloDArrayGetType(intsCopy));
-  assert(tloDArrayGetAllocator(ints) == tloDArrayGetAllocator(intsCopy));
+  assert(tloDArrayGetSize(ints) == tloDArrayGetSize(copy));
+  assert(tloDArrayGetCapacity(ints) == tloDArrayGetCapacity(copy));
+  assert(tloDArrayIsEmpty(ints) == tloDArrayIsEmpty(copy));
+  assert(tloDArrayGetType(ints) == tloDArrayGetType(copy));
+  assert(tloDArrayGetAllocator(ints) == tloDArrayGetAllocator(copy));
 
   for (size_t i = 0; i < tloDArrayGetSize(ints); ++i) {
     const int *elem1 = tloDArrayGetElement(ints, i);
-    const int *elem2 = tloDArrayGetElement(intsCopy, i);
+    const int *elem2 = tloDArrayGetElement(copy, i);
     assert(elem1 != elem2);
     assert(*elem1 == *elem2);
   }
@@ -337,8 +337,8 @@ void testDArrayIntMakeCopy(void) {
   tloDArrayDelete(ints);
   ints = NULL;
 
-  tloDArrayDelete(intsCopy);
-  intsCopy = NULL;
+  tloDArrayDelete(copy);
+  copy = NULL;
 }
 
 void testDArrayIntCopy(void) {
@@ -350,21 +350,21 @@ void testDArrayIntCopy(void) {
     assert(!error);
   }
 
-  tloDArray *intsCopy = tloDArrayMake(&tloIntType, &tloCountingAllocator);
-  assert(intsCopy);
+  tloDArray *copy = tloDArrayMake(&tloIntType, &tloCountingAllocator);
+  assert(copy);
 
-  int error = tloDArrayCopy(intsCopy, ints);
+  int error = tloDArrayCopy(copy, ints);
   assert(!error);
 
-  assert(tloDArrayGetSize(ints) == tloDArrayGetSize(intsCopy));
-  assert(tloDArrayGetCapacity(ints) == tloDArrayGetCapacity(intsCopy));
-  assert(tloDArrayIsEmpty(ints) == tloDArrayIsEmpty(intsCopy));
-  assert(tloDArrayGetType(ints) == tloDArrayGetType(intsCopy));
-  assert(tloDArrayGetAllocator(ints) == tloDArrayGetAllocator(intsCopy));
+  assert(tloDArrayGetSize(ints) == tloDArrayGetSize(copy));
+  assert(tloDArrayGetCapacity(ints) == tloDArrayGetCapacity(copy));
+  assert(tloDArrayIsEmpty(ints) == tloDArrayIsEmpty(copy));
+  assert(tloDArrayGetType(ints) == tloDArrayGetType(copy));
+  assert(tloDArrayGetAllocator(ints) == tloDArrayGetAllocator(copy));
 
   for (size_t i = 0; i < tloDArrayGetSize(ints); ++i) {
     const int *elem1 = tloDArrayGetElement(ints, i);
-    const int *elem2 = tloDArrayGetElement(intsCopy, i);
+    const int *elem2 = tloDArrayGetElement(copy, i);
     assert(elem1 != elem2);
     assert(*elem1 == *elem2);
   }
@@ -372,8 +372,8 @@ void testDArrayIntCopy(void) {
   tloDArrayDelete(ints);
   ints = NULL;
 
-  tloDArrayDelete(intsCopy);
-  intsCopy = NULL;
+  tloDArrayDelete(copy);
+  copy = NULL;
 }
 
 int main(void) {
