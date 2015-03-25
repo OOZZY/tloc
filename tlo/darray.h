@@ -57,11 +57,11 @@ size_t tloDArrayGetSize(const tloDArray *array);
 size_t tloDArrayGetCapacity(const tloDArray *array);
 bool tloDArrayIsEmpty(const tloDArray *array);
 const void *tloDArrayGetElement(const tloDArray *array, size_t index);
-void *tloDArrayGetElementRW(tloDArray *array, size_t index);
+void *tloDArrayGetMutableElement(tloDArray *array, size_t index);
 const void *tloDArrayGetFront(const tloDArray *array);
-void *tloDArrayGetFrontRW(tloDArray *array);
+void *tloDArrayGetMutableFront(tloDArray *array);
 const void *tloDArrayGetBack(const tloDArray *array);
-void *tloDArrayGetBackRW(tloDArray *array);
+void *tloDArrayGetMutableBack(tloDArray *array);
 
 /*
  * * deep copies data using array->type->copy
@@ -71,7 +71,7 @@ int tloDArrayPushBack(tloDArray *array, const void *data);
 /*
  * * shallow copies data using memcpy then zeroes out data using memset
  */
-int tloDArrayPushBackMove(tloDArray *array, void *data);
+int tloDArrayMoveBack(tloDArray *array, void *data);
 
 void tloDArrayPopBack(tloDArray *array);
 

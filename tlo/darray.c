@@ -8,7 +8,9 @@ static const void *getElement(
   return (const char *)bytes + index * sizeOfElement;
 }
 
-static void *getElementRW(void *bytes, size_t index, size_t sizeOfElement) {
+static void *getMutableElement(
+  void *bytes, size_t index, size_t sizeOfElement
+) {
   return (char *)bytes + index * sizeOfElement;
 }
 
@@ -17,7 +19,7 @@ static void destructElements(
   tloDestructFunction destruct
 ) {
   for (size_t i = 0; i < elementCount; ++i) {
-    void *element = getElementRW(bytes, i, sizeOfElement);
+    void *element = getMutableElement(bytes, i, sizeOfElement);
     destruct(element);
   }
 }
@@ -61,7 +63,7 @@ static int resizeBytesIfNeeded(tloDArray *array) {
 
 static int pushBackCopiedData(tloDArray *array, const void *data) {
   void *destination =
-    getElementRW(array->bytes, array->size, array->type->sizeOf);
+    getMutableElement(array->bytes, array->size, array->type->sizeOf);
 
   if (array->type->constructCopy(destination, data)) {
     return 1;
@@ -74,7 +76,7 @@ static int pushBackCopiedData(tloDArray *array, const void *data) {
 
 static int pushBackMovedData(tloDArray *array, void *data) {
   void *destination =
-    getElementRW(array->bytes, array->size, array->type->sizeOf);
+    getMutableElement(array->bytes, array->size, array->type->sizeOf);
 
   memcpy(destination, data, array->type->sizeOf);
   memset(data, 0, array->type->sizeOf);
@@ -296,12 +298,12 @@ const void *tloDArrayGetElement(const tloDArray *array, size_t index) {
   return getElement(array->bytes, index, array->type->sizeOf);
 }
 
-void *tloDArrayGetElementRW(tloDArray *array, size_t index) {
+void *tloDArrayGetMutableElement(tloDArray *array, size_t index) {
   assert(tloDArrayIsValid(array));
   assert(!tloDArrayIsEmpty(array));
   assert(index < array->size);
 
-  return getElementRW(array->bytes, index, array->type->sizeOf);
+  return getMutableElement(array->bytes, index, array->type->sizeOf);
 }
 
 const void *tloDArrayGetFront(const tloDArray *array) {
@@ -311,11 +313,11 @@ const void *tloDArrayGetFront(const tloDArray *array) {
   return tloDArrayGetElement(array, 0);
 }
 
-void *tloDArrayGetFrontRW(tloDArray *array) {
+void *tloDArrayGetMutableFront(tloDArray *array) {
   assert(tloDArrayIsValid(array));
   assert(!tloDArrayIsEmpty(array));
 
-  return tloDArrayGetElementRW(array, 0);
+  return tloDArrayGetMutableElement(array, 0);
 }
 
 const void *tloDArrayGetBack(const tloDArray *array) {
@@ -325,11 +327,11 @@ const void *tloDArrayGetBack(const tloDArray *array) {
   return tloDArrayGetElement(array, array->size - 1);
 }
 
-void *tloDArrayGetBackRW(tloDArray *array) {
+void *tloDArrayGetMutableBack(tloDArray *array) {
   assert(tloDArrayIsValid(array));
   assert(!tloDArrayIsEmpty(array));
 
-  return tloDArrayGetElementRW(array, array->size - 1);
+  return tloDArrayGetMutableElement(array, array->size - 1);
 }
 
 int tloDArrayPushBack(tloDArray *array, const void *data) {
@@ -351,7 +353,7 @@ int tloDArrayPushBack(tloDArray *array, const void *data) {
   return 0;
 }
 
-int tloDArrayPushBackMove(tloDArray *array, void *data) {
+int tloDArrayMoveBack(tloDArray *array, void *data) {
   assert(tloDArrayIsValid(array));
   assert(data);
 
@@ -374,7 +376,8 @@ void tloDArrayPopBack(tloDArray *array) {
   assert(tloDArrayIsValid(array));
   assert(!tloDArrayIsEmpty(array));
 
-  void *back = getElementRW(array->bytes, array->size, array->type->sizeOf);
+  void *back =
+    getMutableElement(array->bytes, array->size, array->type->sizeOf);
   array->type->destruct(back);
   --array->size;
 }
