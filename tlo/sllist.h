@@ -24,9 +24,8 @@ typedef struct tloSLList {
 } tloSLList;
 
 bool tloSLListIsValid(const tloSLList *list);
-int tloSLListConstruct(
-  tloSLList *list, const tloType *type, const tloAllocator *allocator
-);
+int tloSLListConstruct(tloSLList *list, const tloType *type,
+                       const tloAllocator *allocator);
 int tloSLListConstructCopy(tloSLList *list, const tloSLList *other);
 void tloSLListDestruct(tloSLList *list);
 
@@ -85,4 +84,4 @@ void *tloSLLNodeGetMutableElement(tloSLLNode *node);
 const tloSLLNode *tloSLLNodeGetNext(const tloSLLNode *node);
 tloSLLNode *tloSLLNodeGetMutableNext(tloSLLNode *node);
 
-#endif // TLO_SLLIST_H
+#endif  // TLO_SLLIST_H

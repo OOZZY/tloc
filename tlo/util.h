@@ -66,4 +66,4 @@ void *tloCountingAllocatorMalloc(size_t byteCount);
 void tloCountingAllocatorFree(void *bytes);
 extern const tloAllocator tloCountingAllocator;
 
-#endif // TLO_UTIL_H
+#endif  // TLO_UTIL_H

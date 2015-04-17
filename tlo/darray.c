@@ -2,22 +2,19 @@
 #include <assert.h>
 #include <string.h>
 
-static const void *getElement(
-  const void *bytes, size_t index, size_t sizeOfElement
-) {
+static const void *getElement(const void *bytes, size_t index,
+                              size_t sizeOfElement) {
   return (const char *)bytes + index * sizeOfElement;
 }
 
-static void *getMutableElement(
-  void *bytes, size_t index, size_t sizeOfElement
-) {
+static void *getMutableElement(void *bytes, size_t index,
+                               size_t sizeOfElement) {
   return (char *)bytes + index * sizeOfElement;
 }
 
-static void destructElements(
-  void *bytes, size_t elementCount, size_t sizeOfElement,
-  tloDestructFunction destruct
-) {
+static void destructElements(void *bytes, size_t elementCount,
+                             size_t sizeOfElement,
+                             tloDestructFunction destruct) {
   for (size_t i = 0; i < elementCount; ++i) {
     void *element = getMutableElement(bytes, i, sizeOfElement);
     destruct(element);
@@ -35,7 +32,7 @@ static int allocateBytesIfNeeded(tloDArray *array) {
   if (!array->bytes) {
     array->capacity = STARTING_CAPACITY;
     array->bytes =
-      array->allocator->malloc(array->capacity * array->type->sizeOf);
+        array->allocator->malloc(array->capacity * array->type->sizeOf);
     if (!array->bytes) {
       return 1;
     }
@@ -47,7 +44,7 @@ static int resizeBytesIfNeeded(tloDArray *array) {
   if (array->size == array->capacity) {
     size_t newCapacity = array->capacity * 2;
     void *newBytes =
-      array->allocator->malloc(newCapacity * array->type->sizeOf);
+        array->allocator->malloc(newCapacity * array->type->sizeOf);
     if (!newBytes) {
       return 1;
     }
@@ -63,7 +60,7 @@ static int resizeBytesIfNeeded(tloDArray *array) {
 
 static int pushBackCopiedData(tloDArray *array, const void *data) {
   void *destination =
-    getMutableElement(array->bytes, array->size, array->type->sizeOf);
+      getMutableElement(array->bytes, array->size, array->type->sizeOf);
 
   if (array->type->constructCopy(destination, data)) {
     return 1;
@@ -76,7 +73,7 @@ static int pushBackCopiedData(tloDArray *array, const void *data) {
 
 static int pushBackMovedData(tloDArray *array, void *data) {
   void *destination =
-    getMutableElement(array->bytes, array->size, array->type->sizeOf);
+      getMutableElement(array->bytes, array->size, array->type->sizeOf);
 
   memcpy(destination, data, array->type->sizeOf);
   memset(data, 0, array->type->sizeOf);
@@ -99,17 +96,13 @@ static int pushBackElementsOfOther(tloDArray *array, const tloDArray *other) {
 }
 
 bool tloDArrayIsValid(const tloDArray *array) {
-  return (
-    (array) &&
-    (tloTypeIsValid(array->type)) &&
-    (tloAllocatorIsValid(array->allocator)) &&
-    (array->size <= array->capacity)
-  );
+  return ((array) && (tloTypeIsValid(array->type)) &&
+          (tloAllocatorIsValid(array->allocator)) &&
+          (array->size <= array->capacity));
 }
 
-int tloDArrayConstruct(
-  tloDArray *array, const tloType *type, const tloAllocator *allocator
-) {
+int tloDArrayConstruct(tloDArray *array, const tloType *type,
+                       const tloAllocator *allocator) {
   assert(array);
   assert(tloTypeIsValid(type));
   assert(tloAllocatorIsValid(allocator));
@@ -123,10 +116,9 @@ int tloDArrayConstruct(
   return 0;
 }
 
-int tloDArrayConstructWithCapacity(
-  tloDArray *array, const tloType *type, const tloAllocator *allocator,
-  size_t capacity
-) {
+int tloDArrayConstructWithCapacity(tloDArray *array, const tloType *type,
+                                   const tloAllocator *allocator,
+                                   size_t capacity) {
   assert(array);
   assert(tloTypeIsValid(type));
   assert(tloAllocatorIsValid(allocator));
@@ -149,11 +141,8 @@ int tloDArrayConstructCopy(tloDArray *array, const tloDArray *other) {
   assert(array);
   assert(tloDArrayIsValid(other));
 
-  if (
-    tloDArrayConstructWithCapacity(
-      array, other->type, other->allocator, other->capacity
-    )
-  ) {
+  if (tloDArrayConstructWithCapacity(array, other->type, other->allocator,
+                                     other->capacity)) {
     return 1;
   }
 
@@ -198,9 +187,9 @@ tloDArray *tloDArrayMake(const tloType *type, const tloAllocator *allocator) {
   return array;
 }
 
-tloDArray *tloDArrayMakeWithCapacity(
-  const tloType *type, const tloAllocator *allocator, size_t capacity
-) {
+tloDArray *tloDArrayMakeWithCapacity(const tloType *type,
+                                     const tloAllocator *allocator,
+                                     size_t capacity) {
   assert(tloTypeIsValid(type));
   assert(tloAllocatorIsValid(allocator));
 
@@ -377,7 +366,7 @@ void tloDArrayPopBack(tloDArray *array) {
   assert(!tloDArrayIsEmpty(array));
 
   void *back =
-    getMutableElement(array->bytes, array->size, array->type->sizeOf);
+      getMutableElement(array->bytes, array->size, array->type->sizeOf);
   array->type->destruct(back);
   --array->size;
 }

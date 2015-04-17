@@ -100,21 +100,17 @@ static int pushBackElementsOfOther(tloSLList *list, const tloSLList *other) {
 }
 
 bool tloSLListIsValid(const tloSLList *list) {
-  return (
-    (list) &&
-    (tloTypeIsValid(list->type)) &&
-    (tloAllocatorIsValid(list->allocator)) &&
-    ((list->head == NULL) == (list->size == 0)) &&
-    ((list->tail == NULL) == (list->size == 0)) &&
-    ((list->head == NULL) == (list->tail == NULL)) &&
-    ((list->size == 0 || list->size == 1) ?
-      (list->head == list->tail) : (list->head != list->tail))
-  );
+  return ((list) && (tloTypeIsValid(list->type)) &&
+          (tloAllocatorIsValid(list->allocator)) &&
+          ((list->head == NULL) == (list->size == 0)) &&
+          ((list->tail == NULL) == (list->size == 0)) &&
+          ((list->head == NULL) == (list->tail == NULL)) &&
+          ((list->size == 0 || list->size == 1) ? (list->head == list->tail)
+                                                : (list->head != list->tail)));
 }
 
-int tloSLListConstruct(
-  tloSLList *list, const tloType *type, const tloAllocator *allocator
-) {
+int tloSLListConstruct(tloSLList *list, const tloType *type,
+                       const tloAllocator *allocator) {
   assert(list);
   assert(tloTypeIsValid(type));
   assert(tloAllocatorIsValid(allocator));
@@ -345,10 +341,7 @@ int tloSLListMoveBack(tloSLList *list, void *data) {
 }
 
 bool tloSLLNodeIsValid(const tloSLLNode *node) {
-  return (
-    (node) &&
-    (node->bytes)
-  );
+  return ((node) && (node->bytes));
 }
 
 const tloSLLNode *tloSLLNodeGetHead(const tloSLList *list) {
