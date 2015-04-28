@@ -97,9 +97,9 @@ static int pushBackAllElementsOfOther(tloDArray *array,
 }
 
 bool tloDArrayIsValid(const tloDArray *array) {
-  return ((array) && (tloTypeIsValid(array->type)) &&
-          (tloAllocatorIsValid(array->allocator)) &&
-          (array->size <= array->capacity));
+  return array && tloTypeIsValid(array->type) &&
+         tloAllocatorIsValid(array->allocator) &&
+         (array->size <= array->capacity);
 }
 
 int tloDArrayConstruct(tloDArray *array, const tloType *type,

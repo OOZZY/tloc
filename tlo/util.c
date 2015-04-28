@@ -4,8 +4,7 @@
 #include <stdlib.h>
 
 bool tloTypeIsValid(const tloType *type) {
-  return ((type) && (type->sizeOf) && (type->constructCopy) &&
-          (type->destruct));
+  return type && type->sizeOf && type->constructCopy && type->destruct;
 }
 
 int tloIntTypeConstructCopy(void *bytes, const void *data) {
@@ -24,7 +23,7 @@ const tloType tloIntType = {.sizeOf = sizeof(int),
                             .destruct = tloBasicTypeDestruct};
 
 bool tloAllocatorIsValid(const tloAllocator *allocator) {
-  return ((allocator) && (allocator->malloc) && (allocator->free));
+  return allocator && allocator->malloc && allocator->free;
 }
 
 const tloAllocator tloCStdLibAllocator = {.malloc = malloc, .free = free};
