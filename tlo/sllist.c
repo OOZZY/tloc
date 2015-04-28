@@ -3,22 +3,16 @@
 #include <string.h>
 
 static void destructAllElementsAndFreeAllNodes(tloSLList *list) {
-  tloSLLNode *previous = NULL;
   tloSLLNode *current = list->head;
 
   while (current) {
+    tloSLLNode *next = current->next;
+
     list->type->destruct(current->bytes);
     list->allocator->free(current->bytes);
-    if (previous) {
-      list->allocator->free(previous);
-    }
+    list->allocator->free(current);
 
-    previous = current;
-    current = current->next;
-  }
-
-  if (previous) {
-    list->allocator->free(previous);
+    current = next;
   }
 }
 
