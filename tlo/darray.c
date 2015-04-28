@@ -12,18 +12,11 @@ static void *getMutableElement(void *bytes, size_t index,
   return (char *)bytes + index * sizeOfElement;
 }
 
-static void destructElements(void *bytes, size_t elementCount,
-                             size_t sizeOfElement,
-                             tloDestructFunction destruct) {
-  for (size_t i = 0; i < elementCount; ++i) {
-    void *element = getMutableElement(bytes, i, sizeOfElement);
-    destruct(element);
-  }
-}
-
 static void destructAllElements(tloDArray *array) {
-  destructElements(array->bytes, array->size, array->type->sizeOf,
-                   array->type->destruct);
+  for (size_t i = 0; i < array->size; ++i) {
+    void *element = getMutableElement(array->bytes, i, array->type->sizeOf);
+    array->type->destruct(element);
+  }
 }
 
 #define STARTING_CAPACITY 2
