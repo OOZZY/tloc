@@ -3,10 +3,6 @@
 #include <string.h>
 #include <stdlib.h>
 
-bool tloTypeIsValid(const tloType *type) {
-  return type && type->sizeOf && type->constructCopy && type->destruct;
-}
-
 static int intTypeConstructCopy(void *bytes, const void *data) {
   assert(bytes);
   assert(data);
@@ -17,16 +13,6 @@ static int intTypeConstructCopy(void *bytes, const void *data) {
 }
 
 static void basicTypeDestruct(void *bytes) { (void)bytes; }
-
-const tloType tloIntType = {.sizeOf = sizeof(int),
-                            .constructCopy = intTypeConstructCopy,
-                            .destruct = basicTypeDestruct};
-
-bool tloAllocatorIsValid(const tloAllocator *allocator) {
-  return allocator && allocator->malloc && allocator->free;
-}
-
-const tloAllocator tloCStdLibAllocator = {.malloc = malloc, .free = free};
 
 static unsigned long countingAllocatorMallocCount = 0;
 static unsigned long countingAllocatorFreeCount = 0;
@@ -45,6 +31,20 @@ static void countingAllocatorFree(void *bytes) {
   ++countingAllocatorFreeCount;
   free(bytes);
 }
+
+bool tloTypeIsValid(const tloType *type) {
+  return type && type->sizeOf && type->constructCopy && type->destruct;
+}
+
+const tloType tloIntType = {.sizeOf = sizeof(int),
+                            .constructCopy = intTypeConstructCopy,
+                            .destruct = basicTypeDestruct};
+
+bool tloAllocatorIsValid(const tloAllocator *allocator) {
+  return allocator && allocator->malloc && allocator->free;
+}
+
+const tloAllocator tloCStdLibAllocator = {.malloc = malloc, .free = free};
 
 const tloAllocator tloCountingAllocator = {.malloc = countingAllocatorMalloc,
                                            .free = countingAllocatorFree};
