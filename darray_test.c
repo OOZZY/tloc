@@ -370,9 +370,10 @@ void testDArrayIntCopy(void) {
 
 int main(void) {
   printf("sizeof(tloDArray): %zu\n", sizeof(tloDArray));
-  assert(tloCountingAllocatorMallocCount == 0);
-  assert(tloCountingAllocatorMallocCount == tloCountingAllocatorFreeCount);
-  assert(tloCountingAllocatorTotalByteCount == 0);
+  assert(tloCountingAllocatorGetMallocCount() == 0);
+  assert(tloCountingAllocatorGetMallocCount() ==
+         tloCountingAllocatorGetFreeCount());
+  assert(tloCountingAllocatorGetTotalByteCount() == 0);
 
   testDArrayIntConstructDestructStackSpace();
   testDArrayIntConstructDestructHeapSpace();
@@ -393,9 +394,11 @@ int main(void) {
   testDArrayIntCopy();
 
   printf("malloc count: %lu\nfree count: %lu\ntotal bytes allocated: %lu\n",
-         tloCountingAllocatorMallocCount, tloCountingAllocatorFreeCount,
-         tloCountingAllocatorTotalByteCount);
-  assert(tloCountingAllocatorMallocCount > 0);
-  assert(tloCountingAllocatorMallocCount == tloCountingAllocatorFreeCount);
-  assert(tloCountingAllocatorTotalByteCount > 0);
+         tloCountingAllocatorGetMallocCount(),
+         tloCountingAllocatorGetFreeCount(),
+         tloCountingAllocatorGetTotalByteCount());
+  assert(tloCountingAllocatorGetMallocCount() > 0);
+  assert(tloCountingAllocatorGetMallocCount() ==
+         tloCountingAllocatorGetFreeCount());
+  assert(tloCountingAllocatorGetTotalByteCount() > 0);
 }

@@ -59,11 +59,11 @@ bool tloAllocatorIsValid(const tloAllocator *allocator);
 
 extern const tloAllocator tloCStdLibAllocator;
 
-extern unsigned long tloCountingAllocatorMallocCount;
-extern unsigned long tloCountingAllocatorFreeCount;
-extern unsigned long tloCountingAllocatorTotalByteCount;
 void *tloCountingAllocatorMalloc(size_t byteCount);
 void tloCountingAllocatorFree(void *bytes);
 extern const tloAllocator tloCountingAllocator;
+unsigned long tloCountingAllocatorGetMallocCount();
+unsigned long tloCountingAllocatorGetFreeCount();
+unsigned long tloCountingAllocatorGetTotalByteCount();
 
 #endif  // TLO_UTIL_H

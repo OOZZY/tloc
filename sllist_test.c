@@ -405,9 +405,10 @@ void testSLListIntCopy(void) {
 int main(void) {
   printf("sizeof(tloSLList): %zu\n", sizeof(tloSLList));
   printf("sizeof(tloSLLNode): %zu\n", sizeof(tloSLLNode));
-  assert(tloCountingAllocatorMallocCount == 0);
-  assert(tloCountingAllocatorMallocCount == tloCountingAllocatorFreeCount);
-  assert(tloCountingAllocatorTotalByteCount == 0);
+  assert(tloCountingAllocatorGetMallocCount() == 0);
+  assert(tloCountingAllocatorGetMallocCount() ==
+         tloCountingAllocatorGetFreeCount());
+  assert(tloCountingAllocatorGetTotalByteCount() == 0);
 
   testSLListIntConstructDestructStackSpace();
   testSLListIntConstructDestructHeapSpace();
@@ -429,9 +430,11 @@ int main(void) {
   testSLListIntCopy();
 
   printf("malloc count: %lu\nfree count: %lu\ntotal bytes allocated: %lu\n",
-         tloCountingAllocatorMallocCount, tloCountingAllocatorFreeCount,
-         tloCountingAllocatorTotalByteCount);
-  assert(tloCountingAllocatorMallocCount > 0);
-  assert(tloCountingAllocatorMallocCount == tloCountingAllocatorFreeCount);
-  assert(tloCountingAllocatorTotalByteCount > 0);
+         tloCountingAllocatorGetMallocCount(),
+         tloCountingAllocatorGetFreeCount(),
+         tloCountingAllocatorGetTotalByteCount());
+  assert(tloCountingAllocatorGetMallocCount() > 0);
+  assert(tloCountingAllocatorGetMallocCount() ==
+         tloCountingAllocatorGetFreeCount());
+  assert(tloCountingAllocatorGetTotalByteCount() > 0);
 }

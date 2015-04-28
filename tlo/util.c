@@ -29,23 +29,35 @@ bool tloAllocatorIsValid(const tloAllocator *allocator) {
 
 const tloAllocator tloCStdLibAllocator = {.malloc = malloc, .free = free};
 
-unsigned long tloCountingAllocatorMallocCount = 0;
-unsigned long tloCountingAllocatorFreeCount = 0;
-unsigned long tloCountingAllocatorTotalByteCount = 0;
+static unsigned long countingAllocatorMallocCount = 0;
+static unsigned long countingAllocatorFreeCount = 0;
+static unsigned long countingAllocatorTotalByteCount = 0;
 
 void *tloCountingAllocatorMalloc(size_t byteCount) {
-  ++tloCountingAllocatorMallocCount;
+  ++countingAllocatorMallocCount;
   void *bytes = malloc(byteCount);
   if (bytes) {
-    tloCountingAllocatorTotalByteCount += byteCount;
+    countingAllocatorTotalByteCount += byteCount;
   }
   return bytes;
 }
 
 void tloCountingAllocatorFree(void *bytes) {
-  ++tloCountingAllocatorFreeCount;
+  ++countingAllocatorFreeCount;
   free(bytes);
 }
 
 const tloAllocator tloCountingAllocator = {.malloc = tloCountingAllocatorMalloc,
                                            .free = tloCountingAllocatorFree};
+
+unsigned long tloCountingAllocatorGetMallocCount() {
+  return countingAllocatorMallocCount;
+}
+
+unsigned long tloCountingAllocatorGetFreeCount() {
+  return countingAllocatorFreeCount;
+}
+
+unsigned long tloCountingAllocatorGetTotalByteCount() {
+  return countingAllocatorTotalByteCount;
+}
