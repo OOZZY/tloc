@@ -170,12 +170,12 @@ void testDArrayIntPushBackUntilResize(void) {
     assert(tloDArrayGetType(ints) == &tloIntType);
     assert(tloDArrayGetAllocator(ints) == &tloCountingAllocator);
 
-    assert(*(const int *)tloDArrayGetElement(ints, i) == (int) {i});
-    assert(*(int *)tloDArrayGetMutableElement(ints, i) == (int) {i});
+    assert(*(const int *)tloDArrayGetElement(ints, i) == (int)i);
+    assert(*(int *)tloDArrayGetMutableElement(ints, i) == (int)i);
     assert(*(const int *)tloDArrayGetFront(ints) == 0);
     assert(*(int *)tloDArrayGetMutableFront(ints) == 0);
-    assert(*(const int *)tloDArrayGetBack(ints) == (int) {i});
-    assert(*(int *)tloDArrayGetMutableBack(ints) == (int) {i});
+    assert(*(const int *)tloDArrayGetBack(ints) == (int)i);
+    assert(*(int *)tloDArrayGetMutableBack(ints) == (int)i);
   }
 
   tloDArrayDelete(ints);
@@ -198,12 +198,12 @@ void testDArrayIntMoveBackUntilResize(void) {
     assert(tloDArrayGetType(ints) == &tloIntType);
     assert(tloDArrayGetAllocator(ints) == &tloCountingAllocator);
 
-    assert(*(const int *)tloDArrayGetElement(ints, i) == (int) {i});
-    assert(*(int *)tloDArrayGetMutableElement(ints, i) == (int) {i});
+    assert(*(const int *)tloDArrayGetElement(ints, i) == (int)i);
+    assert(*(int *)tloDArrayGetMutableElement(ints, i) == (int)i);
     assert(*(const int *)tloDArrayGetFront(ints) == 0);
     assert(*(int *)tloDArrayGetMutableFront(ints) == 0);
-    assert(*(const int *)tloDArrayGetBack(ints) == (int) {i});
-    assert(*(int *)tloDArrayGetMutableBack(ints) == (int) {i});
+    assert(*(const int *)tloDArrayGetBack(ints) == (int)i);
+    assert(*(int *)tloDArrayGetMutableBack(ints) == (int)i);
   }
 
   tloDArrayDelete(ints);
@@ -245,12 +245,12 @@ void testDArrayIntPushBackUntilResizePopBackUntilEmpty(void) {
     assert(tloDArrayGetType(ints) == &tloIntType);
     assert(tloDArrayGetAllocator(ints) == &tloCountingAllocator);
 
-    assert(*(const int *)tloDArrayGetElement(ints, i) == (int) {i});
-    assert(*(int *)tloDArrayGetMutableElement(ints, i) == (int) {i});
+    assert(*(const int *)tloDArrayGetElement(ints, i) == (int)i);
+    assert(*(int *)tloDArrayGetMutableElement(ints, i) == (int)i);
     assert(*(const int *)tloDArrayGetFront(ints) == 0);
     assert(*(int *)tloDArrayGetMutableFront(ints) == 0);
-    assert(*(const int *)tloDArrayGetBack(ints) == (int) {i});
-    assert(*(int *)tloDArrayGetMutableBack(ints) == (int) {i});
+    assert(*(const int *)tloDArrayGetBack(ints) == (int)i);
+    assert(*(int *)tloDArrayGetMutableBack(ints) == (int)i);
 
     tloDArrayPopBack(ints);
   }
