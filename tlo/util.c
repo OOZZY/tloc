@@ -7,7 +7,7 @@ bool tloTypeIsValid(const tloType *type) {
   return type && type->sizeOf && type->constructCopy && type->destruct;
 }
 
-int tloIntTypeConstructCopy(void *bytes, const void *data) {
+static int intTypeConstructCopy(void *bytes, const void *data) {
   assert(bytes);
   assert(data);
 
@@ -16,11 +16,11 @@ int tloIntTypeConstructCopy(void *bytes, const void *data) {
   return 0;
 }
 
-void tloBasicTypeDestruct(void *bytes) { (void)bytes; }
+static void basicTypeDestruct(void *bytes) { (void)bytes; }
 
 const tloType tloIntType = {.sizeOf = sizeof(int),
-                            .constructCopy = tloIntTypeConstructCopy,
-                            .destruct = tloBasicTypeDestruct};
+                            .constructCopy = intTypeConstructCopy,
+                            .destruct = basicTypeDestruct};
 
 bool tloAllocatorIsValid(const tloAllocator *allocator) {
   return allocator && allocator->malloc && allocator->free;
@@ -32,7 +32,7 @@ static unsigned long countingAllocatorMallocCount = 0;
 static unsigned long countingAllocatorFreeCount = 0;
 static unsigned long countingAllocatorTotalByteCount = 0;
 
-void *tloCountingAllocatorMalloc(size_t byteCount) {
+static void *countingAllocatorMalloc(size_t byteCount) {
   ++countingAllocatorMallocCount;
   void *bytes = malloc(byteCount);
   if (bytes) {
@@ -41,13 +41,13 @@ void *tloCountingAllocatorMalloc(size_t byteCount) {
   return bytes;
 }
 
-void tloCountingAllocatorFree(void *bytes) {
+static void countingAllocatorFree(void *bytes) {
   ++countingAllocatorFreeCount;
   free(bytes);
 }
 
-const tloAllocator tloCountingAllocator = {.malloc = tloCountingAllocatorMalloc,
-                                           .free = tloCountingAllocatorFree};
+const tloAllocator tloCountingAllocator = {.malloc = countingAllocatorMalloc,
+                                           .free = countingAllocatorFree};
 
 unsigned long tloCountingAllocatorGetMallocCount() {
   return countingAllocatorMallocCount;

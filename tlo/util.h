@@ -42,8 +42,6 @@ typedef struct tloType {
 
 bool tloTypeIsValid(const tloType *type);
 
-int tloIntTypeConstructCopy(void *bytes, const void *data);
-void tloBasicTypeDestruct(void *bytes);
 extern const tloType tloIntType;
 
 typedef void *(*tloMallocFunction)(size_t byteCount);
@@ -59,8 +57,6 @@ bool tloAllocatorIsValid(const tloAllocator *allocator);
 
 extern const tloAllocator tloCStdLibAllocator;
 
-void *tloCountingAllocatorMalloc(size_t byteCount);
-void tloCountingAllocatorFree(void *bytes);
 extern const tloAllocator tloCountingAllocator;
 unsigned long tloCountingAllocatorGetMallocCount();
 unsigned long tloCountingAllocatorGetFreeCount();
