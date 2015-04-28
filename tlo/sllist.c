@@ -87,7 +87,7 @@ static void pushBackNode(tloSLList *list, tloSLLNode *node) {
   ++list->size;
 }
 
-static int pushBackElementsOfOther(tloSLList *list, const tloSLList *other) {
+static int pushBackAllElementsOfOther(tloSLList *list, const tloSLList *other) {
   for (tloSLLNode *node = other->head; node; node = node->next) {
     const void *element = node->bytes;
     if (tloSLListPushBack(list, element)) {
@@ -132,7 +132,7 @@ int tloSLListConstructCopy(tloSLList *list, const tloSLList *other) {
     return 1;
   }
 
-  if (pushBackElementsOfOther(list, other)) {
+  if (pushBackAllElementsOfOther(list, other)) {
     return 1;
   }
 

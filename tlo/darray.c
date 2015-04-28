@@ -83,7 +83,8 @@ static int pushBackMovedData(tloDArray *array, void *data) {
   return 0;
 }
 
-static int pushBackElementsOfOther(tloDArray *array, const tloDArray *other) {
+static int pushBackAllElementsOfOther(tloDArray *array,
+                                      const tloDArray *other) {
   for (size_t i = 0; i < other->size; ++i) {
     const void *element = getElement(other->bytes, i, other->type->sizeOf);
     if (tloDArrayPushBack(array, element)) {
@@ -146,7 +147,7 @@ int tloDArrayConstructCopy(tloDArray *array, const tloDArray *other) {
     return 1;
   }
 
-  if (pushBackElementsOfOther(array, other)) {
+  if (pushBackAllElementsOfOther(array, other)) {
     return 1;
   }
 
