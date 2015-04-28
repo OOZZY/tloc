@@ -17,11 +17,11 @@ int tloIntTypeConstructCopy(void *bytes, const void *data) {
   return 0;
 }
 
-void tloIntTypeDestruct(void *bytes) { (void)bytes; }
+void tloBasicTypeDestruct(void *bytes) { (void)bytes; }
 
 const tloType tloIntType = {.sizeOf = sizeof(int),
                             .constructCopy = tloIntTypeConstructCopy,
-                            .destruct = tloIntTypeDestruct};
+                            .destruct = tloBasicTypeDestruct};
 
 bool tloAllocatorIsValid(const tloAllocator *allocator) {
   return ((allocator) && (allocator->malloc) && (allocator->free));
