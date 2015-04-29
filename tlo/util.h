@@ -19,13 +19,20 @@
  */
 
 /*
+ * * used as return type of functions that could fail
+ * * return value zero means function succeeded (no error occurred)
+ * * return value non-zero means function failed (error occurred)
+ */
+typedef int tloError;
+
+/*
  * * both bytes and data should not be NULL. they should point to some valid
  *   space such as the following:
  *   * heap space allocated by some malloc implementation
  *   * stack space
  * * should do a deep copy
  */
-typedef int (*tloConstructCopyFunction)(void *bytes, const void *data);
+typedef tloError (*tloConstructCopyFunction)(void *bytes, const void *data);
 
 /*
  * * does nothing if bytes is NULL

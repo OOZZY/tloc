@@ -18,12 +18,12 @@ typedef struct tloDArray {
 } tloDArray;
 
 bool tloDArrayIsValid(const tloDArray *array);
-int tloDArrayConstruct(tloDArray *array, const tloType *type,
-                       const tloAllocator *allocator);
-int tloDArrayConstructWithCapacity(tloDArray *array, const tloType *type,
-                                   const tloAllocator *allocator,
-                                   size_t capacity);
-int tloDArrayConstructCopy(tloDArray *array, const tloDArray *other);
+tloError tloDArrayConstruct(tloDArray *array, const tloType *type,
+                            const tloAllocator *allocator);
+tloError tloDArrayConstructWithCapacity(tloDArray *array, const tloType *type,
+                                        const tloAllocator *allocator,
+                                        size_t capacity);
+tloError tloDArrayConstructCopy(tloDArray *array, const tloDArray *other);
 void tloDArrayDestruct(tloDArray *array);
 
 /*
@@ -48,7 +48,7 @@ tloDArray *tloDArrayMakeCopy(const tloDArray *other);
  */
 void tloDArrayDelete(tloDArray *array);
 
-int tloDArrayCopy(tloDArray *array, const tloDArray *other);
+tloError tloDArrayCopy(tloDArray *array, const tloDArray *other);
 const tloType *tloDArrayGetType(const tloDArray *array);
 const tloAllocator *tloDArrayGetAllocator(const tloDArray *array);
 size_t tloDArrayGetSize(const tloDArray *array);
@@ -64,12 +64,12 @@ void *tloDArrayGetMutableBack(tloDArray *array);
 /*
  * * deep copies data using array->type->copy
  */
-int tloDArrayPushBack(tloDArray *array, const void *data);
+tloError tloDArrayPushBack(tloDArray *array, const void *data);
 
 /*
  * * shallow copies data using memcpy then zeroes out data using memset
  */
-int tloDArrayMoveBack(tloDArray *array, void *data);
+tloError tloDArrayMoveBack(tloDArray *array, void *data);
 
 void tloDArrayPopBack(tloDArray *array);
 

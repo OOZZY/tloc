@@ -3,7 +3,7 @@
 #include <string.h>
 #include <stdlib.h>
 
-static int intTypeConstructCopy(void *bytes, const void *data) {
+static tloError intTypeConstructCopy(void *bytes, const void *data) {
   assert(bytes);
   assert(data);
 

@@ -81,7 +81,8 @@ static void pushBackNode(tloSLList *list, tloSLLNode *node) {
   ++list->size;
 }
 
-static int pushBackAllElementsOfOther(tloSLList *list, const tloSLList *other) {
+static tloError pushBackAllElementsOfOther(tloSLList *list,
+                                           const tloSLList *other) {
   for (tloSLLNode *node = other->head; node; node = node->next) {
     const void *element = node->bytes;
     if (tloSLListPushBack(list, element)) {
@@ -103,8 +104,8 @@ bool tloSLListIsValid(const tloSLList *list) {
                                                : (list->head != list->tail));
 }
 
-int tloSLListConstruct(tloSLList *list, const tloType *type,
-                       const tloAllocator *allocator) {
+tloError tloSLListConstruct(tloSLList *list, const tloType *type,
+                            const tloAllocator *allocator) {
   assert(list);
   assert(tloTypeIsValid(type));
   assert(tloAllocatorIsValid(allocator));
@@ -118,7 +119,7 @@ int tloSLListConstruct(tloSLList *list, const tloType *type,
   return 0;
 }
 
-int tloSLListConstructCopy(tloSLList *list, const tloSLList *other) {
+tloError tloSLListConstructCopy(tloSLList *list, const tloSLList *other) {
   assert(list);
   assert(tloSLListIsValid(other));
 
@@ -195,7 +196,7 @@ void tloSLListDelete(tloSLList *list) {
   free(list);
 }
 
-int tloSLListCopy(tloSLList *list, const tloSLList *other) {
+tloError tloSLListCopy(tloSLList *list, const tloSLList *other) {
   assert(tloSLListIsValid(list));
   assert(tloSLListIsValid(other));
 
@@ -262,7 +263,7 @@ void *tloSLListGetMutableBack(tloSLList *list) {
   return list->tail->bytes;
 }
 
-int tloSLListPushFront(tloSLList *list, const void *data) {
+tloError tloSLListPushFront(tloSLList *list, const void *data) {
   assert(tloSLListIsValid(list));
   assert(data);
 
@@ -276,7 +277,7 @@ int tloSLListPushFront(tloSLList *list, const void *data) {
   return 0;
 }
 
-int tloSLListMoveFront(tloSLList *list, void *data) {
+tloError tloSLListMoveFront(tloSLList *list, void *data) {
   assert(tloSLListIsValid(list));
   assert(data);
 
@@ -306,7 +307,7 @@ void tloSLListPopFront(tloSLList *list) {
   }
 }
 
-int tloSLListPushBack(tloSLList *list, const void *data) {
+tloError tloSLListPushBack(tloSLList *list, const void *data) {
   assert(tloSLListIsValid(list));
   assert(data);
 
@@ -320,7 +321,7 @@ int tloSLListPushBack(tloSLList *list, const void *data) {
   return 0;
 }
 
-int tloSLListMoveBack(tloSLList *list, void *data) {
+tloError tloSLListMoveBack(tloSLList *list, void *data) {
   assert(tloSLListIsValid(list));
   assert(data);
 
