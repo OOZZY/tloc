@@ -13,7 +13,7 @@
  *   * a struct for storing allocator information
  *     * two const objects of this type storing the allocator information of
  *       two allocators. one using the c standard library's malloc and free.
- *       another one using custom implementations of malloc of free (which
+ *       another one using custom implementations of malloc and free (which
  *       actually just wrap around the c standard library's malloc and free)
  * * all operations are transactional
  */
