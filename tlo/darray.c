@@ -116,6 +116,7 @@ tloError tloDArrayConstructWithCapacity(tloDArray *array, const tloType *type,
   assert(array);
   assert(tloTypeIsValid(type));
   assert(tloAllocatorIsValid(allocator));
+  assert(capacity);
 
   void *newBytes = allocator->malloc(capacity * type->sizeOf);
   if (!newBytes) {
@@ -186,6 +187,7 @@ tloDArray *tloDArrayMakeWithCapacity(const tloType *type,
                                      size_t capacity) {
   assert(tloTypeIsValid(type));
   assert(tloAllocatorIsValid(allocator));
+  assert(capacity);
 
   tloDArray *array = allocator->malloc(sizeof(*array));
   if (!array) {
