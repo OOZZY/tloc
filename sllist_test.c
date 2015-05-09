@@ -5,7 +5,7 @@
 
 #define SOME_NUMBER 42
 
-void testSLListIntConstructDestructStackSpace(void) {
+static void testSLListIntConstructDestructStackSpace(void) {
   tloSLList ints;
 
   tloError error =
@@ -20,7 +20,7 @@ void testSLListIntConstructDestructStackSpace(void) {
   tloSLListDestruct(&ints);
 }
 
-void testSLListIntConstructDestructHeapSpace(void) {
+static void testSLListIntConstructDestructHeapSpace(void) {
   tloSLList *ints = malloc(sizeof(*ints));
   assert(ints);
 
@@ -37,7 +37,7 @@ void testSLListIntConstructDestructHeapSpace(void) {
   ints = NULL;
 }
 
-void testSLListIntMakeDelete(void) {
+static void testSLListIntMakeDelete(void) {
   tloSLList *ints = tloSLListMake(&tloIntType, &tloCountingAllocator);
   assert(ints);
 
@@ -50,11 +50,11 @@ void testSLListIntMakeDelete(void) {
   ints = NULL;
 }
 
-void testSLListDestructWithNull(void) { tloSLListDestruct(NULL); }
+static void testSLListDestructWithNull(void) { tloSLListDestruct(NULL); }
 
-void testSLListDeleteWithNull(void) { tloSLListDelete(NULL); }
+static void testSLListDeleteWithNull(void) { tloSLListDelete(NULL); }
 
-void testSLListIntPushFrontOnce(void) {
+static void testSLListIntPushFrontOnce(void) {
   tloSLList *ints = tloSLListMake(&tloIntType, &tloCountingAllocator);
   assert(ints);
 
@@ -75,7 +75,7 @@ void testSLListIntPushFrontOnce(void) {
   ints = NULL;
 }
 
-void testSLListIntMoveFrontOnce(void) {
+static void testSLListIntMoveFrontOnce(void) {
   tloSLList *ints = tloSLListMake(&tloIntType, &tloCountingAllocator);
   assert(ints);
 
@@ -98,12 +98,12 @@ void testSLListIntMoveFrontOnce(void) {
   ints = NULL;
 }
 
-void testSLListIntPushFrontManyTimes(void) {
+static void testSLListIntPushFrontManyTimes(void) {
   tloSLList *ints = tloSLListMake(&tloIntType, &tloCountingAllocator);
   assert(ints);
 
   for (size_t i = 0; i < SOME_NUMBER; ++i) {
-    tloError error = tloSLListPushFront(ints, &(int) {i});
+    tloError error = tloSLListPushFront(ints, &(int) {(int)i});
     assert(!error);
 
     assert(tloSLListGetSize(ints) == i + 1);
@@ -121,7 +121,7 @@ void testSLListIntPushFrontManyTimes(void) {
   ints = NULL;
 }
 
-void testSLListIntMoveFrontManyTimes(void) {
+static void testSLListIntMoveFrontManyTimes(void) {
   tloSLList *ints = tloSLListMake(&tloIntType, &tloCountingAllocator);
   assert(ints);
 
@@ -146,7 +146,7 @@ void testSLListIntMoveFrontManyTimes(void) {
   ints = NULL;
 }
 
-void testSLListIntPushFrontOncePopFrontOnce(void) {
+static void testSLListIntPushFrontOncePopFrontOnce(void) {
   tloSLList *ints = tloSLListMake(&tloIntType, &tloCountingAllocator);
   assert(ints);
 
@@ -164,12 +164,12 @@ void testSLListIntPushFrontOncePopFrontOnce(void) {
   ints = NULL;
 }
 
-void testSLListIntPushFrontManyTimesPopFrontUntilEmpty(void) {
+static void testSLListIntPushFrontManyTimesPopFrontUntilEmpty(void) {
   tloSLList *ints = tloSLListMake(&tloIntType, &tloCountingAllocator);
   assert(ints);
 
   for (size_t i = 0; i < SOME_NUMBER; ++i) {
-    tloError error = tloSLListPushFront(ints, &(int) {i});
+    tloError error = tloSLListPushFront(ints, &(int) {(int)i});
     assert(!error);
   }
 
@@ -196,7 +196,7 @@ void testSLListIntPushFrontManyTimesPopFrontUntilEmpty(void) {
   ints = NULL;
 }
 
-void testSLListIntPushBackOnce(void) {
+static void testSLListIntPushBackOnce(void) {
   tloSLList *ints = tloSLListMake(&tloIntType, &tloCountingAllocator);
   assert(ints);
 
@@ -217,7 +217,7 @@ void testSLListIntPushBackOnce(void) {
   ints = NULL;
 }
 
-void testSLListIntMoveBackOnce(void) {
+static void testSLListIntMoveBackOnce(void) {
   tloSLList *ints = tloSLListMake(&tloIntType, &tloCountingAllocator);
   assert(ints);
 
@@ -240,12 +240,12 @@ void testSLListIntMoveBackOnce(void) {
   ints = NULL;
 }
 
-void testSLListIntPushBackManyTimes(void) {
+static void testSLListIntPushBackManyTimes(void) {
   tloSLList *ints = tloSLListMake(&tloIntType, &tloCountingAllocator);
   assert(ints);
 
   for (size_t i = 0; i < SOME_NUMBER; ++i) {
-    tloError error = tloSLListPushBack(ints, &(int) {i});
+    tloError error = tloSLListPushBack(ints, &(int) {(int)i});
     assert(!error);
 
     assert(tloSLListGetSize(ints) == i + 1);
@@ -263,7 +263,7 @@ void testSLListIntPushBackManyTimes(void) {
   ints = NULL;
 }
 
-void testSLListIntMoveBackManyTimes(void) {
+static void testSLListIntMoveBackManyTimes(void) {
   tloSLList *ints = tloSLListMake(&tloIntType, &tloCountingAllocator);
   assert(ints);
 
@@ -288,7 +288,7 @@ void testSLListIntMoveBackManyTimes(void) {
   ints = NULL;
 }
 
-void testSLListIntConstructCopy(void) {
+static void testSLListIntConstructCopy(void) {
   tloSLList *ints = tloSLListMake(&tloIntType, &tloCountingAllocator);
   assert(ints);
 
@@ -328,7 +328,7 @@ void testSLListIntConstructCopy(void) {
   copy = NULL;
 }
 
-void testSLListIntMakeCopy(void) {
+static void testSLListIntMakeCopy(void) {
   tloSLList *ints = tloSLListMake(&tloIntType, &tloCountingAllocator);
   assert(ints);
 
@@ -364,7 +364,7 @@ void testSLListIntMakeCopy(void) {
   copy = NULL;
 }
 
-void testSLListIntCopy(void) {
+static void testSLListIntCopy(void) {
   tloSLList *ints = tloSLListMake(&tloIntType, &tloCountingAllocator);
   assert(ints);
 

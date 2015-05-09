@@ -49,14 +49,14 @@ const tloAllocator tloCStdLibAllocator = {.malloc = malloc, .free = free};
 const tloAllocator tloCountingAllocator = {.malloc = countingAllocatorMalloc,
                                            .free = countingAllocatorFree};
 
-unsigned long tloCountingAllocatorGetMallocCount() {
+unsigned long tloCountingAllocatorGetMallocCount(void) {
   return countingAllocatorMallocCount;
 }
 
-unsigned long tloCountingAllocatorGetFreeCount() {
+unsigned long tloCountingAllocatorGetFreeCount(void) {
   return countingAllocatorFreeCount;
 }
 
-unsigned long tloCountingAllocatorGetTotalByteCount() {
+unsigned long tloCountingAllocatorGetTotalByteCount(void) {
   return countingAllocatorTotalByteCount;
 }
