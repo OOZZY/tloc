@@ -3,7 +3,8 @@
 # ./test.sh; echo $?
 
 CFLAGS="-std=c11 -pedantic -Wall -Wextra -Werror -g -I. tlo/*.c"
-VALGRIND_FLAGS="--tool=memcheck --leak-check=yes --track-origins=yes"
+VALGRIND_FLAGS="--tool=memcheck --leak-check=full --track-origins=yes \
+  --error-exitcode=1"
 
 set -xe
 
