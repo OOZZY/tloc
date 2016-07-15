@@ -6,7 +6,6 @@
 /*
  * - dynamic array
  */
-
 typedef struct tloDArray {
   // private
   const tloType *type;
