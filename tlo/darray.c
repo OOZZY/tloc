@@ -27,7 +27,7 @@ static tloError allocateBytesIfNeeded(TloDArray *array) {
     array->bytes =
         array->allocator->malloc(array->capacity * array->type->sizeOf);
     if (!array->bytes) {
-      return 1;
+      return -1;
     }
   }
   return 0;
@@ -39,7 +39,7 @@ static tloError resizeBytesIfNeeded(TloDArray *array) {
     void *newBytes =
         array->allocator->malloc(newCapacity * array->type->sizeOf);
     if (!newBytes) {
-      return 1;
+      return -1;
     }
 
     memcpy(newBytes, array->bytes, array->size * array->type->sizeOf);
@@ -55,8 +55,8 @@ static tloError pushBackCopiedData(TloDArray *array, const void *data) {
   void *destination =
       getMutableElement(array->bytes, array->size, array->type->sizeOf);
 
-  if (array->type->constructCopy(destination, data)) {
-    return 1;
+  if (array->type->constructCopy(destination, data) == -1) {
+    return -1;
   }
 
   ++array->size;
@@ -80,9 +80,9 @@ static tloError pushBackAllElementsOfOther(TloDArray *array,
                                            const TloDArray *other) {
   for (size_t i = 0; i < other->size; ++i) {
     const void *element = getElement(other->bytes, i, other->type->sizeOf);
-    if (tloDArrayPushBack(array, element)) {
+    if (tloDArrayPushBack(array, element) == -1) {
       tloDArrayDestruct(array);
-      return 1;
+      return -1;
     }
   }
 
@@ -120,7 +120,7 @@ tloError tloDArrayConstructWithCapacity(TloDArray *array, const TloType *type,
 
   void *newBytes = allocator->malloc(capacity * type->sizeOf);
   if (!newBytes) {
-    return 1;
+    return -1;
   }
 
   array->type = type;
@@ -137,12 +137,12 @@ tloError tloDArrayConstructCopy(TloDArray *array, const TloDArray *other) {
   assert(tloDArrayIsValid(other));
 
   if (tloDArrayConstructWithCapacity(array, other->type, other->allocator,
-                                     other->capacity)) {
-    return 1;
+                                     other->capacity) == -1) {
+    return -1;
   }
 
-  if (pushBackAllElementsOfOther(array, other)) {
-    return 1;
+  if (pushBackAllElementsOfOther(array, other) == -1) {
+    return -1;
   }
 
   return 0;
@@ -235,8 +235,8 @@ tloError tloDArrayCopy(TloDArray *array, const TloDArray *other) {
   assert(tloDArrayIsValid(other));
 
   TloDArray copy;
-  if (tloDArrayConstructCopy(&copy, other)) {
-    return 1;
+  if (tloDArrayConstructCopy(&copy, other) == -1) {
+    return -1;
   }
 
   tloDArrayDestruct(array);
@@ -323,16 +323,16 @@ tloError tloDArrayPushBack(TloDArray *array, const void *data) {
   assert(tloDArrayIsValid(array));
   assert(data);
 
-  if (allocateBytesIfNeeded(array)) {
-    return 1;
+  if (allocateBytesIfNeeded(array) == -1) {
+    return -1;
   }
 
-  if (resizeBytesIfNeeded(array)) {
-    return 1;
+  if (resizeBytesIfNeeded(array) == -1) {
+    return -1;
   }
 
-  if (pushBackCopiedData(array, data)) {
-    return 1;
+  if (pushBackCopiedData(array, data) == -1) {
+    return -1;
   }
 
   return 0;
@@ -342,16 +342,16 @@ tloError tloDArrayMoveBack(TloDArray *array, void *data) {
   assert(tloDArrayIsValid(array));
   assert(data);
 
-  if (allocateBytesIfNeeded(array)) {
-    return 1;
+  if (allocateBytesIfNeeded(array) == -1) {
+    return -1;
   }
 
-  if (resizeBytesIfNeeded(array)) {
-    return 1;
+  if (resizeBytesIfNeeded(array) == -1) {
+    return -1;
   }
 
-  if (pushBackMovedData(array, data)) {
-    return 1;
+  if (pushBackMovedData(array, data) == -1) {
+    return -1;
   }
 
   return 0;

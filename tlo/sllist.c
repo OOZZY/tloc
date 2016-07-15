@@ -85,9 +85,9 @@ static tloError pushBackAllElementsOfOther(TloSLList *list,
                                            const TloSLList *other) {
   for (TloSLLNode *node = other->head; node; node = node->next) {
     const void *element = node->bytes;
-    if (tloSLListPushBack(list, element)) {
+    if (tloSLListPushBack(list, element) == -1) {
       tloSLListDestruct(list);
-      return 1;
+      return -1;
     }
   }
 
@@ -123,12 +123,12 @@ tloError tloSLListConstructCopy(TloSLList *list, const TloSLList *other) {
   assert(list);
   assert(tloSLListIsValid(other));
 
-  if (tloSLListConstruct(list, other->type, other->allocator)) {
-    return 1;
+  if (tloSLListConstruct(list, other->type, other->allocator) == -1) {
+    return -1;
   }
 
-  if (pushBackAllElementsOfOther(list, other)) {
-    return 1;
+  if (pushBackAllElementsOfOther(list, other) == -1) {
+    return -1;
   }
 
   return 0;
@@ -201,8 +201,8 @@ tloError tloSLListCopy(TloSLList *list, const TloSLList *other) {
   assert(tloSLListIsValid(other));
 
   TloSLList copy;
-  if (tloSLListConstructCopy(&copy, other)) {
-    return 1;
+  if (tloSLListConstructCopy(&copy, other) == -1) {
+    return -1;
   }
 
   tloSLListDestruct(list);
@@ -269,7 +269,7 @@ tloError tloSLListPushFront(TloSLList *list, const void *data) {
 
   TloSLLNode *newNode = makeNodeWithCopiedData(list, data);
   if (!newNode) {
-    return 1;
+    return -1;
   }
 
   pushFrontNode(list, newNode);
@@ -283,7 +283,7 @@ tloError tloSLListMoveFront(TloSLList *list, void *data) {
 
   TloSLLNode *newNode = makeNodeWithMovedData(list, data);
   if (!newNode) {
-    return 1;
+    return -1;
   }
 
   pushFrontNode(list, newNode);
@@ -313,7 +313,7 @@ tloError tloSLListPushBack(TloSLList *list, const void *data) {
 
   TloSLLNode *newNode = makeNodeWithCopiedData(list, data);
   if (!newNode) {
-    return 1;
+    return -1;
   }
 
   pushBackNode(list, newNode);
@@ -327,7 +327,7 @@ tloError tloSLListMoveBack(TloSLList *list, void *data) {
 
   TloSLLNode *newNode = makeNodeWithMovedData(list, data);
   if (!newNode) {
-    return 1;
+    return -1;
   }
 
   pushBackNode(list, newNode);
