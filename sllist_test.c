@@ -1,3 +1,4 @@
+#include "libtloc_test.h"
 #include <tlo/sllist.h>
 #include <stdlib.h>
 #include <assert.h>
@@ -403,9 +404,8 @@ static void testSLListIntCopy(void) {
   copy = NULL;
 }
 
-int main(void) {
-  printf("sizeof(TloSLList): %zu\n", sizeof(TloSLList));
-  printf("sizeof(TloSLLNode): %zu\n", sizeof(TloSLLNode));
+void testSLList(void) {
+  tloCountingAllocatorResetCounts();
   assert(tloCountingAllocatorGetMallocCount() == 0);
   assert(tloCountingAllocatorGetMallocCount() ==
          tloCountingAllocatorGetFreeCount());
@@ -430,14 +430,16 @@ int main(void) {
   testSLListIntMakeCopy();
   testSLListIntCopy();
 
-  printf("malloc count: %lu\nfree count: %lu\ntotal bytes allocated: %lu\n",
-         tloCountingAllocatorGetMallocCount(),
-         tloCountingAllocatorGetFreeCount(),
-         tloCountingAllocatorGetTotalByteCount());
   assert(tloCountingAllocatorGetMallocCount() > 0);
   assert(tloCountingAllocatorGetMallocCount() ==
          tloCountingAllocatorGetFreeCount());
   assert(tloCountingAllocatorGetTotalByteCount() > 0);
 
-  puts("All tests passed.");
+  printf("sizeof(TloSLList): %zu\n", sizeof(TloSLList));
+  printf("sizeof(TloSLLNode): %zu\n", sizeof(TloSLLNode));
+  printf("malloc count: %lu\nfree count: %lu\ntotal bytes allocated: %lu\n",
+         tloCountingAllocatorGetMallocCount(),
+         tloCountingAllocatorGetFreeCount(),
+         tloCountingAllocatorGetTotalByteCount());
+  puts("SLList tests passed.");
 }

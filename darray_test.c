@@ -1,3 +1,4 @@
+#include "libtloc_test.h"
 #include <tlo/darray.h>
 #include <stdlib.h>
 #include <assert.h>
@@ -369,8 +370,8 @@ static void testDArrayIntCopy(void) {
   copy = NULL;
 }
 
-int main(void) {
-  printf("sizeof(TloDArray): %zu\n", sizeof(TloDArray));
+void testDArray(void) {
+  tloCountingAllocatorResetCounts();
   assert(tloCountingAllocatorGetMallocCount() == 0);
   assert(tloCountingAllocatorGetMallocCount() ==
          tloCountingAllocatorGetFreeCount());
@@ -394,14 +395,15 @@ int main(void) {
   testDArrayIntMakeCopy();
   testDArrayIntCopy();
 
-  printf("malloc count: %lu\nfree count: %lu\ntotal bytes allocated: %lu\n",
-         tloCountingAllocatorGetMallocCount(),
-         tloCountingAllocatorGetFreeCount(),
-         tloCountingAllocatorGetTotalByteCount());
   assert(tloCountingAllocatorGetMallocCount() > 0);
   assert(tloCountingAllocatorGetMallocCount() ==
          tloCountingAllocatorGetFreeCount());
   assert(tloCountingAllocatorGetTotalByteCount() > 0);
 
-  puts("All tests passed.");
+  printf("sizeof(TloDArray): %zu\n", sizeof(TloDArray));
+  printf("malloc count: %lu\nfree count: %lu\ntotal bytes allocated: %lu\n",
+         tloCountingAllocatorGetMallocCount(),
+         tloCountingAllocatorGetFreeCount(),
+         tloCountingAllocatorGetTotalByteCount());
+  puts("DArray tests passed.");
 }

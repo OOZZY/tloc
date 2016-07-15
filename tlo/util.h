@@ -49,6 +49,7 @@ bool tloAllocatorIsValid(const TloAllocator *allocator);
 extern const TloAllocator tloCStdLibAllocator;
 
 extern const TloAllocator tloCountingAllocator;
+void tloCountingAllocatorResetCounts(void);
 unsigned long tloCountingAllocatorGetMallocCount(void);
 unsigned long tloCountingAllocatorGetFreeCount(void);
 unsigned long tloCountingAllocatorGetTotalByteCount(void);

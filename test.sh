@@ -7,12 +7,10 @@ VALGRIND_FLAGS="--tool=memcheck --leak-check=full --track-origins=yes \
 
 set -xe
 
-clang ${CLANG_FLAGS} darray_test.c -o darray_test
-gcc ${CFLAGS} darray_test.c -o darray_test-gcc
-clang ${CLANG_FLAGS} sllist_test.c -o sllist_test
-gcc ${CFLAGS} sllist_test.c -o sllist_test-gcc
+clang ${CLANG_FLAGS} *.c -o libtloc_test
+gcc ${CFLAGS} *.c -o libtloc_test-gcc
 
-valgrind ${VALGRIND_FLAGS} ./darray_test
-valgrind ${VALGRIND_FLAGS} ./sllist_test
+valgrind ${VALGRIND_FLAGS} ./libtloc_test
+valgrind ${VALGRIND_FLAGS} ./libtloc_test-gcc
 
 echo "All tests passed."
