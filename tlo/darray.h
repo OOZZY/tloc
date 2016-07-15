@@ -6,69 +6,69 @@
 /*
  * - dynamic array
  */
-typedef struct tloDArray {
+typedef struct TloDArray {
   // private
-  const tloType *type;
-  const tloAllocator *allocator;
+  const TloType *type;
+  const TloAllocator *allocator;
   void *bytes;
   size_t size;
   size_t capacity;
-} tloDArray;
+} TloDArray;
 
-bool tloDArrayIsValid(const tloDArray *array);
-tloError tloDArrayConstruct(tloDArray *array, const tloType *type,
-                            const tloAllocator *allocator);
-tloError tloDArrayConstructWithCapacity(tloDArray *array, const tloType *type,
-                                        const tloAllocator *allocator,
+bool tloDArrayIsValid(const TloDArray *array);
+tloError tloDArrayConstruct(TloDArray *array, const TloType *type,
+                            const TloAllocator *allocator);
+tloError tloDArrayConstructWithCapacity(TloDArray *array, const TloType *type,
+                                        const TloAllocator *allocator,
                                         size_t capacity);
-tloError tloDArrayConstructCopy(tloDArray *array, const tloDArray *other);
-void tloDArrayDestruct(tloDArray *array);
+tloError tloDArrayConstructCopy(TloDArray *array, const TloDArray *other);
+void tloDArrayDestruct(TloDArray *array);
 
 /*
  * - allocator->malloc then tloDArrayConstruct
  */
-tloDArray *tloDArrayMake(const tloType *type, const tloAllocator *allocator);
+TloDArray *tloDArrayMake(const TloType *type, const TloAllocator *allocator);
 
 /*
  * - allocator->malloc then tloDArrayConstructWithCapacity
  */
-tloDArray *tloDArrayMakeWithCapacity(const tloType *type,
-                                     const tloAllocator *allocator,
+TloDArray *tloDArrayMakeWithCapacity(const TloType *type,
+                                     const TloAllocator *allocator,
                                      size_t capacity);
 
 /*
  * - other->allocator->malloc then tloDArrayConstructCopy
  */
-tloDArray *tloDArrayMakeCopy(const tloDArray *other);
+TloDArray *tloDArrayMakeCopy(const TloDArray *other);
 
 /*
  * - tloDArrayDestruct then array->allocator->free
  */
-void tloDArrayDelete(tloDArray *array);
+void tloDArrayDelete(TloDArray *array);
 
-tloError tloDArrayCopy(tloDArray *array, const tloDArray *other);
-const tloType *tloDArrayGetType(const tloDArray *array);
-const tloAllocator *tloDArrayGetAllocator(const tloDArray *array);
-size_t tloDArrayGetSize(const tloDArray *array);
-size_t tloDArrayGetCapacity(const tloDArray *array);
-bool tloDArrayIsEmpty(const tloDArray *array);
-const void *tloDArrayGetElement(const tloDArray *array, size_t index);
-void *tloDArrayGetMutableElement(tloDArray *array, size_t index);
-const void *tloDArrayGetFront(const tloDArray *array);
-void *tloDArrayGetMutableFront(tloDArray *array);
-const void *tloDArrayGetBack(const tloDArray *array);
-void *tloDArrayGetMutableBack(tloDArray *array);
+tloError tloDArrayCopy(TloDArray *array, const TloDArray *other);
+const TloType *tloDArrayGetType(const TloDArray *array);
+const TloAllocator *tloDArrayGetAllocator(const TloDArray *array);
+size_t tloDArrayGetSize(const TloDArray *array);
+size_t tloDArrayGetCapacity(const TloDArray *array);
+bool tloDArrayIsEmpty(const TloDArray *array);
+const void *tloDArrayGetElement(const TloDArray *array, size_t index);
+void *tloDArrayGetMutableElement(TloDArray *array, size_t index);
+const void *tloDArrayGetFront(const TloDArray *array);
+void *tloDArrayGetMutableFront(TloDArray *array);
+const void *tloDArrayGetBack(const TloDArray *array);
+void *tloDArrayGetMutableBack(TloDArray *array);
 
 /*
  * - deep copies data using array->type->copy
  */
-tloError tloDArrayPushBack(tloDArray *array, const void *data);
+tloError tloDArrayPushBack(TloDArray *array, const void *data);
 
 /*
  * - shallow copies data using memcpy then zeroes out data using memset
  */
-tloError tloDArrayMoveBack(tloDArray *array, void *data);
+tloError tloDArrayMoveBack(TloDArray *array, void *data);
 
-void tloDArrayPopBack(tloDArray *array);
+void tloDArrayPopBack(TloDArray *array);
 
 #endif  // TLO_DARRAY_H

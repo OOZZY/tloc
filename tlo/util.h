@@ -24,31 +24,31 @@ typedef tloError (*tloConstructCopyFunction)(void *bytes, const void *data);
  */
 typedef void (*tloDestructFunction)(void *bytes);
 
-typedef struct tloType {
+typedef struct TloType {
   // public
   size_t sizeOf;
   tloConstructCopyFunction constructCopy;
   tloDestructFunction destruct;
-} tloType;
+} TloType;
 
-bool tloTypeIsValid(const tloType *type);
+bool tloTypeIsValid(const TloType *type);
 
-extern const tloType tloIntType;
+extern const TloType tloIntType;
 
 typedef void *(*tloMallocFunction)(size_t byteCount);
 typedef void (*tloFreeFunction)(void *bytes);
 
-typedef struct tloAllocator {
+typedef struct TloAllocator {
   // public
   tloMallocFunction malloc;
   tloFreeFunction free;
-} tloAllocator;
+} TloAllocator;
 
-bool tloAllocatorIsValid(const tloAllocator *allocator);
+bool tloAllocatorIsValid(const TloAllocator *allocator);
 
-extern const tloAllocator tloCStdLibAllocator;
+extern const TloAllocator tloCStdLibAllocator;
 
-extern const tloAllocator tloCountingAllocator;
+extern const TloAllocator tloCountingAllocator;
 unsigned long tloCountingAllocatorGetMallocCount(void);
 unsigned long tloCountingAllocatorGetFreeCount(void);
 unsigned long tloCountingAllocatorGetTotalByteCount(void);

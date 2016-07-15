@@ -6,80 +6,80 @@
 /*
  * - singly-linked list
  */
-typedef struct tloSLLNode {
+typedef struct TloSLLNode {
   // private
   void *bytes;
-  struct tloSLLNode *next;
-} tloSLLNode;
+  struct TloSLLNode *next;
+} TloSLLNode;
 
-typedef struct tloSLList {
+typedef struct TloSLList {
   // private
-  const tloType *type;
-  const tloAllocator *allocator;
-  tloSLLNode *head;
-  tloSLLNode *tail;
+  const TloType *type;
+  const TloAllocator *allocator;
+  TloSLLNode *head;
+  TloSLLNode *tail;
   size_t size;
-} tloSLList;
+} TloSLList;
 
-bool tloSLListIsValid(const tloSLList *list);
-tloError tloSLListConstruct(tloSLList *list, const tloType *type,
-                            const tloAllocator *allocator);
-tloError tloSLListConstructCopy(tloSLList *list, const tloSLList *other);
-void tloSLListDestruct(tloSLList *list);
+bool tloSLListIsValid(const TloSLList *list);
+tloError tloSLListConstruct(TloSLList *list, const TloType *type,
+                            const TloAllocator *allocator);
+tloError tloSLListConstructCopy(TloSLList *list, const TloSLList *other);
+void tloSLListDestruct(TloSLList *list);
 
 /*
  * - allocator->malloc then tloSLListConstruct
  */
-tloSLList *tloSLListMake(const tloType *type, const tloAllocator *allocator);
+TloSLList *tloSLListMake(const TloType *type, const TloAllocator *allocator);
 
 /*
  * - other->allocator->malloc then tloSLListConstructCopy
  */
-tloSLList *tloSLListMakeCopy(const tloSLList *other);
+TloSLList *tloSLListMakeCopy(const TloSLList *other);
 
 /*
  * - tloSLListDestruct then list->allocator->free
  */
-void tloSLListDelete(tloSLList *list);
+void tloSLListDelete(TloSLList *list);
 
-tloError tloSLListCopy(tloSLList *list, const tloSLList *other);
-const tloType *tloSLListGetType(const tloSLList *list);
-const tloAllocator *tloSLListGetAllocator(const tloSLList *list);
-size_t tloSLListGetSize(const tloSLList *list);
-bool tloSLListIsEmpty(const tloSLList *list);
-const void *tloSLListGetFront(const tloSLList *list);
-void *tloSLListGetMutableFront(tloSLList *list);
-const void *tloSLListGetBack(const tloSLList *list);
-void *tloSLListGetMutableBack(tloSLList *list);
-
-/*
- * - deep copies data using list->type->copy
- */
-tloError tloSLListPushFront(tloSLList *list, const void *data);
-
-/*
- * - shallow copies data using memcpy then zeroes out data using memset
- */
-tloError tloSLListMoveFront(tloSLList *list, void *data);
-
-void tloSLListPopFront(tloSLList *list);
+tloError tloSLListCopy(TloSLList *list, const TloSLList *other);
+const TloType *tloSLListGetType(const TloSLList *list);
+const TloAllocator *tloSLListGetAllocator(const TloSLList *list);
+size_t tloSLListGetSize(const TloSLList *list);
+bool tloSLListIsEmpty(const TloSLList *list);
+const void *tloSLListGetFront(const TloSLList *list);
+void *tloSLListGetMutableFront(TloSLList *list);
+const void *tloSLListGetBack(const TloSLList *list);
+void *tloSLListGetMutableBack(TloSLList *list);
 
 /*
  * - deep copies data using list->type->copy
  */
-tloError tloSLListPushBack(tloSLList *list, const void *data);
+tloError tloSLListPushFront(TloSLList *list, const void *data);
 
 /*
  * - shallow copies data using memcpy then zeroes out data using memset
  */
-tloError tloSLListMoveBack(tloSLList *list, void *data);
+tloError tloSLListMoveFront(TloSLList *list, void *data);
 
-bool tloSLLNodeIsValid(const tloSLLNode *node);
-const tloSLLNode *tloSLLNodeGetHead(const tloSLList *list);
-tloSLLNode *tloSLLNodeGetMutableHead(tloSLList *list);
-const void *tloSLLNodeGetElement(const tloSLLNode *node);
-void *tloSLLNodeGetMutableElement(tloSLLNode *node);
-const tloSLLNode *tloSLLNodeGetNext(const tloSLLNode *node);
-tloSLLNode *tloSLLNodeGetMutableNext(tloSLLNode *node);
+void tloSLListPopFront(TloSLList *list);
+
+/*
+ * - deep copies data using list->type->copy
+ */
+tloError tloSLListPushBack(TloSLList *list, const void *data);
+
+/*
+ * - shallow copies data using memcpy then zeroes out data using memset
+ */
+tloError tloSLListMoveBack(TloSLList *list, void *data);
+
+bool tloSLLNodeIsValid(const TloSLLNode *node);
+const TloSLLNode *tloSLLNodeGetHead(const TloSLList *list);
+TloSLLNode *tloSLLNodeGetMutableHead(TloSLList *list);
+const void *tloSLLNodeGetElement(const TloSLLNode *node);
+void *tloSLLNodeGetMutableElement(TloSLLNode *node);
+const TloSLLNode *tloSLLNodeGetNext(const TloSLLNode *node);
+TloSLLNode *tloSLLNodeGetMutableNext(TloSLLNode *node);
 
 #endif  // TLO_SLLIST_H

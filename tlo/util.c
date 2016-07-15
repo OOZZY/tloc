@@ -32,21 +32,21 @@ static void countingAllocatorFree(void *bytes) {
   free(bytes);
 }
 
-bool tloTypeIsValid(const tloType *type) {
+bool tloTypeIsValid(const TloType *type) {
   return type && type->sizeOf && type->constructCopy && type->destruct;
 }
 
-const tloType tloIntType = {.sizeOf = sizeof(int),
+const TloType tloIntType = {.sizeOf = sizeof(int),
                             .constructCopy = intTypeConstructCopy,
                             .destruct = basicTypeDestruct};
 
-bool tloAllocatorIsValid(const tloAllocator *allocator) {
+bool tloAllocatorIsValid(const TloAllocator *allocator) {
   return allocator && allocator->malloc && allocator->free;
 }
 
-const tloAllocator tloCStdLibAllocator = {.malloc = malloc, .free = free};
+const TloAllocator tloCStdLibAllocator = {.malloc = malloc, .free = free};
 
-const tloAllocator tloCountingAllocator = {.malloc = countingAllocatorMalloc,
+const TloAllocator tloCountingAllocator = {.malloc = countingAllocatorMalloc,
                                            .free = countingAllocatorFree};
 
 unsigned long tloCountingAllocatorGetMallocCount(void) {

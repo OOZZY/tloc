@@ -6,7 +6,7 @@
 #define SOME_NUMBER 42
 
 static void testSLListIntConstructDestructStackSpace(void) {
-  tloSLList ints;
+  TloSLList ints;
 
   tloError error =
       tloSLListConstruct(&ints, &tloIntType, &tloCountingAllocator);
@@ -21,7 +21,7 @@ static void testSLListIntConstructDestructStackSpace(void) {
 }
 
 static void testSLListIntConstructDestructHeapSpace(void) {
-  tloSLList *ints = malloc(sizeof(*ints));
+  TloSLList *ints = malloc(sizeof(*ints));
   assert(ints);
 
   tloError error = tloSLListConstruct(ints, &tloIntType, &tloCountingAllocator);
@@ -38,7 +38,7 @@ static void testSLListIntConstructDestructHeapSpace(void) {
 }
 
 static void testSLListIntMakeDelete(void) {
-  tloSLList *ints = tloSLListMake(&tloIntType, &tloCountingAllocator);
+  TloSLList *ints = tloSLListMake(&tloIntType, &tloCountingAllocator);
   assert(ints);
 
   assert(tloSLListGetSize(ints) == 0);
@@ -55,7 +55,7 @@ static void testSLListDestructWithNull(void) { tloSLListDestruct(NULL); }
 static void testSLListDeleteWithNull(void) { tloSLListDelete(NULL); }
 
 static void testSLListIntPushFrontOnce(void) {
-  tloSLList *ints = tloSLListMake(&tloIntType, &tloCountingAllocator);
+  TloSLList *ints = tloSLListMake(&tloIntType, &tloCountingAllocator);
   assert(ints);
 
   tloError error = tloSLListPushFront(ints, &(int) {SOME_NUMBER});
@@ -76,7 +76,7 @@ static void testSLListIntPushFrontOnce(void) {
 }
 
 static void testSLListIntMoveFrontOnce(void) {
-  tloSLList *ints = tloSLListMake(&tloIntType, &tloCountingAllocator);
+  TloSLList *ints = tloSLListMake(&tloIntType, &tloCountingAllocator);
   assert(ints);
 
   int value = SOME_NUMBER;
@@ -99,7 +99,7 @@ static void testSLListIntMoveFrontOnce(void) {
 }
 
 static void testSLListIntPushFrontManyTimes(void) {
-  tloSLList *ints = tloSLListMake(&tloIntType, &tloCountingAllocator);
+  TloSLList *ints = tloSLListMake(&tloIntType, &tloCountingAllocator);
   assert(ints);
 
   for (size_t i = 0; i < SOME_NUMBER; ++i) {
@@ -122,7 +122,7 @@ static void testSLListIntPushFrontManyTimes(void) {
 }
 
 static void testSLListIntMoveFrontManyTimes(void) {
-  tloSLList *ints = tloSLListMake(&tloIntType, &tloCountingAllocator);
+  TloSLList *ints = tloSLListMake(&tloIntType, &tloCountingAllocator);
   assert(ints);
 
   for (size_t i = 0; i < SOME_NUMBER; ++i) {
@@ -147,7 +147,7 @@ static void testSLListIntMoveFrontManyTimes(void) {
 }
 
 static void testSLListIntPushFrontOncePopFrontOnce(void) {
-  tloSLList *ints = tloSLListMake(&tloIntType, &tloCountingAllocator);
+  TloSLList *ints = tloSLListMake(&tloIntType, &tloCountingAllocator);
   assert(ints);
 
   tloError error = tloSLListPushFront(ints, &(int) {SOME_NUMBER});
@@ -165,7 +165,7 @@ static void testSLListIntPushFrontOncePopFrontOnce(void) {
 }
 
 static void testSLListIntPushFrontManyTimesPopFrontUntilEmpty(void) {
-  tloSLList *ints = tloSLListMake(&tloIntType, &tloCountingAllocator);
+  TloSLList *ints = tloSLListMake(&tloIntType, &tloCountingAllocator);
   assert(ints);
 
   for (size_t i = 0; i < SOME_NUMBER; ++i) {
@@ -197,7 +197,7 @@ static void testSLListIntPushFrontManyTimesPopFrontUntilEmpty(void) {
 }
 
 static void testSLListIntPushBackOnce(void) {
-  tloSLList *ints = tloSLListMake(&tloIntType, &tloCountingAllocator);
+  TloSLList *ints = tloSLListMake(&tloIntType, &tloCountingAllocator);
   assert(ints);
 
   tloError error = tloSLListPushBack(ints, &(int) {SOME_NUMBER});
@@ -218,7 +218,7 @@ static void testSLListIntPushBackOnce(void) {
 }
 
 static void testSLListIntMoveBackOnce(void) {
-  tloSLList *ints = tloSLListMake(&tloIntType, &tloCountingAllocator);
+  TloSLList *ints = tloSLListMake(&tloIntType, &tloCountingAllocator);
   assert(ints);
 
   int value = SOME_NUMBER;
@@ -241,7 +241,7 @@ static void testSLListIntMoveBackOnce(void) {
 }
 
 static void testSLListIntPushBackManyTimes(void) {
-  tloSLList *ints = tloSLListMake(&tloIntType, &tloCountingAllocator);
+  TloSLList *ints = tloSLListMake(&tloIntType, &tloCountingAllocator);
   assert(ints);
 
   for (size_t i = 0; i < SOME_NUMBER; ++i) {
@@ -264,7 +264,7 @@ static void testSLListIntPushBackManyTimes(void) {
 }
 
 static void testSLListIntMoveBackManyTimes(void) {
-  tloSLList *ints = tloSLListMake(&tloIntType, &tloCountingAllocator);
+  TloSLList *ints = tloSLListMake(&tloIntType, &tloCountingAllocator);
   assert(ints);
 
   for (size_t i = 0; i < SOME_NUMBER; ++i) {
@@ -289,7 +289,7 @@ static void testSLListIntMoveBackManyTimes(void) {
 }
 
 static void testSLListIntConstructCopy(void) {
-  tloSLList *ints = tloSLListMake(&tloIntType, &tloCountingAllocator);
+  TloSLList *ints = tloSLListMake(&tloIntType, &tloCountingAllocator);
   assert(ints);
 
   for (int i = 0; i < SOME_NUMBER; ++i) {
@@ -297,7 +297,7 @@ static void testSLListIntConstructCopy(void) {
     assert(!error);
   }
 
-  tloSLList *copy = malloc(sizeof(*copy));
+  TloSLList *copy = malloc(sizeof(*copy));
   assert(copy);
 
   tloError error = tloSLListConstructCopy(copy, ints);
@@ -308,8 +308,8 @@ static void testSLListIntConstructCopy(void) {
   assert(tloSLListGetType(ints) == tloSLListGetType(copy));
   assert(tloSLListGetAllocator(ints) == tloSLListGetAllocator(copy));
 
-  const tloSLLNode *node1 = tloSLLNodeGetHead(ints);
-  const tloSLLNode *node2 = tloSLLNodeGetHead(copy);
+  const TloSLLNode *node1 = tloSLLNodeGetHead(ints);
+  const TloSLLNode *node2 = tloSLLNodeGetHead(copy);
   while (node1) {
     assert(node2);
     const int *elem1 = tloSLLNodeGetElement(node1);
@@ -329,7 +329,7 @@ static void testSLListIntConstructCopy(void) {
 }
 
 static void testSLListIntMakeCopy(void) {
-  tloSLList *ints = tloSLListMake(&tloIntType, &tloCountingAllocator);
+  TloSLList *ints = tloSLListMake(&tloIntType, &tloCountingAllocator);
   assert(ints);
 
   for (int i = 0; i < SOME_NUMBER; ++i) {
@@ -337,7 +337,7 @@ static void testSLListIntMakeCopy(void) {
     assert(!error);
   }
 
-  tloSLList *copy = tloSLListMakeCopy(ints);
+  TloSLList *copy = tloSLListMakeCopy(ints);
   assert(copy);
 
   assert(tloSLListGetSize(ints) == tloSLListGetSize(copy));
@@ -345,8 +345,8 @@ static void testSLListIntMakeCopy(void) {
   assert(tloSLListGetType(ints) == tloSLListGetType(copy));
   assert(tloSLListGetAllocator(ints) == tloSLListGetAllocator(copy));
 
-  const tloSLLNode *node1 = tloSLLNodeGetHead(ints);
-  const tloSLLNode *node2 = tloSLLNodeGetHead(copy);
+  const TloSLLNode *node1 = tloSLLNodeGetHead(ints);
+  const TloSLLNode *node2 = tloSLLNodeGetHead(copy);
   while (node1) {
     assert(node2);
     const int *elem1 = tloSLLNodeGetElement(node1);
@@ -365,7 +365,7 @@ static void testSLListIntMakeCopy(void) {
 }
 
 static void testSLListIntCopy(void) {
-  tloSLList *ints = tloSLListMake(&tloIntType, &tloCountingAllocator);
+  TloSLList *ints = tloSLListMake(&tloIntType, &tloCountingAllocator);
   assert(ints);
 
   for (int i = 0; i < SOME_NUMBER; ++i) {
@@ -373,7 +373,7 @@ static void testSLListIntCopy(void) {
     assert(!error);
   }
 
-  tloSLList *copy = tloSLListMake(&tloIntType, &tloCountingAllocator);
+  TloSLList *copy = tloSLListMake(&tloIntType, &tloCountingAllocator);
   assert(copy);
 
   tloError error = tloSLListCopy(copy, ints);
@@ -384,8 +384,8 @@ static void testSLListIntCopy(void) {
   assert(tloSLListGetType(ints) == tloSLListGetType(copy));
   assert(tloSLListGetAllocator(ints) == tloSLListGetAllocator(copy));
 
-  const tloSLLNode *node1 = tloSLLNodeGetHead(ints);
-  const tloSLLNode *node2 = tloSLLNodeGetHead(copy);
+  const TloSLLNode *node1 = tloSLLNodeGetHead(ints);
+  const TloSLLNode *node2 = tloSLLNodeGetHead(copy);
   while (node1) {
     assert(node2);
     const int *elem1 = tloSLLNodeGetElement(node1);
@@ -404,8 +404,8 @@ static void testSLListIntCopy(void) {
 }
 
 int main(void) {
-  printf("sizeof(tloSLList): %zu\n", sizeof(tloSLList));
-  printf("sizeof(tloSLLNode): %zu\n", sizeof(tloSLLNode));
+  printf("sizeof(TloSLList): %zu\n", sizeof(TloSLList));
+  printf("sizeof(TloSLLNode): %zu\n", sizeof(TloSLLNode));
   assert(tloCountingAllocatorGetMallocCount() == 0);
   assert(tloCountingAllocatorGetMallocCount() ==
          tloCountingAllocatorGetFreeCount());
