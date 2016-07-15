@@ -4,8 +4,7 @@
 #include "tlo/util.h"
 
 /*
- * * an implementation of a dynamic array
- * * all operations are transactional
+ * - dynamic array
  */
 
 typedef struct tloDArray {
@@ -27,24 +26,24 @@ tloError tloDArrayConstructCopy(tloDArray *array, const tloDArray *other);
 void tloDArrayDestruct(tloDArray *array);
 
 /*
- * * allocator->malloc then tloDArrayConstruct
+ * - allocator->malloc then tloDArrayConstruct
  */
 tloDArray *tloDArrayMake(const tloType *type, const tloAllocator *allocator);
 
 /*
-* * allocator->malloc then tloDArrayConstructWithCapacity
-*/
+ * - allocator->malloc then tloDArrayConstructWithCapacity
+ */
 tloDArray *tloDArrayMakeWithCapacity(const tloType *type,
                                      const tloAllocator *allocator,
                                      size_t capacity);
 
 /*
- * * other->allocator->malloc then tloDArrayConstructCopy
+ * - other->allocator->malloc then tloDArrayConstructCopy
  */
 tloDArray *tloDArrayMakeCopy(const tloDArray *other);
 
 /*
- * * tloDArrayDestruct then array->allocator->free
+ * - tloDArrayDestruct then array->allocator->free
  */
 void tloDArrayDelete(tloDArray *array);
 
@@ -62,12 +61,12 @@ const void *tloDArrayGetBack(const tloDArray *array);
 void *tloDArrayGetMutableBack(tloDArray *array);
 
 /*
- * * deep copies data using array->type->copy
+ * - deep copies data using array->type->copy
  */
 tloError tloDArrayPushBack(tloDArray *array, const void *data);
 
 /*
- * * shallow copies data using memcpy then zeroes out data using memset
+ * - shallow copies data using memcpy then zeroes out data using memset
  */
 tloError tloDArrayMoveBack(tloDArray *array, void *data);
 

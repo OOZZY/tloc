@@ -5,38 +5,22 @@
 #include <stdbool.h>
 
 /*
- * * some utilities including:
- *   * typedefs of function pointer types
- *   * a struct for storing type information
- *     * a few const objects of this type storing the type information of some
- *       types
- *   * a struct for storing allocator information
- *     * two const objects of this type storing the allocator information of
- *       two allocators. one using the c standard library's malloc and free.
- *       another one using custom implementations of malloc and free (which
- *       actually just wrap around the c standard library's malloc and free)
- * * all operations are transactional
- */
-
-/*
- * * used as return type of functions that could fail
- * * return value zero means function succeeded (no error occurred)
- * * return value non-zero means function failed (error occurred)
+ * - used as return type of functions that could fail
+ * - return value zero means function succeeded (no error occurred)
+ * - return value non-zero means function failed (error occurred)
  */
 typedef int tloError;
 
 /*
- * * both bytes and data should not be NULL. they should point to some valid
- *   space such as the following:
- *   * heap space allocated by some malloc implementation
- *   * stack space
- * * should do a deep copy
+ * - both bytes and data should not be NULL. they should point to some valid
+ *   stack space or heap space allocated by some malloc implementation
+ * - should do a deep copy
  */
 typedef tloError (*tloConstructCopyFunction)(void *bytes, const void *data);
 
 /*
- * * does nothing if bytes is NULL
- * * should not fail
+ * - should do nothing if bytes is NULL
+ * - should not fail
  */
 typedef void (*tloDestructFunction)(void *bytes);
 
