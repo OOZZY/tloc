@@ -14,3 +14,5 @@ gcc ${CFLAGS} sllist_test.c -o sllist_test-gcc
 
 valgrind ${VALGRIND_FLAGS} ./darray_test
 valgrind ${VALGRIND_FLAGS} ./sllist_test
+
+echo "All tests passed."

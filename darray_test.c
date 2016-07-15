@@ -402,4 +402,6 @@ int main(void) {
   assert(tloCountingAllocatorGetMallocCount() ==
          tloCountingAllocatorGetFreeCount());
   assert(tloCountingAllocatorGetTotalByteCount() > 0);
+
+  puts("All tests passed.");
 }
