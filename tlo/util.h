@@ -9,14 +9,14 @@
  * - return value zero means function succeeded (no error occurred)
  * - return value non-zero means function failed (error occurred)
  */
-typedef int tloError;
+typedef int TloError;
 
 /*
  * - both bytes and data should not be NULL. they should point to some valid
  *   stack space or heap space allocated by some malloc implementation
  * - should do a deep copy
  */
-typedef tloError (*tloConstructCopyFunction)(void *bytes, const void *data);
+typedef TloError (*tloConstructCopyFunction)(void *bytes, const void *data);
 
 /*
  * - should do nothing if bytes is NULL
@@ -33,22 +33,22 @@ typedef struct TloType {
 
 bool tloTypeIsValid(const TloType *type);
 
-extern const TloType tloIntType;
+extern const TloType tloInt;
 
 typedef void *(*tloMallocFunction)(size_t byteCount);
 typedef void (*tloFreeFunction)(void *bytes);
 
-typedef struct TloAllocator {
+typedef struct TloAllocatorType {
   // public
   tloMallocFunction malloc;
   tloFreeFunction free;
-} TloAllocator;
+} TloAllocatorType;
 
-bool tloAllocatorIsValid(const TloAllocator *allocator);
+bool tloAllocatorTypeIsValid(const TloAllocatorType *allocatorType);
 
-extern const TloAllocator tloCStdLibAllocator;
+extern const TloAllocatorType tloCStdLibAllocator;
 
-extern const TloAllocator tloCountingAllocator;
+extern const TloAllocatorType tloCountingAllocator;
 void tloCountingAllocatorResetCounts(void);
 unsigned long tloCountingAllocatorGetMallocCount(void);
 unsigned long tloCountingAllocatorGetFreeCount(void);

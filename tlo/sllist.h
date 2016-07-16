@@ -14,37 +14,38 @@ typedef struct TloSLLNode {
 
 typedef struct TloSLList {
   // private
-  const TloType *type;
-  const TloAllocator *allocator;
+  const TloType *valueType;
+  const TloAllocatorType *allocatorType;
   TloSLLNode *head;
   TloSLLNode *tail;
   size_t size;
 } TloSLList;
 
 bool tloSLListIsValid(const TloSLList *list);
-tloError tloSLListConstruct(TloSLList *list, const TloType *type,
-                            const TloAllocator *allocator);
-tloError tloSLListConstructCopy(TloSLList *list, const TloSLList *other);
+TloError tloSLListConstruct(TloSLList *list, const TloType *valueType,
+                            const TloAllocatorType *allocatorType);
+TloError tloSLListConstructCopy(TloSLList *list, const TloSLList *other);
 void tloSLListDestruct(TloSLList *list);
 
 /*
- * - allocator->malloc then tloSLListConstruct
+ * - allocatorType->malloc then tloSLListConstruct
  */
-TloSLList *tloSLListMake(const TloType *type, const TloAllocator *allocator);
+TloSLList *tloSLListMake(const TloType *valueType,
+                         const TloAllocatorType *allocatorType);
 
 /*
- * - other->allocator->malloc then tloSLListConstructCopy
+ * - other->allocatorType->malloc then tloSLListConstructCopy
  */
 TloSLList *tloSLListMakeCopy(const TloSLList *other);
 
 /*
- * - tloSLListDestruct then list->allocator->free
+ * - tloSLListDestruct then list->allocatorType->free
  */
 void tloSLListDelete(TloSLList *list);
 
-tloError tloSLListCopy(TloSLList *list, const TloSLList *other);
-const TloType *tloSLListGetType(const TloSLList *list);
-const TloAllocator *tloSLListGetAllocator(const TloSLList *list);
+TloError tloSLListCopy(TloSLList *list, const TloSLList *other);
+const TloType *tloSLListGetValueType(const TloSLList *list);
+const TloAllocatorType *tloSLListGetAllocatorType(const TloSLList *list);
 size_t tloSLListGetSize(const TloSLList *list);
 bool tloSLListIsEmpty(const TloSLList *list);
 const void *tloSLListGetFront(const TloSLList *list);
@@ -53,26 +54,26 @@ const void *tloSLListGetBack(const TloSLList *list);
 void *tloSLListGetMutableBack(TloSLList *list);
 
 /*
- * - deep copies data using list->type->copy
+ * - deep copies data using list->valueType->copy
  */
-tloError tloSLListPushFront(TloSLList *list, const void *data);
+TloError tloSLListPushFront(TloSLList *list, const void *data);
 
 /*
  * - shallow copies data using memcpy then zeroes out data using memset
  */
-tloError tloSLListMoveFront(TloSLList *list, void *data);
+TloError tloSLListMoveFront(TloSLList *list, void *data);
 
 void tloSLListPopFront(TloSLList *list);
 
 /*
- * - deep copies data using list->type->copy
+ * - deep copies data using list->valueType->copy
  */
-tloError tloSLListPushBack(TloSLList *list, const void *data);
+TloError tloSLListPushBack(TloSLList *list, const void *data);
 
 /*
  * - shallow copies data using memcpy then zeroes out data using memset
  */
-tloError tloSLListMoveBack(TloSLList *list, void *data);
+TloError tloSLListMoveBack(TloSLList *list, void *data);
 
 bool tloSLLNodeIsValid(const TloSLLNode *node);
 const TloSLLNode *tloSLLNodeGetHead(const TloSLList *list);
