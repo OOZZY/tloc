@@ -4,4 +4,4 @@
 void testDArray(void);
 void testSLList(void);
 
-#endif // LIBTLOC_TEST_H
+#endif  // LIBTLOC_TEST_H

@@ -9,8 +9,7 @@
 static void testDArrayIntConstructDestructStackSpace(void) {
   TloDArray ints;
 
-  TloError error =
-      tloDArrayConstruct(&ints, &tloInt, &tloCountingAllocator);
+  TloError error = tloDArrayConstruct(&ints, &tloInt, &tloCountingAllocator);
   assert(!error);
 
   assert(tloDArrayGetSize(&ints) == 0);
@@ -90,8 +89,8 @@ static void testDArrayIntMakeDelete(void) {
 }
 
 static void testDArrayIntMakeWithCapacityDelete(void) {
-  TloDArray *ints = tloDArrayMakeWithCapacity(
-      &tloInt, &tloCountingAllocator, SOME_NUMBER);
+  TloDArray *ints =
+      tloDArrayMakeWithCapacity(&tloInt, &tloCountingAllocator, SOME_NUMBER);
   assert(ints);
 
   assert(tloDArrayGetSize(ints) == 0);

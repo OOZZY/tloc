@@ -9,8 +9,7 @@
 static void testSLListIntConstructDestructStackSpace(void) {
   TloSLList ints;
 
-  TloError error =
-      tloSLListConstruct(&ints, &tloInt, &tloCountingAllocator);
+  TloError error = tloSLListConstruct(&ints, &tloInt, &tloCountingAllocator);
   assert(!error);
 
   assert(tloSLListGetSize(&ints) == 0);
