@@ -2,8 +2,8 @@
 
 CFLAGS="-std=c11 -pedantic -Wall -Wextra -Werror -g -I. tlo/*.c"
 CLANG_FLAGS="$CFLAGS -Weverything"
-VALGRIND_FLAGS="--tool=memcheck --leak-check=full --track-origins=yes \
-  --error-exitcode=1"
+VALGRIND_FLAGS="--tool=memcheck --leak-check=full --show-leak-kinds=all \
+  --track-origins=yes --error-exitcode=1"
 
 set -xe
 

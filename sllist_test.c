@@ -428,6 +428,12 @@ void testSLList(void) {
   testSLListIntConstructCopy();
   testSLListIntMakeCopy();
   testSLListIntCopy();
+  // testSLListIntPtrPushFrontOnce();
+  // testSLListIntPtrPushFrontManyTimes();
+  // testSLListIntPtrPushFrontOncePopFrontOnce();
+  // testSLListIntPtrPushFrontManyTimesPopFrontUntilEmpty();
+  // testSLListIntPtrPushBackOnce();
+  // testSLListIntPtrPushBackManyTimes();
 
   assert(tloCountingAllocatorGetMallocCount() > 0);
   assert(tloCountingAllocatorGetMallocCount() ==

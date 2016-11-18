@@ -54,4 +54,13 @@ unsigned long tloCountingAllocatorGetMallocCount(void);
 unsigned long tloCountingAllocatorGetFreeCount(void);
 unsigned long tloCountingAllocatorGetTotalByteCount(void);
 
+typedef struct TloIntPtr {
+  int *ptr;
+} TloIntPtr;
+
+TloError tloIntPtrConstruct(TloIntPtr *ptr);
+TloError tloIntPtrConstructCopy(TloIntPtr *ptr, const TloIntPtr *other);
+void tloIntPtrDestruct(TloIntPtr *ptr);
+extern const TloType tloIntPtr;
+
 #endif  // TLO_UTIL_H

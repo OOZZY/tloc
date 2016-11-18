@@ -366,8 +366,8 @@ void tloDArrayPopBack(TloDArray *array) {
   assert(tloDArrayIsValid(array));
   assert(!tloDArrayIsEmpty(array));
 
-  void *back =
-      getMutableElement(array->bytes, array->size, array->valueType->sizeOf);
+  void *back = getMutableElement(array->bytes, array->size - 1,
+                                 array->valueType->sizeOf);
   array->valueType->destruct(back);
   --array->size;
 }

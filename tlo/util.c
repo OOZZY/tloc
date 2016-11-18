@@ -32,6 +32,12 @@ static void countingAllocatorFree(void *bytes) {
   free(bytes);
 }
 
+static TloError intPtrConstructCopy(void *bytes, const void *data) {
+  return tloIntPtrConstructCopy(bytes, data);
+}
+
+static void intPtrDestruct(void *bytes) { tloIntPtrDestruct(bytes); }
+
 bool tloTypeIsValid(const TloType *type) {
   return type && type->sizeOf && type->constructCopy && type->destruct;
 }
@@ -66,3 +72,46 @@ unsigned long tloCountingAllocatorGetFreeCount(void) {
 unsigned long tloCountingAllocatorGetTotalByteCount(void) {
   return countingAllocatorTotalByteCount;
 }
+
+TloError tloIntPtrConstruct(TloIntPtr *ptr) {
+  assert(ptr);
+
+  int *newPtr = malloc(sizeof(int));
+  if (!newPtr) {
+    return -1;
+  }
+
+  ptr->ptr = newPtr;
+
+  return 0;
+}
+
+TloError tloIntPtrConstructCopy(TloIntPtr *ptr, const TloIntPtr *other) {
+  assert(ptr);
+  assert(other && other->ptr);
+
+  if (tloIntPtrConstruct(ptr) == -1) {
+    return -1;
+  }
+
+  *ptr->ptr = *other->ptr;
+
+  return 0;
+}
+
+void tloIntPtrDestruct(TloIntPtr *ptr) {
+  if (!ptr) {
+    return;
+  }
+
+  if (!ptr->ptr) {
+    return;
+  }
+
+  free(ptr->ptr);
+  ptr->ptr = NULL;
+}
+
+const TloType tloIntPtr = {.sizeOf = sizeof(TloIntPtr),
+                           .constructCopy = intPtrConstructCopy,
+                           .destruct = intPtrDestruct};
