@@ -16,32 +16,32 @@ typedef int TloError;
  *   stack space or heap space allocated by some malloc implementation
  * - should do a deep copy
  */
-typedef TloError (*tloConstructCopyFunction)(void *bytes, const void *data);
+typedef TloError (*TloConstructCopyFunction)(void *bytes, const void *data);
 
 /*
  * - should do nothing if bytes is NULL
  * - should not fail
  */
-typedef void (*tloDestructFunction)(void *bytes);
+typedef void (*TloDestructFunction)(void *bytes);
 
 typedef struct TloType {
   // public
   size_t sizeOf;
-  tloConstructCopyFunction constructCopy;
-  tloDestructFunction destruct;
+  TloConstructCopyFunction constructCopy;
+  TloDestructFunction destruct;
 } TloType;
 
 bool tloTypeIsValid(const TloType *type);
 
 extern const TloType tloInt;
 
-typedef void *(*tloMallocFunction)(size_t byteCount);
-typedef void (*tloFreeFunction)(void *bytes);
+typedef void *(*TloMallocFunction)(size_t byteCount);
+typedef void (*TloFreeFunction)(void *bytes);
 
 typedef struct TloAllocatorType {
   // public
-  tloMallocFunction malloc;
-  tloFreeFunction free;
+  TloMallocFunction malloc;
+  TloFreeFunction free;
 } TloAllocatorType;
 
 bool tloAllocatorTypeIsValid(const TloAllocatorType *allocatorType);

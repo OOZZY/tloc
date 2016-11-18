@@ -231,7 +231,7 @@ void tloDArrayDelete(TloDArray *array) {
   assert(tloDArrayIsValid(array));
 
   tloDArrayDestruct(array);
-  tloFreeFunction free = array->allocatorType->free;
+  TloFreeFunction free = array->allocatorType->free;
   free(array);
 }
 

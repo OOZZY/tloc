@@ -193,7 +193,7 @@ void tloSLListDelete(TloSLList *list) {
   assert(tloSLListIsValid(list));
 
   tloSLListDestruct(list);
-  tloFreeFunction free = list->allocatorType->free;
+  TloFreeFunction free = list->allocatorType->free;
   free(list);
 }
 
