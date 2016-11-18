@@ -3,13 +3,13 @@ set(CMAKE_LEGACY_CYGWIN_WIN32 0)
 project("libtloc")
 enable_testing()
 
-if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" OR
-    "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
-  set(warnings "-std=c++11 -pedantic -Wall -Wextra -Werror")
+if ("${CMAKE_C_COMPILER_ID}" STREQUAL "GNU" OR
+    "${CMAKE_C_COMPILER_ID}" STREQUAL "Clang")
+  set(warnings "-std=c11 -pedantic -Wall -Wextra -Werror")
 endif()
 
 if (NOT CONFIGURED_ONCE)
-  set(CMAKE_CXX_FLAGS "${warnings}" CACHE STRING
+  set(CMAKE_C_FLAGS "${warnings}" CACHE STRING
       "Flags used by the compiler during all build types." FORCE)
 endif()
 
