@@ -1,8 +1,8 @@
 #ifndef TLO_UTIL_H
 #define TLO_UTIL_H
 
-#include <stddef.h>
 #include <stdbool.h>
+#include <stddef.h>
 
 /*
  * - used as return type of functions that could fail
@@ -54,9 +54,7 @@ unsigned long tloCountingAllocatorGetMallocCount(void);
 unsigned long tloCountingAllocatorGetFreeCount(void);
 unsigned long tloCountingAllocatorGetTotalByteCount(void);
 
-typedef struct TloIntPtr {
-  int *ptr;
-} TloIntPtr;
+typedef struct TloIntPtr { int *ptr; } TloIntPtr;
 
 TloError tloIntPtrConstruct(TloIntPtr *ptr);
 TloError tloIntPtrConstructCopy(TloIntPtr *ptr, const TloIntPtr *other);

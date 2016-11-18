@@ -1,7 +1,7 @@
 #include "tlo/util.h"
 #include <assert.h>
-#include <string.h>
 #include <stdlib.h>
+#include <string.h>
 
 static TloError intConstructCopy(void *bytes, const void *data) {
   assert(bytes);

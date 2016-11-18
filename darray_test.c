@@ -1,8 +1,8 @@
-#include "libtloc_test.h"
-#include <tlo/darray.h>
-#include <stdlib.h>
 #include <assert.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <tlo/darray.h>
+#include "libtloc_test.h"
 
 #define SOME_NUMBER 42
 
@@ -111,7 +111,7 @@ static void testDArrayIntPushBackOnce(void) {
   TloDArray *ints = tloDArrayMake(&tloInt, &tloCountingAllocator);
   assert(ints);
 
-  TloError error = tloDArrayPushBack(ints, &(int) {SOME_NUMBER});
+  TloError error = tloDArrayPushBack(ints, &(int){SOME_NUMBER});
   assert(!error);
 
   assert(tloDArrayGetSize(ints) == 1);
@@ -162,7 +162,7 @@ static void testDArrayIntPushBackUntilResize(void) {
   assert(ints);
 
   for (size_t i = 0; i < SOME_NUMBER; ++i) {
-    TloError error = tloDArrayPushBack(ints, &(int) {(int)i});
+    TloError error = tloDArrayPushBack(ints, &(int){(int)i});
     assert(!error);
 
     assert(tloDArrayGetSize(ints) == i + 1);
@@ -215,7 +215,7 @@ static void testDArrayIntPushBackOncePopBackOnce(void) {
   TloDArray *ints = tloDArrayMake(&tloInt, &tloCountingAllocator);
   assert(ints);
 
-  TloError error = tloDArrayPushBack(ints, &(int) {SOME_NUMBER});
+  TloError error = tloDArrayPushBack(ints, &(int){SOME_NUMBER});
   assert(!error);
 
   tloDArrayPopBack(ints);
@@ -235,7 +235,7 @@ static void testDArrayIntPushBackUntilResizePopBackUntilEmpty(void) {
   assert(ints);
 
   for (size_t i = 0; i < SOME_NUMBER; ++i) {
-    TloError error = tloDArrayPushBack(ints, &(int) {(int)i});
+    TloError error = tloDArrayPushBack(ints, &(int){(int)i});
     assert(!error);
   }
 

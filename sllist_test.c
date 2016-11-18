@@ -1,8 +1,8 @@
-#include "libtloc_test.h"
-#include <tlo/sllist.h>
-#include <stdlib.h>
 #include <assert.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <tlo/sllist.h>
+#include "libtloc_test.h"
 
 #define SOME_NUMBER 42
 
@@ -58,7 +58,7 @@ static void testSLListIntPushFrontOnce(void) {
   TloSLList *ints = tloSLListMake(&tloInt, &tloCountingAllocator);
   assert(ints);
 
-  TloError error = tloSLListPushFront(ints, &(int) {SOME_NUMBER});
+  TloError error = tloSLListPushFront(ints, &(int){SOME_NUMBER});
   assert(!error);
 
   assert(tloSLListGetSize(ints) == 1);
@@ -103,7 +103,7 @@ static void testSLListIntPushFrontManyTimes(void) {
   assert(ints);
 
   for (size_t i = 0; i < SOME_NUMBER; ++i) {
-    TloError error = tloSLListPushFront(ints, &(int) {(int)i});
+    TloError error = tloSLListPushFront(ints, &(int){(int)i});
     assert(!error);
 
     assert(tloSLListGetSize(ints) == i + 1);
@@ -150,7 +150,7 @@ static void testSLListIntPushFrontOncePopFrontOnce(void) {
   TloSLList *ints = tloSLListMake(&tloInt, &tloCountingAllocator);
   assert(ints);
 
-  TloError error = tloSLListPushFront(ints, &(int) {SOME_NUMBER});
+  TloError error = tloSLListPushFront(ints, &(int){SOME_NUMBER});
   assert(!error);
 
   tloSLListPopFront(ints);
@@ -169,7 +169,7 @@ static void testSLListIntPushFrontManyTimesPopFrontUntilEmpty(void) {
   assert(ints);
 
   for (size_t i = 0; i < SOME_NUMBER; ++i) {
-    TloError error = tloSLListPushFront(ints, &(int) {(int)i});
+    TloError error = tloSLListPushFront(ints, &(int){(int)i});
     assert(!error);
   }
 
@@ -200,7 +200,7 @@ static void testSLListIntPushBackOnce(void) {
   TloSLList *ints = tloSLListMake(&tloInt, &tloCountingAllocator);
   assert(ints);
 
-  TloError error = tloSLListPushBack(ints, &(int) {SOME_NUMBER});
+  TloError error = tloSLListPushBack(ints, &(int){SOME_NUMBER});
   assert(!error);
 
   assert(tloSLListGetSize(ints) == 1);
@@ -245,7 +245,7 @@ static void testSLListIntPushBackManyTimes(void) {
   assert(ints);
 
   for (size_t i = 0; i < SOME_NUMBER; ++i) {
-    TloError error = tloSLListPushBack(ints, &(int) {(int)i});
+    TloError error = tloSLListPushBack(ints, &(int){(int)i});
     assert(!error);
 
     assert(tloSLListGetSize(ints) == i + 1);
