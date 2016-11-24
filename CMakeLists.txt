@@ -5,12 +5,17 @@ enable_testing()
 
 if ("${CMAKE_C_COMPILER_ID}" STREQUAL "GNU" OR
     "${CMAKE_C_COMPILER_ID}" STREQUAL "Clang")
-  set(warnings "-std=c11 -pedantic -Wall -Wextra -Werror")
+  set(warning_flags "-std=c11 -pedantic -Wall -Wextra -Werror")
+  set(debug_flags "-g")
+  #set(debug_flags "-g -fsanitize=address -fsanitize=undefined -O1 -fno-omit-frame-pointer -fno-optimize-sibling-calls")
+  #set(debug_flags "-g -fsanitize=memory -fsanitize=undefined -O1 -fno-omit-frame-pointer -fno-optimize-sibling-calls")
 endif()
 
 if (NOT CONFIGURED_ONCE)
-  set(CMAKE_C_FLAGS "${warnings}" CACHE STRING
+  set(CMAKE_C_FLAGS "${warning_flags}" CACHE STRING
       "Flags used by the compiler during all build types." FORCE)
+  set(CMAKE_C_FLAGS_DEBUG "${debug_flags}" CACHE STRING
+      "Flags used by the compiler during debug builds." FORCE)
 endif()
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
