@@ -535,10 +535,7 @@ void testDArray(void) {
   assert(tloCountingAllocatorGetTotalByteCount() > 0);
 
   printf("sizeof(TloDArray): %zu\n", sizeof(TloDArray));
-  printf("malloc count: %lu\nfree count: %lu\ntotal bytes allocated: %lu\n",
-         tloCountingAllocatorGetMallocCount(),
-         tloCountingAllocatorGetFreeCount(),
-         tloCountingAllocatorGetTotalByteCount());
+  tloCountingAllocatorPrintCounts();
   puts("====================");
   puts("DArray tests passed.");
   puts("====================");

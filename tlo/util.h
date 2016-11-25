@@ -3,6 +3,7 @@
 
 #include <stdbool.h>
 #include <stddef.h>
+#include <stdio.h>
 
 /*
  * - used as return type of functions that could fail
@@ -53,6 +54,7 @@ void tloCountingAllocatorResetCounts(void);
 unsigned long tloCountingAllocatorGetMallocCount(void);
 unsigned long tloCountingAllocatorGetFreeCount(void);
 unsigned long tloCountingAllocatorGetTotalByteCount(void);
+void tloCountingAllocatorPrintCounts(void);
 
 typedef struct TloIntPtr { int *ptr; } TloIntPtr;
 

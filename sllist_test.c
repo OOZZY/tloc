@@ -610,10 +610,7 @@ void testSLList(void) {
 
   printf("sizeof(TloSLList): %zu\n", sizeof(TloSLList));
   printf("sizeof(TloSLLNode): %zu\n", sizeof(TloSLLNode));
-  printf("malloc count: %lu\nfree count: %lu\ntotal bytes allocated: %lu\n",
-         tloCountingAllocatorGetMallocCount(),
-         tloCountingAllocatorGetFreeCount(),
-         tloCountingAllocatorGetTotalByteCount());
+  tloCountingAllocatorPrintCounts();
   puts("====================");
   puts("SLList tests passed.");
   puts("====================");
