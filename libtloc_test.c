@@ -4,5 +4,7 @@
 int main(void) {
   testDArray();
   testSLList();
+  puts("=================");
   puts("All tests passed.");
+  puts("=================");
 }

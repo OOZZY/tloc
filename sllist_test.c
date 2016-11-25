@@ -614,5 +614,7 @@ void testSLList(void) {
          tloCountingAllocatorGetMallocCount(),
          tloCountingAllocatorGetFreeCount(),
          tloCountingAllocatorGetTotalByteCount());
+  puts("====================");
   puts("SLList tests passed.");
+  puts("====================");
 }

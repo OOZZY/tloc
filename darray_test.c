@@ -539,5 +539,7 @@ void testDArray(void) {
          tloCountingAllocatorGetMallocCount(),
          tloCountingAllocatorGetFreeCount(),
          tloCountingAllocatorGetTotalByteCount());
+  puts("====================");
   puts("DArray tests passed.");
+  puts("====================");
 }
