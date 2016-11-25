@@ -403,6 +403,174 @@ static void testSLListIntCopy(void) {
   copy = NULL;
 }
 
+static void testSLListIntPtrPushFrontOnce(void) {
+  TloSLList *intPtrs = tloSLListMake(&tloIntPtr, &tloCountingAllocator);
+  assert(intPtrs);
+
+  TloIntPtr intPtr;
+  TloError error = tloIntPtrConstruct(&intPtr);
+  assert(!error);
+  *intPtr.ptr = SOME_NUMBER;
+  error = tloSLListPushFront(intPtrs, &intPtr);
+  assert(!error);
+  tloIntPtrDestruct(&intPtr);
+
+  assert(tloSLListGetSize(intPtrs) == 1);
+  assert(!tloSLListIsEmpty(intPtrs));
+  assert(tloSLListGetValueType(intPtrs) == &tloIntPtr);
+  assert(tloSLListGetAllocatorType(intPtrs) == &tloCountingAllocator);
+
+  assert(*((const TloIntPtr *)tloSLListGetFront(intPtrs))->ptr == SOME_NUMBER);
+  assert(*((TloIntPtr *)tloSLListGetMutableFront(intPtrs))->ptr == SOME_NUMBER);
+  assert(*((const TloIntPtr *)tloSLListGetBack(intPtrs))->ptr == SOME_NUMBER);
+  assert(*((TloIntPtr *)tloSLListGetMutableBack(intPtrs))->ptr == SOME_NUMBER);
+
+  tloSLListDelete(intPtrs);
+  intPtrs = NULL;
+}
+
+static void testSLListIntPtrPushFrontManyTimes(void) {
+  TloSLList *intPtrs = tloSLListMake(&tloIntPtr, &tloCountingAllocator);
+  assert(intPtrs);
+
+  TloIntPtr intPtr;
+  TloError error = tloIntPtrConstruct(&intPtr);
+  assert(!error);
+  for (size_t i = 0; i < SOME_NUMBER; ++i) {
+    *intPtr.ptr = (int)i;
+    error = tloSLListPushFront(intPtrs, &intPtr);
+    assert(!error);
+
+    assert(tloSLListGetSize(intPtrs) == i + 1);
+    assert(!tloSLListIsEmpty(intPtrs));
+    assert(tloSLListGetValueType(intPtrs) == &tloIntPtr);
+    assert(tloSLListGetAllocatorType(intPtrs) == &tloCountingAllocator);
+
+    assert(*((const TloIntPtr *)tloSLListGetFront(intPtrs))->ptr == (int)i);
+    assert(*((TloIntPtr *)tloSLListGetMutableFront(intPtrs))->ptr == (int)i);
+    assert(*((const TloIntPtr *)tloSLListGetBack(intPtrs))->ptr == 0);
+    assert(*((TloIntPtr *)tloSLListGetMutableBack(intPtrs))->ptr == 0);
+  }
+  tloIntPtrDestruct(&intPtr);
+
+  tloSLListDelete(intPtrs);
+  intPtrs = NULL;
+}
+
+static void testSLListIntPtrPushFrontOncePopFrontOnce(void) {
+  TloSLList *intPtrs = tloSLListMake(&tloIntPtr, &tloCountingAllocator);
+  assert(intPtrs);
+
+  TloIntPtr intPtr;
+  TloError error = tloIntPtrConstruct(&intPtr);
+  assert(!error);
+  *intPtr.ptr = SOME_NUMBER;
+  error = tloSLListPushFront(intPtrs, &intPtr);
+  assert(!error);
+  tloIntPtrDestruct(&intPtr);
+
+  tloSLListPopFront(intPtrs);
+
+  assert(tloSLListGetSize(intPtrs) == 0);
+  assert(tloSLListIsEmpty(intPtrs));
+  assert(tloSLListGetValueType(intPtrs) == &tloIntPtr);
+  assert(tloSLListGetAllocatorType(intPtrs) == &tloCountingAllocator);
+
+  tloSLListDelete(intPtrs);
+  intPtrs = NULL;
+}
+
+static void testSLListIntPtrPushFrontManyTimesPopFrontUntilEmpty(void) {
+  TloSLList *intPtrs = tloSLListMake(&tloIntPtr, &tloCountingAllocator);
+  assert(intPtrs);
+
+  TloIntPtr intPtr;
+  TloError error = tloIntPtrConstruct(&intPtr);
+  assert(!error);
+  for (size_t i = 0; i < SOME_NUMBER; ++i) {
+    *intPtr.ptr = (int)i;
+    error = tloSLListPushFront(intPtrs, &intPtr);
+    assert(!error);
+  }
+  tloIntPtrDestruct(&intPtr);
+
+  for (size_t i = SOME_NUMBER - 1; i <= SOME_NUMBER - 1; --i) {
+    assert(tloSLListGetSize(intPtrs) == i + 1);
+    assert(!tloSLListIsEmpty(intPtrs));
+    assert(tloSLListGetValueType(intPtrs) == &tloIntPtr);
+    assert(tloSLListGetAllocatorType(intPtrs) == &tloCountingAllocator);
+
+    assert(*((const TloIntPtr *)tloSLListGetFront(intPtrs))->ptr == (int)i);
+    assert(*((TloIntPtr *)tloSLListGetMutableFront(intPtrs))->ptr == (int)i);
+    assert(*((const TloIntPtr *)tloSLListGetBack(intPtrs))->ptr == 0);
+    assert(*((TloIntPtr *)tloSLListGetMutableBack(intPtrs))->ptr == 0);
+
+    tloSLListPopFront(intPtrs);
+  }
+
+  assert(tloSLListGetSize(intPtrs) == 0);
+  assert(tloSLListIsEmpty(intPtrs));
+  assert(tloSLListGetValueType(intPtrs) == &tloIntPtr);
+  assert(tloSLListGetAllocatorType(intPtrs) == &tloCountingAllocator);
+
+  tloSLListDelete(intPtrs);
+  intPtrs = NULL;
+}
+
+static void testSLListIntPtrPushBackOnce(void) {
+  TloSLList *intPtrs = tloSLListMake(&tloIntPtr, &tloCountingAllocator);
+  assert(intPtrs);
+
+  TloIntPtr intPtr;
+  TloError error = tloIntPtrConstruct(&intPtr);
+  assert(!error);
+  *intPtr.ptr = SOME_NUMBER;
+  error = tloSLListPushBack(intPtrs, &intPtr);
+  assert(!error);
+  tloIntPtrDestruct(&intPtr);
+
+  assert(tloSLListGetSize(intPtrs) == 1);
+  assert(!tloSLListIsEmpty(intPtrs));
+  assert(tloSLListGetValueType(intPtrs) == &tloIntPtr);
+  assert(tloSLListGetAllocatorType(intPtrs) == &tloCountingAllocator);
+
+  assert(*((const TloIntPtr *)tloSLListGetFront(intPtrs))->ptr == SOME_NUMBER);
+  assert(*((TloIntPtr *)tloSLListGetMutableFront(intPtrs))->ptr == SOME_NUMBER);
+  assert(*((const TloIntPtr *)tloSLListGetBack(intPtrs))->ptr == SOME_NUMBER);
+  assert(*((TloIntPtr *)tloSLListGetMutableBack(intPtrs))->ptr == SOME_NUMBER);
+
+  tloSLListDelete(intPtrs);
+  intPtrs = NULL;
+}
+
+static void testSLListIntPtrPushBackManyTimes(void) {
+  TloSLList *intPtrs = tloSLListMake(&tloIntPtr, &tloCountingAllocator);
+  assert(intPtrs);
+
+  TloIntPtr intPtr;
+  TloError error = tloIntPtrConstruct(&intPtr);
+  assert(!error);
+  for (size_t i = 0; i < SOME_NUMBER; ++i) {
+    *intPtr.ptr = (int)i;
+    error = tloSLListPushBack(intPtrs, &intPtr);
+    assert(!error);
+
+    assert(tloSLListGetSize(intPtrs) == i + 1);
+    assert(!tloSLListIsEmpty(intPtrs));
+    assert(tloSLListGetValueType(intPtrs) == &tloIntPtr);
+    assert(tloSLListGetAllocatorType(intPtrs) == &tloCountingAllocator);
+
+    assert(*((const TloIntPtr *)tloSLListGetFront(intPtrs))->ptr == 0);
+    assert(*((TloIntPtr *)tloSLListGetMutableFront(intPtrs))->ptr == 0);
+    assert(*((const TloIntPtr *)tloSLListGetBack(intPtrs))->ptr == (int)i);
+    assert(*((TloIntPtr *)tloSLListGetMutableBack(intPtrs))->ptr == (int)i);
+  }
+  tloIntPtrDestruct(&intPtr);
+
+  tloSLListDelete(intPtrs);
+  intPtrs = NULL;
+}
+
 void testSLList(void) {
   tloCountingAllocatorResetCounts();
   assert(tloCountingAllocatorGetMallocCount() == 0);
@@ -428,12 +596,12 @@ void testSLList(void) {
   testSLListIntConstructCopy();
   testSLListIntMakeCopy();
   testSLListIntCopy();
-  // testSLListIntPtrPushFrontOnce();
-  // testSLListIntPtrPushFrontManyTimes();
-  // testSLListIntPtrPushFrontOncePopFrontOnce();
-  // testSLListIntPtrPushFrontManyTimesPopFrontUntilEmpty();
-  // testSLListIntPtrPushBackOnce();
-  // testSLListIntPtrPushBackManyTimes();
+  testSLListIntPtrPushFrontOnce();
+  testSLListIntPtrPushFrontManyTimes();
+  testSLListIntPtrPushFrontOncePopFrontOnce();
+  testSLListIntPtrPushFrontManyTimesPopFrontUntilEmpty();
+  testSLListIntPtrPushBackOnce();
+  testSLListIntPtrPushBackManyTimes();
 
   assert(tloCountingAllocatorGetMallocCount() > 0);
   assert(tloCountingAllocatorGetMallocCount() ==
