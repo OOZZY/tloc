@@ -3,6 +3,10 @@
 #include <stdlib.h>
 #include <string.h>
 
+bool tloTypeIsValid(const TloType *type) {
+  return type && type->sizeOf && type->constructCopy && type->destruct;
+}
+
 static TloError intConstructCopy(void *bytes, const void *data) {
   assert(bytes);
   assert(data);
@@ -13,6 +17,16 @@ static TloError intConstructCopy(void *bytes, const void *data) {
 }
 
 static void basicDestruct(void *bytes) { (void)bytes; }
+
+const TloType tloInt = {.sizeOf = sizeof(int),
+                        .constructCopy = intConstructCopy,
+                        .destruct = basicDestruct};
+
+bool tloAllocatorTypeIsValid(const TloAllocatorType *allocatorType) {
+  return allocatorType && allocatorType->malloc && allocatorType->free;
+}
+
+const TloAllocatorType tloCStdLibAllocator = {.malloc = malloc, .free = free};
 
 static unsigned long countingAllocatorMallocCount = 0;
 static unsigned long countingAllocatorFreeCount = 0;
@@ -31,26 +45,6 @@ static void countingAllocatorFree(void *bytes) {
   ++countingAllocatorFreeCount;
   free(bytes);
 }
-
-static TloError intPtrConstructCopy(void *bytes, const void *data) {
-  return tloIntPtrConstructCopy(bytes, data);
-}
-
-static void intPtrDestruct(void *bytes) { tloIntPtrDestruct(bytes); }
-
-bool tloTypeIsValid(const TloType *type) {
-  return type && type->sizeOf && type->constructCopy && type->destruct;
-}
-
-const TloType tloInt = {.sizeOf = sizeof(int),
-                        .constructCopy = intConstructCopy,
-                        .destruct = basicDestruct};
-
-bool tloAllocatorTypeIsValid(const TloAllocatorType *allocatorType) {
-  return allocatorType && allocatorType->malloc && allocatorType->free;
-}
-
-const TloAllocatorType tloCStdLibAllocator = {.malloc = malloc, .free = free};
 
 const TloAllocatorType tloCountingAllocator = {
     .malloc = countingAllocatorMalloc, .free = countingAllocatorFree};
@@ -117,6 +111,12 @@ void tloIntPtrDestruct(TloIntPtr *ptr) {
   free(ptr->ptr);
   ptr->ptr = NULL;
 }
+
+static TloError intPtrConstructCopy(void *bytes, const void *data) {
+  return tloIntPtrConstructCopy(bytes, data);
+}
+
+static void intPtrDestruct(void *bytes) { tloIntPtrDestruct(bytes); }
 
 const TloType tloIntPtr = {.sizeOf = sizeof(TloIntPtr),
                            .constructCopy = intPtrConstructCopy,
