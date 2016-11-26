@@ -7,10 +7,10 @@
 
 /*
  * - used as return type of functions that could fail
- * - return value zero means function succeeded (no error occurred)
- * - return value non-zero means function failed (error occurred)
+ * - return value TLO_SUCCESS means function succeeded (no error occurred)
+ * - return value TLO_ERROR means function failed (error occurred)
  */
-typedef int TloError;
+typedef enum TloError { TLO_ERROR = -1, TLO_SUCCESS = 0 } TloError;
 
 /*
  * - both bytes and data should not be NULL. they should point to some valid

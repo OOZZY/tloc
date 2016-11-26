@@ -13,7 +13,7 @@ static TloError intConstructCopy(void *bytes, const void *data) {
 
   memcpy(bytes, data, sizeof(int));
 
-  return 0;
+  return TLO_SUCCESS;
 }
 
 static void basicDestruct(void *bytes) { (void)bytes; }
@@ -78,25 +78,25 @@ TloError tloIntPtrConstruct(TloIntPtr *ptr) {
 
   int *newPtr = malloc(sizeof(int));
   if (!newPtr) {
-    return -1;
+    return TLO_ERROR;
   }
 
   ptr->ptr = newPtr;
 
-  return 0;
+  return TLO_SUCCESS;
 }
 
 TloError tloIntPtrConstructCopy(TloIntPtr *ptr, const TloIntPtr *other) {
   assert(ptr);
   assert(other && other->ptr);
 
-  if (tloIntPtrConstruct(ptr) == -1) {
-    return -1;
+  if (tloIntPtrConstruct(ptr) == TLO_ERROR) {
+    return TLO_ERROR;
   }
 
   *ptr->ptr = *other->ptr;
 
-  return 0;
+  return TLO_SUCCESS;
 }
 
 void tloIntPtrDestruct(TloIntPtr *ptr) {

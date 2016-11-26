@@ -24,35 +24,36 @@ TloError tloSLListConstruct(TloSLList *list, const TloType *valueType,
   list->tail = NULL;
   list->size = 0;
 
-  return 0;
+  return TLO_SUCCESS;
 }
 
 static TloError pushBackAllElementsOfOther(TloSLList *list,
                                            const TloSLList *other) {
   for (TloSLLNode *node = other->head; node; node = node->next) {
     const void *element = node->bytes;
-    if (tloSLListPushBack(list, element) == -1) {
+    if (tloSLListPushBack(list, element) == TLO_ERROR) {
       tloSLListDestruct(list);
-      return -1;
+      return TLO_ERROR;
     }
   }
 
-  return 0;
+  return TLO_SUCCESS;
 }
 
 TloError tloSLListConstructCopy(TloSLList *list, const TloSLList *other) {
   assert(list);
   assert(tloSLListIsValid(other));
 
-  if (tloSLListConstruct(list, other->valueType, other->allocatorType) == -1) {
-    return -1;
+  if (tloSLListConstruct(list, other->valueType, other->allocatorType) ==
+      TLO_ERROR) {
+    return TLO_ERROR;
   }
 
-  if (pushBackAllElementsOfOther(list, other) == -1) {
-    return -1;
+  if (pushBackAllElementsOfOther(list, other) == TLO_ERROR) {
+    return TLO_ERROR;
   }
 
-  return 0;
+  return TLO_SUCCESS;
 }
 
 static void destructAllElementsAndFreeAllNodes(TloSLList *list) {
@@ -137,14 +138,14 @@ TloError tloSLListCopy(TloSLList *list, const TloSLList *other) {
   assert(tloSLListIsValid(other));
 
   TloSLList copy;
-  if (tloSLListConstructCopy(&copy, other) == -1) {
-    return -1;
+  if (tloSLListConstructCopy(&copy, other) == TLO_ERROR) {
+    return TLO_ERROR;
   }
 
   tloSLListDestruct(list);
   memcpy(list, &copy, sizeof(TloSLList));
 
-  return 0;
+  return TLO_SUCCESS;
 }
 
 const TloType *tloSLListGetValueType(const TloSLList *list) {
@@ -239,12 +240,12 @@ TloError tloSLListPushFront(TloSLList *list, const void *data) {
 
   TloSLLNode *newNode = makeNodeWithCopiedData(list, data);
   if (!newNode) {
-    return -1;
+    return TLO_ERROR;
   }
 
   pushFrontNode(list, newNode);
 
-  return 0;
+  return TLO_SUCCESS;
 }
 
 static TloSLLNode *makeNodeWithMovedData(TloSLList *list, void *data) {
@@ -272,12 +273,12 @@ TloError tloSLListMoveFront(TloSLList *list, void *data) {
 
   TloSLLNode *newNode = makeNodeWithMovedData(list, data);
   if (!newNode) {
-    return -1;
+    return TLO_ERROR;
   }
 
   pushFrontNode(list, newNode);
 
-  return 0;
+  return TLO_SUCCESS;
 }
 
 void tloSLListPopFront(TloSLList *list) {
@@ -314,12 +315,12 @@ TloError tloSLListPushBack(TloSLList *list, const void *data) {
 
   TloSLLNode *newNode = makeNodeWithCopiedData(list, data);
   if (!newNode) {
-    return -1;
+    return TLO_ERROR;
   }
 
   pushBackNode(list, newNode);
 
-  return 0;
+  return TLO_SUCCESS;
 }
 
 TloError tloSLListMoveBack(TloSLList *list, void *data) {
@@ -328,12 +329,12 @@ TloError tloSLListMoveBack(TloSLList *list, void *data) {
 
   TloSLLNode *newNode = makeNodeWithMovedData(list, data);
   if (!newNode) {
-    return -1;
+    return TLO_ERROR;
   }
 
   pushBackNode(list, newNode);
 
-  return 0;
+  return TLO_SUCCESS;
 }
 
 bool tloSLLNodeIsValid(const TloSLLNode *node) { return node && node->bytes; }

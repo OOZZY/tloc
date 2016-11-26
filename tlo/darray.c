@@ -19,7 +19,7 @@ TloError tloDArrayConstruct(TloDArray *array, const TloType *valueType,
   if (capacity) {
     newBytes = allocatorType->malloc(capacity * valueType->sizeOf);
     if (!newBytes) {
-      return -1;
+      return TLO_ERROR;
     }
   }
 
@@ -29,7 +29,7 @@ TloError tloDArrayConstruct(TloDArray *array, const TloType *valueType,
   array->size = 0;
   array->capacity = capacity;
 
-  return 0;
+  return TLO_SUCCESS;
 }
 
 static const void *getElement(const void *bytes, size_t index,
@@ -46,13 +46,13 @@ static TloError pushBackAllElementsOfOther(TloDArray *array,
                                            const TloDArray *other) {
   for (size_t i = 0; i < other->size; ++i) {
     const void *element = getElement(other->bytes, i, other->valueType->sizeOf);
-    if (tloDArrayPushBack(array, element) == -1) {
+    if (tloDArrayPushBack(array, element) == TLO_ERROR) {
       tloDArrayDestruct(array);
-      return -1;
+      return TLO_ERROR;
     }
   }
 
-  return 0;
+  return TLO_SUCCESS;
 }
 
 TloError tloDArrayConstructCopy(TloDArray *array, const TloDArray *other) {
@@ -60,15 +60,15 @@ TloError tloDArrayConstructCopy(TloDArray *array, const TloDArray *other) {
   assert(tloDArrayIsValid(other));
 
   if (tloDArrayConstruct(array, other->valueType, other->allocatorType,
-                         other->capacity) == -1) {
-    return -1;
+                         other->capacity) == TLO_ERROR) {
+    return TLO_ERROR;
   }
 
-  if (pushBackAllElementsOfOther(array, other) == -1) {
-    return -1;
+  if (pushBackAllElementsOfOther(array, other) == TLO_ERROR) {
+    return TLO_ERROR;
   }
 
-  return 0;
+  return TLO_SUCCESS;
 }
 
 static void destructAllElements(TloDArray *array) {
@@ -148,14 +148,14 @@ TloError tloDArrayCopy(TloDArray *array, const TloDArray *other) {
   assert(tloDArrayIsValid(other));
 
   TloDArray copy;
-  if (tloDArrayConstructCopy(&copy, other) == -1) {
-    return -1;
+  if (tloDArrayConstructCopy(&copy, other) == TLO_ERROR) {
+    return TLO_ERROR;
   }
 
   tloDArrayDestruct(array);
   memcpy(array, &copy, sizeof(TloDArray));
 
-  return 0;
+  return TLO_SUCCESS;
 }
 
 const TloType *tloDArrayGetValueType(const TloDArray *array) {
@@ -240,10 +240,10 @@ static TloError allocateBytesIfNeeded(TloDArray *array) {
     array->bytes = array->allocatorType->malloc(array->capacity *
                                                 array->valueType->sizeOf);
     if (!array->bytes) {
-      return -1;
+      return TLO_ERROR;
     }
   }
-  return 0;
+  return TLO_SUCCESS;
 }
 
 static TloError resizeBytesIfNeeded(TloDArray *array) {
@@ -252,7 +252,7 @@ static TloError resizeBytesIfNeeded(TloDArray *array) {
     void *newBytes =
         array->allocatorType->malloc(newCapacity * array->valueType->sizeOf);
     if (!newBytes) {
-      return -1;
+      return TLO_ERROR;
     }
 
     memcpy(newBytes, array->bytes, array->size * array->valueType->sizeOf);
@@ -261,39 +261,39 @@ static TloError resizeBytesIfNeeded(TloDArray *array) {
     array->bytes = newBytes;
     array->capacity = newCapacity;
   }
-  return 0;
+  return TLO_SUCCESS;
 }
 
 static TloError pushBackCopiedData(TloDArray *array, const void *data) {
   void *destination =
       getMutableElement(array->bytes, array->size, array->valueType->sizeOf);
 
-  if (array->valueType->constructCopy(destination, data) == -1) {
-    return -1;
+  if (array->valueType->constructCopy(destination, data) == TLO_ERROR) {
+    return TLO_ERROR;
   }
 
   ++array->size;
 
-  return 0;
+  return TLO_SUCCESS;
 }
 
 TloError tloDArrayPushBack(TloDArray *array, const void *data) {
   assert(tloDArrayIsValid(array));
   assert(data);
 
-  if (allocateBytesIfNeeded(array) == -1) {
-    return -1;
+  if (allocateBytesIfNeeded(array) == TLO_ERROR) {
+    return TLO_ERROR;
   }
 
-  if (resizeBytesIfNeeded(array) == -1) {
-    return -1;
+  if (resizeBytesIfNeeded(array) == TLO_ERROR) {
+    return TLO_ERROR;
   }
 
-  if (pushBackCopiedData(array, data) == -1) {
-    return -1;
+  if (pushBackCopiedData(array, data) == TLO_ERROR) {
+    return TLO_ERROR;
   }
 
-  return 0;
+  return TLO_SUCCESS;
 }
 
 static TloError pushBackMovedData(TloDArray *array, void *data) {
@@ -305,26 +305,26 @@ static TloError pushBackMovedData(TloDArray *array, void *data) {
 
   ++array->size;
 
-  return 0;
+  return TLO_SUCCESS;
 }
 
 TloError tloDArrayMoveBack(TloDArray *array, void *data) {
   assert(tloDArrayIsValid(array));
   assert(data);
 
-  if (allocateBytesIfNeeded(array) == -1) {
-    return -1;
+  if (allocateBytesIfNeeded(array) == TLO_ERROR) {
+    return TLO_ERROR;
   }
 
-  if (resizeBytesIfNeeded(array) == -1) {
-    return -1;
+  if (resizeBytesIfNeeded(array) == TLO_ERROR) {
+    return TLO_ERROR;
   }
 
-  if (pushBackMovedData(array, data) == -1) {
-    return -1;
+  if (pushBackMovedData(array, data) == TLO_ERROR) {
+    return TLO_ERROR;
   }
 
-  return 0;
+  return TLO_SUCCESS;
 }
 
 void tloDArrayPopBack(TloDArray *array) {
