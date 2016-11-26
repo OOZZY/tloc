@@ -8,10 +8,9 @@ bool tloDArrayIsValid(const TloDArray *array) {
          (array->size <= array->capacity);
 }
 
-TloError tloDArrayConstructWithCapacity(TloDArray *array,
-                                        const TloType *valueType,
-                                        const TloAllocatorType *allocatorType,
-                                        size_t capacity) {
+TloError tloDArrayConstruct(TloDArray *array, const TloType *valueType,
+                            const TloAllocatorType *allocatorType,
+                            size_t capacity) {
   assert(array);
   assert(tloTypeIsValid(valueType));
   assert(tloAllocatorTypeIsValid(allocatorType));
@@ -60,9 +59,8 @@ TloError tloDArrayConstructCopy(TloDArray *array, const TloDArray *other) {
   assert(array);
   assert(tloDArrayIsValid(other));
 
-  if (tloDArrayConstructWithCapacity(array, other->valueType,
-                                     other->allocatorType,
-                                     other->capacity) == -1) {
+  if (tloDArrayConstruct(array, other->valueType, other->allocatorType,
+                         other->capacity) == -1) {
     return -1;
   }
 
@@ -98,9 +96,9 @@ void tloDArrayDestruct(TloDArray *array) {
   array->bytes = NULL;
 }
 
-TloDArray *tloDArrayMakeWithCapacity(const TloType *valueType,
-                                     const TloAllocatorType *allocatorType,
-                                     size_t capacity) {
+TloDArray *tloDArrayMake(const TloType *valueType,
+                         const TloAllocatorType *allocatorType,
+                         size_t capacity) {
   assert(tloTypeIsValid(valueType));
   assert(tloAllocatorTypeIsValid(allocatorType));
 
@@ -109,8 +107,7 @@ TloDArray *tloDArrayMakeWithCapacity(const TloType *valueType,
     return NULL;
   }
 
-  if (tloDArrayConstructWithCapacity(array, valueType, allocatorType,
-                                     capacity)) {
+  if (tloDArrayConstruct(array, valueType, allocatorType, capacity)) {
     allocatorType->free(array);
     return NULL;
   }
