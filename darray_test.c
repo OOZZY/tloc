@@ -9,7 +9,8 @@
 static void testDArrayIntConstructDestructStackSpace(void) {
   TloDArray ints;
 
-  TloError error = tloDArrayConstruct(&ints, &tloInt, &tloCountingAllocator);
+  TloError error =
+      tloDArrayConstructWithCapacity(&ints, &tloInt, &tloCountingAllocator, 0);
   assert(!error);
 
   assert(tloDArrayGetSize(&ints) == 0);
@@ -25,7 +26,8 @@ static void testDArrayIntConstructDestructHeapSpace(void) {
   TloDArray *ints = malloc(sizeof(*ints));
   assert(ints);
 
-  TloError error = tloDArrayConstruct(ints, &tloInt, &tloCountingAllocator);
+  TloError error =
+      tloDArrayConstructWithCapacity(ints, &tloInt, &tloCountingAllocator, 0);
   assert(!error);
 
   assert(tloDArrayGetSize(ints) == 0);
@@ -75,7 +77,8 @@ static void testDArrayIntConstructWithCapacityDestructHeapSpace(void) {
 }
 
 static void testDArrayIntMakeDelete(void) {
-  TloDArray *ints = tloDArrayMake(&tloInt, &tloCountingAllocator);
+  TloDArray *ints =
+      tloDArrayMakeWithCapacity(&tloInt, &tloCountingAllocator, 0);
   assert(ints);
 
   assert(tloDArrayGetSize(ints) == 0);
@@ -108,7 +111,8 @@ static void testDArrayDestructWithNull(void) { tloDArrayDestruct(NULL); }
 static void testDArrayDeleteWithNull(void) { tloDArrayDelete(NULL); }
 
 static void testDArrayIntPushBackOnce(void) {
-  TloDArray *ints = tloDArrayMake(&tloInt, &tloCountingAllocator);
+  TloDArray *ints =
+      tloDArrayMakeWithCapacity(&tloInt, &tloCountingAllocator, 0);
   assert(ints);
 
   TloError error = tloDArrayPushBack(ints, &(int){SOME_NUMBER});
@@ -132,7 +136,8 @@ static void testDArrayIntPushBackOnce(void) {
 }
 
 static void testDArrayIntMoveBackOnce(void) {
-  TloDArray *ints = tloDArrayMake(&tloInt, &tloCountingAllocator);
+  TloDArray *ints =
+      tloDArrayMakeWithCapacity(&tloInt, &tloCountingAllocator, 0);
   assert(ints);
 
   int value = SOME_NUMBER;
@@ -158,7 +163,8 @@ static void testDArrayIntMoveBackOnce(void) {
 }
 
 static void testDArrayIntPushBackUntilResize(void) {
-  TloDArray *ints = tloDArrayMake(&tloInt, &tloCountingAllocator);
+  TloDArray *ints =
+      tloDArrayMakeWithCapacity(&tloInt, &tloCountingAllocator, 0);
   assert(ints);
 
   for (size_t i = 0; i < SOME_NUMBER; ++i) {
@@ -184,7 +190,8 @@ static void testDArrayIntPushBackUntilResize(void) {
 }
 
 static void testDArrayIntMoveBackUntilResize(void) {
-  TloDArray *ints = tloDArrayMake(&tloInt, &tloCountingAllocator);
+  TloDArray *ints =
+      tloDArrayMakeWithCapacity(&tloInt, &tloCountingAllocator, 0);
   assert(ints);
 
   for (size_t i = 0; i < SOME_NUMBER; ++i) {
@@ -212,7 +219,8 @@ static void testDArrayIntMoveBackUntilResize(void) {
 }
 
 static void testDArrayIntPushBackOncePopBackOnce(void) {
-  TloDArray *ints = tloDArrayMake(&tloInt, &tloCountingAllocator);
+  TloDArray *ints =
+      tloDArrayMakeWithCapacity(&tloInt, &tloCountingAllocator, 0);
   assert(ints);
 
   TloError error = tloDArrayPushBack(ints, &(int){SOME_NUMBER});
@@ -231,7 +239,8 @@ static void testDArrayIntPushBackOncePopBackOnce(void) {
 }
 
 static void testDArrayIntPushBackUntilResizePopBackUntilEmpty(void) {
-  TloDArray *ints = tloDArrayMake(&tloInt, &tloCountingAllocator);
+  TloDArray *ints =
+      tloDArrayMakeWithCapacity(&tloInt, &tloCountingAllocator, 0);
   assert(ints);
 
   for (size_t i = 0; i < SOME_NUMBER; ++i) {
@@ -267,7 +276,8 @@ static void testDArrayIntPushBackUntilResizePopBackUntilEmpty(void) {
 }
 
 static void testDArrayIntConstructCopy(void) {
-  TloDArray *ints = tloDArrayMake(&tloInt, &tloCountingAllocator);
+  TloDArray *ints =
+      tloDArrayMakeWithCapacity(&tloInt, &tloCountingAllocator, 0);
   assert(ints);
 
   for (int i = 0; i < SOME_NUMBER; ++i) {
@@ -303,7 +313,8 @@ static void testDArrayIntConstructCopy(void) {
 }
 
 static void testDArrayIntMakeCopy(void) {
-  TloDArray *ints = tloDArrayMake(&tloInt, &tloCountingAllocator);
+  TloDArray *ints =
+      tloDArrayMakeWithCapacity(&tloInt, &tloCountingAllocator, 0);
   assert(ints);
 
   for (int i = 0; i < SOME_NUMBER; ++i) {
@@ -335,7 +346,8 @@ static void testDArrayIntMakeCopy(void) {
 }
 
 static void testDArrayIntCopy(void) {
-  TloDArray *ints = tloDArrayMake(&tloInt, &tloCountingAllocator);
+  TloDArray *ints =
+      tloDArrayMakeWithCapacity(&tloInt, &tloCountingAllocator, 0);
   assert(ints);
 
   for (int i = 0; i < SOME_NUMBER; ++i) {
@@ -343,7 +355,8 @@ static void testDArrayIntCopy(void) {
     assert(!error);
   }
 
-  TloDArray *copy = tloDArrayMake(&tloInt, &tloCountingAllocator);
+  TloDArray *copy =
+      tloDArrayMakeWithCapacity(&tloInt, &tloCountingAllocator, 0);
   assert(copy);
 
   TloError error = tloDArrayCopy(copy, ints);
@@ -370,7 +383,8 @@ static void testDArrayIntCopy(void) {
 }
 
 static void testDArrayIntPtrPushBackOnce(void) {
-  TloDArray *intPtrs = tloDArrayMake(&tloIntPtr, &tloCountingAllocator);
+  TloDArray *intPtrs =
+      tloDArrayMakeWithCapacity(&tloIntPtr, &tloCountingAllocator, 0);
   assert(intPtrs);
 
   TloIntPtr intPtr;
@@ -401,7 +415,8 @@ static void testDArrayIntPtrPushBackOnce(void) {
 }
 
 static void testDArrayIntPtrPushBackUntilResize(void) {
-  TloDArray *intPtrs = tloDArrayMake(&tloIntPtr, &tloCountingAllocator);
+  TloDArray *intPtrs =
+      tloDArrayMakeWithCapacity(&tloIntPtr, &tloCountingAllocator, 0);
   assert(intPtrs);
 
   TloIntPtr intPtr;
@@ -434,7 +449,8 @@ static void testDArrayIntPtrPushBackUntilResize(void) {
 }
 
 static void testDArrayIntPtrPushBackOncePopBackOnce(void) {
-  TloDArray *intPtrs = tloDArrayMake(&tloIntPtr, &tloCountingAllocator);
+  TloDArray *intPtrs =
+      tloDArrayMakeWithCapacity(&tloIntPtr, &tloCountingAllocator, 0);
   assert(intPtrs);
 
   TloIntPtr intPtr;
@@ -458,7 +474,8 @@ static void testDArrayIntPtrPushBackOncePopBackOnce(void) {
 }
 
 static void testDArrayIntPtrPushBackUntilResizePopBackUntilEmpty(void) {
-  TloDArray *intPtrs = tloDArrayMake(&tloIntPtr, &tloCountingAllocator);
+  TloDArray *intPtrs =
+      tloDArrayMakeWithCapacity(&tloIntPtr, &tloCountingAllocator, 0);
   assert(intPtrs);
 
   TloIntPtr intPtr;

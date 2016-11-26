@@ -8,21 +8,6 @@ bool tloDArrayIsValid(const TloDArray *array) {
          (array->size <= array->capacity);
 }
 
-TloError tloDArrayConstruct(TloDArray *array, const TloType *valueType,
-                            const TloAllocatorType *allocatorType) {
-  assert(array);
-  assert(tloTypeIsValid(valueType));
-  assert(tloAllocatorTypeIsValid(allocatorType));
-
-  array->valueType = valueType;
-  array->allocatorType = allocatorType;
-  array->bytes = NULL;
-  array->size = 0;
-  array->capacity = 0;
-
-  return 0;
-}
-
 TloError tloDArrayConstructWithCapacity(TloDArray *array,
                                         const TloType *valueType,
                                         const TloAllocatorType *allocatorType,
@@ -111,24 +96,6 @@ void tloDArrayDestruct(TloDArray *array) {
 
   array->allocatorType->free(array->bytes);
   array->bytes = NULL;
-}
-
-TloDArray *tloDArrayMake(const TloType *valueType,
-                         const TloAllocatorType *allocatorType) {
-  assert(tloTypeIsValid(valueType));
-  assert(tloAllocatorTypeIsValid(allocatorType));
-
-  TloDArray *array = allocatorType->malloc(sizeof(*array));
-  if (!array) {
-    return NULL;
-  }
-
-  if (tloDArrayConstruct(array, valueType, allocatorType)) {
-    allocatorType->free(array);
-    return NULL;
-  }
-
-  return array;
 }
 
 TloDArray *tloDArrayMakeWithCapacity(const TloType *valueType,
