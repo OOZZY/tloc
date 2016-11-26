@@ -136,7 +136,6 @@ TloDArray *tloDArrayMakeWithCapacity(const TloType *valueType,
                                      size_t capacity) {
   assert(tloTypeIsValid(valueType));
   assert(tloAllocatorTypeIsValid(allocatorType));
-  assert(capacity);
 
   TloDArray *array = allocatorType->malloc(sizeof(*array));
   if (!array) {
