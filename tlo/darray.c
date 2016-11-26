@@ -107,7 +107,8 @@ TloDArray *tloDArrayMake(const TloType *valueType,
     return NULL;
   }
 
-  if (tloDArrayConstruct(array, valueType, allocatorType, capacity)) {
+  if (tloDArrayConstruct(array, valueType, allocatorType, capacity) ==
+      TLO_ERROR) {
     allocatorType->free(array);
     return NULL;
   }
@@ -123,7 +124,7 @@ TloDArray *tloDArrayMakeCopy(const TloDArray *other) {
     return NULL;
   }
 
-  if (tloDArrayConstructCopy(array, other)) {
+  if (tloDArrayConstructCopy(array, other) == TLO_ERROR) {
     other->allocatorType->free(array);
     return NULL;
   }

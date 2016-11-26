@@ -97,7 +97,7 @@ TloSLList *tloSLListMake(const TloType *valueType,
     return NULL;
   }
 
-  if (tloSLListConstruct(list, valueType, allocatorType)) {
+  if (tloSLListConstruct(list, valueType, allocatorType) == TLO_ERROR) {
     allocatorType->free(list);
     return NULL;
   }
@@ -113,7 +113,7 @@ TloSLList *tloSLListMakeCopy(const TloSLList *other) {
     return NULL;
   }
 
-  if (tloSLListConstructCopy(list, other)) {
+  if (tloSLListConstructCopy(list, other) == TLO_ERROR) {
     other->allocatorType->free(list);
     return NULL;
   }
@@ -212,7 +212,7 @@ static TloSLLNode *makeNodeWithCopiedData(TloSLList *list, const void *data) {
     return NULL;
   }
 
-  if (list->valueType->constructCopy(node->bytes, data)) {
+  if (list->valueType->constructCopy(node->bytes, data) == TLO_ERROR) {
     list->allocatorType->free(node->bytes);
     list->allocatorType->free(node);
     return NULL;
