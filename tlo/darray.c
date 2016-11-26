@@ -13,6 +13,11 @@ TloError tloDArrayConstruct(TloDArray *array, const TloType *valueType,
                             size_t capacity) {
   assert(array);
   assert(tloTypeIsValid(valueType));
+
+  if (!allocatorType) {
+    allocatorType = &tloCStdLibAllocator;
+  }
+
   assert(tloAllocatorTypeIsValid(allocatorType));
 
   void *newBytes = NULL;
@@ -100,6 +105,11 @@ TloDArray *tloDArrayMake(const TloType *valueType,
                          const TloAllocatorType *allocatorType,
                          size_t capacity) {
   assert(tloTypeIsValid(valueType));
+
+  if (!allocatorType) {
+    allocatorType = &tloCStdLibAllocator;
+  }
+
   assert(tloAllocatorTypeIsValid(allocatorType));
 
   TloDArray *array = allocatorType->malloc(sizeof(*array));

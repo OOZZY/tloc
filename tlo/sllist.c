@@ -16,6 +16,11 @@ TloError tloSLListConstruct(TloSLList *list, const TloType *valueType,
                             const TloAllocatorType *allocatorType) {
   assert(list);
   assert(tloTypeIsValid(valueType));
+
+  if (!allocatorType) {
+    allocatorType = &tloCStdLibAllocator;
+  }
+
   assert(tloAllocatorTypeIsValid(allocatorType));
 
   list->valueType = valueType;
@@ -90,6 +95,11 @@ void tloSLListDestruct(TloSLList *list) {
 TloSLList *tloSLListMake(const TloType *valueType,
                          const TloAllocatorType *allocatorType) {
   assert(tloTypeIsValid(valueType));
+
+  if (!allocatorType) {
+    allocatorType = &tloCStdLibAllocator;
+  }
+
   assert(tloAllocatorTypeIsValid(allocatorType));
 
   TloSLList *list = allocatorType->malloc(sizeof(*list));
