@@ -30,11 +30,13 @@ TloError tloDArrayConstructWithCapacity(TloDArray *array,
   assert(array);
   assert(tloTypeIsValid(valueType));
   assert(tloAllocatorTypeIsValid(allocatorType));
-  assert(capacity);
 
-  void *newBytes = allocatorType->malloc(capacity * valueType->sizeOf);
-  if (!newBytes) {
-    return -1;
+  void *newBytes = NULL;
+  if (capacity) {
+    newBytes = allocatorType->malloc(capacity * valueType->sizeOf);
+    if (!newBytes) {
+      return -1;
+    }
   }
 
   array->valueType = valueType;
