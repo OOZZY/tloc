@@ -1,4 +1,4 @@
-#include "libtloc_test.h"
+#include "tloc_test.h"
 #include <stdio.h>
 
 int main(void) {

@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <tlo/darray.h>
-#include "libtloc_test.h"
+#include "tloc_test.h"
 
 #define SOME_NUMBER 42
 
