@@ -7,10 +7,10 @@ VALGRIND_FLAGS="--tool=memcheck --leak-check=full --show-leak-kinds=all \
 
 set -xe
 
-clang ${CLANG_FLAGS} *.c -o libtloc_test
-gcc ${CFLAGS} *.c -o libtloc_test-gcc
+clang ${CLANG_FLAGS} *.c -o tloc_test
+gcc ${CFLAGS} *.c -o tloc_test-gcc
 
-valgrind ${VALGRIND_FLAGS} ./libtloc_test
-valgrind ${VALGRIND_FLAGS} ./libtloc_test-gcc
+valgrind ${VALGRIND_FLAGS} ./tloc_test
+valgrind ${VALGRIND_FLAGS} ./tloc_test-gcc
 
 echo "All tests passed."

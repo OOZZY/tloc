@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <tlo/sllist.h>
-#include "libtloc_test.h"
+#include "tloc_test.h"
 
 #define SOME_NUMBER 42
 
