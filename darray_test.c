@@ -499,6 +499,116 @@ static void testDArrayIntPtrPushBackUntilResizePopBackUntilEmpty(void) {
   intPtrs = NULL;
 }
 
+static void testDArrayIntPtrPushBackUntilResizeUnorderedRemoveBackUntilEmpty(
+    void) {
+  TloDArray *intPtrs = tloDArrayMake(&tloIntPtr, &tloCountingAllocator, 0);
+  assert(intPtrs);
+
+  TloIntPtr intPtr;
+  TloError error = tloIntPtrConstruct(&intPtr);
+  assert(!error);
+  for (size_t i = 0; i < SOME_NUMBER; ++i) {
+    *intPtr.ptr = (int)i;
+    error = tloDArrayPushBack(intPtrs, &intPtr);
+    assert(!error);
+  }
+  tloIntPtrDestruct(&intPtr);
+
+  for (size_t i = SOME_NUMBER - 1; i <= SOME_NUMBER - 1; --i) {
+    assert(tloDArrayGetSize(intPtrs) == i + 1);
+    assert(tloDArrayGetCapacity(intPtrs) >= tloDArrayGetSize(intPtrs));
+    assert(!tloDArrayIsEmpty(intPtrs));
+    assert(tloDArrayGetValueType(intPtrs) == &tloIntPtr);
+    assert(tloDArrayGetAllocatorType(intPtrs) == &tloCountingAllocator);
+
+    assert(*((const TloIntPtr *)tloDArrayGetElement(intPtrs, i))->ptr ==
+           (int)i);
+    assert(*((TloIntPtr *)tloDArrayGetMutableElement(intPtrs, i))->ptr ==
+           (int)i);
+    assert(*((const TloIntPtr *)tloDArrayGetFront(intPtrs))->ptr == 0);
+    assert(*((TloIntPtr *)tloDArrayGetMutableFront(intPtrs))->ptr == 0);
+    assert(*((const TloIntPtr *)tloDArrayGetBack(intPtrs))->ptr == (int)i);
+    assert(*((TloIntPtr *)tloDArrayGetMutableBack(intPtrs))->ptr == (int)i);
+
+    tloDArrayUnorderedRemove(intPtrs, tloDArrayGetSize(intPtrs) - 1);
+  }
+
+  assert(tloDArrayGetSize(intPtrs) == 0);
+  assert(tloDArrayGetCapacity(intPtrs) >= tloDArrayGetSize(intPtrs));
+  assert(tloDArrayIsEmpty(intPtrs));
+  assert(tloDArrayGetValueType(intPtrs) == &tloIntPtr);
+  assert(tloDArrayGetAllocatorType(intPtrs) == &tloCountingAllocator);
+
+  tloDArrayDelete(intPtrs);
+  intPtrs = NULL;
+}
+
+static void testDArrayIntPtrPushBackUntilResizeUnorderedRemoveFrontUntilEmpty(
+    void) {
+  TloDArray *intPtrs = tloDArrayMake(&tloIntPtr, &tloCountingAllocator, 0);
+  assert(intPtrs);
+
+  TloIntPtr intPtr;
+  TloError error = tloIntPtrConstruct(&intPtr);
+  assert(!error);
+  for (size_t i = 0; i < SOME_NUMBER; ++i) {
+    *intPtr.ptr = (int)i;
+    error = tloDArrayPushBack(intPtrs, &intPtr);
+    assert(!error);
+  }
+  tloIntPtrDestruct(&intPtr);
+
+  for (size_t i = SOME_NUMBER - 1; i <= SOME_NUMBER - 1; --i) {
+    assert(tloDArrayGetSize(intPtrs) == i + 1);
+    assert(tloDArrayGetCapacity(intPtrs) >= tloDArrayGetSize(intPtrs));
+    assert(!tloDArrayIsEmpty(intPtrs));
+    assert(tloDArrayGetValueType(intPtrs) == &tloIntPtr);
+    assert(tloDArrayGetAllocatorType(intPtrs) == &tloCountingAllocator);
+
+    if (i == SOME_NUMBER - 1) {
+      assert(*((const TloIntPtr *)tloDArrayGetElement(intPtrs, i))->ptr ==
+             SOME_NUMBER - 1);
+      assert(*((TloIntPtr *)tloDArrayGetMutableElement(intPtrs, i))->ptr ==
+             SOME_NUMBER - 1);
+      assert(*((const TloIntPtr *)tloDArrayGetFront(intPtrs))->ptr == 0);
+      assert(*((TloIntPtr *)tloDArrayGetMutableFront(intPtrs))->ptr == 0);
+      assert(*((const TloIntPtr *)tloDArrayGetBack(intPtrs))->ptr ==
+             SOME_NUMBER - 1);
+      assert(*((TloIntPtr *)tloDArrayGetMutableBack(intPtrs))->ptr ==
+             SOME_NUMBER - 1);
+    } else if (i == 0) {
+      assert(*((const TloIntPtr *)tloDArrayGetElement(intPtrs, i))->ptr == 1);
+      assert(*((TloIntPtr *)tloDArrayGetMutableElement(intPtrs, i))->ptr == 1);
+      assert(*((const TloIntPtr *)tloDArrayGetFront(intPtrs))->ptr == 1);
+      assert(*((TloIntPtr *)tloDArrayGetMutableFront(intPtrs))->ptr == 1);
+      assert(*((const TloIntPtr *)tloDArrayGetBack(intPtrs))->ptr == 1);
+      assert(*((TloIntPtr *)tloDArrayGetMutableBack(intPtrs))->ptr == 1);
+    } else {
+      assert(*((const TloIntPtr *)tloDArrayGetElement(intPtrs, i))->ptr ==
+             (int)i);
+      assert(*((TloIntPtr *)tloDArrayGetMutableElement(intPtrs, i))->ptr ==
+             (int)i);
+      assert(*((const TloIntPtr *)tloDArrayGetFront(intPtrs))->ptr ==
+             (int)i + 1);
+      assert(*((TloIntPtr *)tloDArrayGetMutableFront(intPtrs))->ptr ==
+             (int)i + 1);
+      assert(*((const TloIntPtr *)tloDArrayGetBack(intPtrs))->ptr == (int)i);
+      assert(*((TloIntPtr *)tloDArrayGetMutableBack(intPtrs))->ptr == (int)i);
+    }
+
+    tloDArrayUnorderedRemove(intPtrs, 0);
+  }
+
+  assert(tloDArrayGetSize(intPtrs) == 0);
+  assert(tloDArrayGetCapacity(intPtrs) >= tloDArrayGetSize(intPtrs));
+  assert(tloDArrayIsEmpty(intPtrs));
+  assert(tloDArrayGetValueType(intPtrs) == &tloIntPtr);
+  assert(tloDArrayGetAllocatorType(intPtrs) == &tloCountingAllocator);
+
+  tloDArrayDelete(intPtrs);
+  intPtrs = NULL;
+}
+
 void testDArray(void) {
   tloCountingAllocatorResetCounts();
   assert(tloCountingAllocatorGetMallocCount() == 0);
@@ -527,6 +637,8 @@ void testDArray(void) {
   testDArrayIntPtrPushBackUntilResize();
   testDArrayIntPtrPushBackOncePopBackOnce();
   testDArrayIntPtrPushBackUntilResizePopBackUntilEmpty();
+  testDArrayIntPtrPushBackUntilResizeUnorderedRemoveBackUntilEmpty();
+  testDArrayIntPtrPushBackUntilResizeUnorderedRemoveFrontUntilEmpty();
 
   assert(tloCountingAllocatorGetMallocCount() > 0);
   assert(tloCountingAllocatorGetMallocCount() ==

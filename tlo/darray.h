@@ -63,5 +63,6 @@ TloError tloDArrayPushBack(TloDArray *array, const void *data);
 TloError tloDArrayMoveBack(TloDArray *array, void *data);
 
 void tloDArrayPopBack(TloDArray *array);
+void tloDArrayUnorderedRemove(TloDArray *array, size_t index);
 
 #endif  // TLO_DARRAY_H

@@ -347,3 +347,22 @@ void tloDArrayPopBack(TloDArray *array) {
   array->valueType->destruct(back);
   --array->size;
 }
+
+void tloDArrayUnorderedRemove(TloDArray *array, size_t index) {
+  assert(tloDArrayIsValid(array));
+  assert(!tloDArrayIsEmpty(array));
+  assert(index < array->size);
+
+  if (index == array->size - 1) {
+    tloDArrayPopBack(array);
+    return;
+  }
+
+  void *target =
+      getMutableElement(array->bytes, index, array->valueType->sizeOf);
+  array->valueType->destruct(target);
+  void *back = getMutableElement(array->bytes, array->size - 1,
+                                 array->valueType->sizeOf);
+  memcpy(target, back, array->valueType->sizeOf);
+  --array->size;
+}
