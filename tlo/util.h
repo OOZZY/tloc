@@ -3,7 +3,6 @@
 
 #include <stdbool.h>
 #include <stddef.h>
-#include <stdio.h>
 
 /*
  * - used as return type of functions that could fail
