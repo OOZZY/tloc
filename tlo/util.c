@@ -16,11 +16,11 @@ static TloError intConstructCopy(void *bytes, const void *data) {
   return TLO_SUCCESS;
 }
 
-static void basicDestruct(void *bytes) { (void)bytes; }
+void tloBasicDestruct(void *bytes) { (void)bytes; }
 
 const TloType tloInt = {.sizeOf = sizeof(int),
                         .constructCopy = intConstructCopy,
-                        .destruct = basicDestruct};
+                        .destruct = tloBasicDestruct};
 
 bool tloAllocatorTypeIsValid(const TloAllocatorType *allocatorType) {
   return allocatorType && allocatorType->malloc && allocatorType->free;

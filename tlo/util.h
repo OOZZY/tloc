@@ -34,6 +34,7 @@ typedef struct TloType {
 
 bool tloTypeIsValid(const TloType *type);
 
+void tloBasicDestruct(void *bytes);
 extern const TloType tloInt;
 
 typedef void *(*TloMallocFunction)(size_t byteCount);
