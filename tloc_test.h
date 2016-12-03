@@ -1,7 +1,7 @@
-#ifndef LIBTLOC_TEST_H
-#define LIBTLOC_TEST_H
+#ifndef TLOC_TEST_H
+#define TLOC_TEST_H
 
 void testDArray(void);
 void testSLList(void);
 
-#endif  // LIBTLOC_TEST_H
+#endif  // TLOC_TEST_H
