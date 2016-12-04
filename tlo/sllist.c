@@ -67,7 +67,9 @@ static void destructAllElementsAndFreeAllNodes(TloSLList *list) {
   while (current) {
     TloSLLNode *next = current->next;
 
-    list->valueType->destruct(current->bytes);
+    if (list->valueType->destruct) {
+      list->valueType->destruct(current->bytes);
+    }
     list->allocatorType->free(current->bytes);
     list->allocatorType->free(current);
 
@@ -297,7 +299,9 @@ void tloSLListPopFront(TloSLList *list) {
 
   TloSLLNode *frontNode = list->head;
   list->head = list->head->next;
-  list->valueType->destruct(frontNode->bytes);
+  if (list->valueType->destruct) {
+    list->valueType->destruct(frontNode->bytes);
+  }
   list->allocatorType->free(frontNode->bytes);
   list->allocatorType->free(frontNode);
   --list->size;

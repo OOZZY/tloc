@@ -25,6 +25,10 @@ bool tloSLListIsValid(const TloSLList *list);
 TloError tloSLListConstruct(TloSLList *list, const TloType *valueType,
                             const TloAllocatorType *allocatorType);
 TloError tloSLListConstructCopy(TloSLList *list, const TloSLList *other);
+
+/*
+ * - uses list->valueType->destruct if it is not NULL
+ */
 void tloSLListDestruct(TloSLList *list);
 
 /*
@@ -63,6 +67,9 @@ TloError tloSLListPushFront(TloSLList *list, const void *data);
  */
 TloError tloSLListMoveFront(TloSLList *list, void *data);
 
+/*
+ * - uses list->valueType->destruct if it is not NULL
+ */
 void tloSLListPopFront(TloSLList *list);
 
 /*

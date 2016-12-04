@@ -20,6 +20,10 @@ TloError tloDArrayConstruct(TloDArray *array, const TloType *valueType,
                             const TloAllocatorType *allocatorType,
                             size_t capacity);
 TloError tloDArrayConstructCopy(TloDArray *array, const TloDArray *other);
+
+/*
+ * - uses array->valueType->destruct if it is not NULL
+ */
 void tloDArrayDestruct(TloDArray *array);
 
 /*
@@ -62,7 +66,14 @@ TloError tloDArrayPushBack(TloDArray *array, const void *data);
  */
 TloError tloDArrayMoveBack(TloDArray *array, void *data);
 
+/*
+ * - uses array->valueType->destruct if it is not NULL
+ */
 void tloDArrayPopBack(TloDArray *array);
+
+/*
+ * - uses array->valueType->destruct if it is not NULL
+ */
 void tloDArrayUnorderedRemove(TloDArray *array, size_t index);
 
 #endif  // TLO_DARRAY_H

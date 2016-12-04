@@ -5,7 +5,7 @@
 #include <string.h>
 
 bool tloTypeIsValid(const TloType *type) {
-  return type && type->sizeOf && type->constructCopy && type->destruct;
+  return type && type->sizeOf && type->constructCopy;
 }
 
 static TloError intConstructCopy(void *bytes, const void *data) {
@@ -17,11 +17,8 @@ static TloError intConstructCopy(void *bytes, const void *data) {
   return TLO_SUCCESS;
 }
 
-void tloBasicDestruct(void *bytes) { (void)bytes; }
-
-const TloType tloInt = {.sizeOf = sizeof(int),
-                        .constructCopy = intConstructCopy,
-                        .destruct = tloBasicDestruct};
+const TloType tloInt = {
+    .sizeOf = sizeof(int), .constructCopy = intConstructCopy, .destruct = NULL};
 
 bool tloAllocatorTypeIsValid(const TloAllocatorType *allocatorType) {
   return allocatorType && allocatorType->malloc && allocatorType->free;

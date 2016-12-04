@@ -80,7 +80,9 @@ static void destructAllElements(TloDArray *array) {
   for (size_t i = 0; i < array->size; ++i) {
     void *element =
         getMutableElement(array->bytes, i, array->valueType->sizeOf);
-    array->valueType->destruct(element);
+    if (array->valueType->destruct) {
+      array->valueType->destruct(element);
+    }
   }
 }
 
@@ -344,7 +346,9 @@ void tloDArrayPopBack(TloDArray *array) {
 
   void *back = getMutableElement(array->bytes, array->size - 1,
                                  array->valueType->sizeOf);
-  array->valueType->destruct(back);
+  if (array->valueType->destruct) {
+    array->valueType->destruct(back);
+  }
   --array->size;
 }
 
@@ -360,7 +364,9 @@ void tloDArrayUnorderedRemove(TloDArray *array, size_t index) {
 
   void *target =
       getMutableElement(array->bytes, index, array->valueType->sizeOf);
-  array->valueType->destruct(target);
+  if (array->valueType->destruct) {
+    array->valueType->destruct(target);
+  }
   void *back = getMutableElement(array->bytes, array->size - 1,
                                  array->valueType->sizeOf);
   memcpy(target, back, array->valueType->sizeOf);
