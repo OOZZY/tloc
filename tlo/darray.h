@@ -19,6 +19,10 @@ bool tloDArrayIsValid(const TloDArray *array);
 TloError tloDArrayConstruct(TloDArray *array, const TloType *valueType,
                             const TloAllocatorType *allocatorType,
                             size_t capacity);
+
+/*
+ * - deep copies data using other->valueType->constructCopy
+ */
 TloError tloDArrayConstructCopy(TloDArray *array, const TloDArray *other);
 
 /*
@@ -57,7 +61,7 @@ const void *tloDArrayGetBack(const TloDArray *array);
 void *tloDArrayGetMutableBack(TloDArray *array);
 
 /*
- * - deep copies data using array->valueType->copy
+ * - deep copies data using array->valueType->constructCopy
  */
 TloError tloDArrayPushBack(TloDArray *array, const void *data);
 

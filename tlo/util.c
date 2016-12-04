@@ -4,8 +4,10 @@
 #include <stdlib.h>
 #include <string.h>
 
-bool tloTypeIsValid(const TloType *type) {
-  return type && type->sizeOf && type->constructCopy;
+bool tloTypeIsValid(const TloType *type) { return type && type->sizeOf; }
+
+bool tloTypeIsDeepCopyable(const TloType *type) {
+  return tloTypeIsValid(type) && type->constructCopy;
 }
 
 static TloError intConstructCopy(void *bytes, const void *data) {

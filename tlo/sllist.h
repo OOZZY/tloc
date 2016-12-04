@@ -24,6 +24,10 @@ typedef struct TloSLList {
 bool tloSLListIsValid(const TloSLList *list);
 TloError tloSLListConstruct(TloSLList *list, const TloType *valueType,
                             const TloAllocatorType *allocatorType);
+
+/*
+ * - deep copies data using other->valueType->constructCopy
+ */
 TloError tloSLListConstructCopy(TloSLList *list, const TloSLList *other);
 
 /*
@@ -58,7 +62,7 @@ const void *tloSLListGetBack(const TloSLList *list);
 void *tloSLListGetMutableBack(TloSLList *list);
 
 /*
- * - deep copies data using list->valueType->copy
+ * - deep copies data using list->valueType->constructCopy
  */
 TloError tloSLListPushFront(TloSLList *list, const void *data);
 
@@ -73,7 +77,7 @@ TloError tloSLListMoveFront(TloSLList *list, void *data);
 void tloSLListPopFront(TloSLList *list);
 
 /*
- * - deep copies data using list->valueType->copy
+ * - deep copies data using list->valueType->constructCopy
  */
 TloError tloSLListPushBack(TloSLList *list, const void *data);
 

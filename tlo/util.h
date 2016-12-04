@@ -32,6 +32,7 @@ typedef struct TloType {
 } TloType;
 
 bool tloTypeIsValid(const TloType *type);
+bool tloTypeIsDeepCopyable(const TloType *type);
 
 extern const TloType tloInt;
 
