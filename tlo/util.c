@@ -121,3 +121,6 @@ void tloPtrDestruct(void *ptr) {
 const TloType tloIntPtr = {.sizeOf = sizeof(TloIntPtr),
                            .constructCopy = intPtrConstructCopy,
                            .destruct = tloPtrDestruct};
+
+const TloType tloPtr = {
+    .sizeOf = sizeof(int *), .constructCopy = NULL, .destruct = tloPtrDestruct};
