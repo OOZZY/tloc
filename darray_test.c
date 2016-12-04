@@ -376,7 +376,7 @@ static void testDArrayIntPtrPushBackOnce(void) {
   *intPtr.ptr = SOME_NUMBER;
   error = tloDArrayPushBack(intPtrs, &intPtr);
   assert(!error);
-  tloIntPtrDestruct(&intPtr);
+  tloPtrDestruct(&intPtr);
 
   assert(tloDArrayGetSize(intPtrs) == 1);
   assert(tloDArrayGetCapacity(intPtrs) >= tloDArrayGetSize(intPtrs));
@@ -424,7 +424,7 @@ static void testDArrayIntPtrPushBackUntilResize(void) {
     assert(*((const TloIntPtr *)tloDArrayGetBack(intPtrs))->ptr == (int)i);
     assert(*((TloIntPtr *)tloDArrayGetMutableBack(intPtrs))->ptr == (int)i);
   }
-  tloIntPtrDestruct(&intPtr);
+  tloPtrDestruct(&intPtr);
 
   tloDArrayDelete(intPtrs);
   intPtrs = NULL;
@@ -440,7 +440,7 @@ static void testDArrayIntPtrPushBackOncePopBackOnce(void) {
   *intPtr.ptr = SOME_NUMBER;
   error = tloDArrayPushBack(intPtrs, &intPtr);
   assert(!error);
-  tloIntPtrDestruct(&intPtr);
+  tloPtrDestruct(&intPtr);
 
   tloDArrayPopBack(intPtrs);
 
@@ -466,7 +466,7 @@ static void testDArrayIntPtrPushBackUntilResizePopBackUntilEmpty(void) {
     error = tloDArrayPushBack(intPtrs, &intPtr);
     assert(!error);
   }
-  tloIntPtrDestruct(&intPtr);
+  tloPtrDestruct(&intPtr);
 
   for (size_t i = SOME_NUMBER - 1; i <= SOME_NUMBER - 1; --i) {
     assert(tloDArrayGetSize(intPtrs) == i + 1);
@@ -510,7 +510,7 @@ static void testDArrayIntPtrPushBackUntilResizeUnorderedRemoveBackUntilEmpty(
     error = tloDArrayPushBack(intPtrs, &intPtr);
     assert(!error);
   }
-  tloIntPtrDestruct(&intPtr);
+  tloPtrDestruct(&intPtr);
 
   for (size_t i = SOME_NUMBER - 1; i <= SOME_NUMBER - 1; --i) {
     assert(tloDArrayGetSize(intPtrs) == i + 1);
@@ -554,7 +554,7 @@ static void testDArrayIntPtrPushBackUntilResizeUnorderedRemoveFrontUntilEmpty(
     error = tloDArrayPushBack(intPtrs, &intPtr);
     assert(!error);
   }
-  tloIntPtrDestruct(&intPtr);
+  tloPtrDestruct(&intPtr);
 
   for (size_t i = SOME_NUMBER - 1; i <= SOME_NUMBER - 1; --i) {
     assert(tloDArrayGetSize(intPtrs) == i + 1);

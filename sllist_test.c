@@ -411,7 +411,7 @@ static void testSLListIntPtrPushFrontOnce(void) {
   *intPtr.ptr = SOME_NUMBER;
   error = tloSLListPushFront(intPtrs, &intPtr);
   assert(!error);
-  tloIntPtrDestruct(&intPtr);
+  tloPtrDestruct(&intPtr);
 
   assert(tloSLListGetSize(intPtrs) == 1);
   assert(!tloSLListIsEmpty(intPtrs));
@@ -449,7 +449,7 @@ static void testSLListIntPtrPushFrontManyTimes(void) {
     assert(*((const TloIntPtr *)tloSLListGetBack(intPtrs))->ptr == 0);
     assert(*((TloIntPtr *)tloSLListGetMutableBack(intPtrs))->ptr == 0);
   }
-  tloIntPtrDestruct(&intPtr);
+  tloPtrDestruct(&intPtr);
 
   tloSLListDelete(intPtrs);
   intPtrs = NULL;
@@ -465,7 +465,7 @@ static void testSLListIntPtrPushFrontOncePopFrontOnce(void) {
   *intPtr.ptr = SOME_NUMBER;
   error = tloSLListPushFront(intPtrs, &intPtr);
   assert(!error);
-  tloIntPtrDestruct(&intPtr);
+  tloPtrDestruct(&intPtr);
 
   tloSLListPopFront(intPtrs);
 
@@ -490,7 +490,7 @@ static void testSLListIntPtrPushFrontManyTimesPopFrontUntilEmpty(void) {
     error = tloSLListPushFront(intPtrs, &intPtr);
     assert(!error);
   }
-  tloIntPtrDestruct(&intPtr);
+  tloPtrDestruct(&intPtr);
 
   for (size_t i = SOME_NUMBER - 1; i <= SOME_NUMBER - 1; --i) {
     assert(tloSLListGetSize(intPtrs) == i + 1);
@@ -525,7 +525,7 @@ static void testSLListIntPtrPushBackOnce(void) {
   *intPtr.ptr = SOME_NUMBER;
   error = tloSLListPushBack(intPtrs, &intPtr);
   assert(!error);
-  tloIntPtrDestruct(&intPtr);
+  tloPtrDestruct(&intPtr);
 
   assert(tloSLListGetSize(intPtrs) == 1);
   assert(!tloSLListIsEmpty(intPtrs));
@@ -563,7 +563,7 @@ static void testSLListIntPtrPushBackManyTimes(void) {
     assert(*((const TloIntPtr *)tloSLListGetBack(intPtrs))->ptr == (int)i);
     assert(*((TloIntPtr *)tloSLListGetMutableBack(intPtrs))->ptr == (int)i);
   }
-  tloIntPtrDestruct(&intPtr);
+  tloPtrDestruct(&intPtr);
 
   tloSLListDelete(intPtrs);
   intPtrs = NULL;

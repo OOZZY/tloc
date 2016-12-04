@@ -60,7 +60,7 @@ typedef struct TloIntPtr { int *ptr; } TloIntPtr;
 
 TloError tloIntPtrConstruct(TloIntPtr *ptr);
 TloError tloIntPtrConstructCopy(TloIntPtr *ptr, const TloIntPtr *other);
-void tloIntPtrDestruct(TloIntPtr *ptr);
+void tloPtrDestruct(void *ptr);
 extern const TloType tloIntPtr;
 
 #endif  // TLO_UTIL_H

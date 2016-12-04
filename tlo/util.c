@@ -99,25 +99,25 @@ TloError tloIntPtrConstructCopy(TloIntPtr *ptr, const TloIntPtr *other) {
   return TLO_SUCCESS;
 }
 
-void tloIntPtrDestruct(TloIntPtr *ptr) {
-  if (!ptr) {
-    return;
-  }
-
-  if (!ptr->ptr) {
-    return;
-  }
-
-  free(ptr->ptr);
-  ptr->ptr = NULL;
-}
-
 static TloError intPtrConstructCopy(void *bytes, const void *data) {
   return tloIntPtrConstructCopy(bytes, data);
 }
 
-static void intPtrDestruct(void *bytes) { tloIntPtrDestruct(bytes); }
+void tloPtrDestruct(void *ptr) {
+  int **ptrptr = ptr;
+
+  if (!ptrptr) {
+    return;
+  }
+
+  if (!*ptrptr) {
+    return;
+  }
+
+  free(*ptrptr);
+  *ptrptr = NULL;
+}
 
 const TloType tloIntPtr = {.sizeOf = sizeof(TloIntPtr),
                            .constructCopy = intPtrConstructCopy,
-                           .destruct = intPtrDestruct};
+                           .destruct = tloPtrDestruct};
