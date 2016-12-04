@@ -4,8 +4,6 @@
 #include <tlo/sllist.h>
 #include "tloc_test.h"
 
-#define SOME_NUMBER 42
-
 static void testSLListIntConstructDestructStackSpace(void) {
   TloSLList ints;
 

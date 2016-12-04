@@ -4,8 +4,6 @@
 #include <tlo/darray.h>
 #include "tloc_test.h"
 
-#define SOME_NUMBER 42
-
 static void testDArrayIntConstructDestructStackSpace(void) {
   TloDArray ints;
 
