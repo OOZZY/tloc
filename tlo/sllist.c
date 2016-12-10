@@ -48,7 +48,6 @@ static TloError pushBackAllElementsOfOther(TloSLList *list,
 TloError tloSLListConstructCopy(TloSLList *list, const TloSLList *other) {
   assert(list);
   assert(tloSLListIsValid(other));
-  assert(tloTypeIsDeepCopyable(other->valueType));
 
   if (tloSLListConstruct(list, other->valueType, other->allocatorType) ==
       TLO_ERROR) {
@@ -120,7 +119,6 @@ TloSLList *tloSLListMake(const TloType *valueType,
 
 TloSLList *tloSLListMakeCopy(const TloSLList *other) {
   assert(tloSLListIsValid(other));
-  assert(tloTypeIsDeepCopyable(other->valueType));
 
   TloSLList *list = other->allocatorType->malloc(sizeof(*list));
   if (!list) {
@@ -226,10 +224,14 @@ static TloSLLNode *makeNodeWithCopiedData(TloSLList *list, const void *data) {
     return NULL;
   }
 
-  if (list->valueType->constructCopy(node->bytes, data) == TLO_ERROR) {
-    list->allocatorType->free(node->bytes);
-    list->allocatorType->free(node);
-    return NULL;
+  if (list->valueType->constructCopy) {
+    if (list->valueType->constructCopy(node->bytes, data) == TLO_ERROR) {
+      list->allocatorType->free(node->bytes);
+      list->allocatorType->free(node);
+      return NULL;
+    }
+  } else {
+    memcpy(node->bytes, data, list->valueType->sizeOf);
   }
 
   node->next = NULL;
@@ -250,7 +252,6 @@ static void pushFrontNode(TloSLList *list, TloSLLNode *node) {
 
 TloError tloSLListPushFront(TloSLList *list, const void *data) {
   assert(tloSLListIsValid(list));
-  assert(tloTypeIsDeepCopyable(list->valueType));
   assert(data);
 
   TloSLLNode *newNode = makeNodeWithCopiedData(list, data);
@@ -328,7 +329,6 @@ static void pushBackNode(TloSLList *list, TloSLLNode *node) {
 
 TloError tloSLListPushBack(TloSLList *list, const void *data) {
   assert(tloSLListIsValid(list));
-  assert(tloTypeIsDeepCopyable(list->valueType));
   assert(data);
 
   TloSLLNode *newNode = makeNodeWithCopiedData(list, data);

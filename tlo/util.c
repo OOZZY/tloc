@@ -6,21 +6,8 @@
 
 bool tloTypeIsValid(const TloType *type) { return type && type->sizeOf; }
 
-bool tloTypeIsDeepCopyable(const TloType *type) {
-  return tloTypeIsValid(type) && type->constructCopy;
-}
-
-static TloError intConstructCopy(void *bytes, const void *data) {
-  assert(bytes);
-  assert(data);
-
-  memcpy(bytes, data, sizeof(int));
-
-  return TLO_SUCCESS;
-}
-
 const TloType tloInt = {
-    .sizeOf = sizeof(int), .constructCopy = intConstructCopy, .destruct = NULL};
+    .sizeOf = sizeof(int), .constructCopy = NULL, .destruct = NULL};
 
 bool tloAllocatorTypeIsValid(const TloAllocatorType *allocatorType) {
   return allocatorType && allocatorType->malloc && allocatorType->free;

@@ -63,7 +63,6 @@ static TloError pushBackAllElementsOfOther(TloDArray *array,
 TloError tloDArrayConstructCopy(TloDArray *array, const TloDArray *other) {
   assert(array);
   assert(tloDArrayIsValid(other));
-  assert(tloTypeIsDeepCopyable(other->valueType));
 
   if (tloDArrayConstruct(array, other->valueType, other->allocatorType,
                          other->capacity) == TLO_ERROR) {
@@ -131,7 +130,6 @@ TloDArray *tloDArrayMake(const TloType *valueType,
 
 TloDArray *tloDArrayMakeCopy(const TloDArray *other) {
   assert(tloDArrayIsValid(other));
-  assert(tloTypeIsDeepCopyable(other->valueType));
 
   TloDArray *array = other->allocatorType->malloc(sizeof(*array));
   if (!array) {
@@ -283,8 +281,12 @@ static TloError pushBackCopiedData(TloDArray *array, const void *data) {
   void *destination =
       getMutableElement(array->bytes, array->size, array->valueType->sizeOf);
 
-  if (array->valueType->constructCopy(destination, data) == TLO_ERROR) {
-    return TLO_ERROR;
+  if (array->valueType->constructCopy) {
+    if (array->valueType->constructCopy(destination, data) == TLO_ERROR) {
+      return TLO_ERROR;
+    }
+  } else {
+    memcpy(destination, data, array->valueType->sizeOf);
   }
 
   ++array->size;
@@ -294,7 +296,6 @@ static TloError pushBackCopiedData(TloDArray *array, const void *data) {
 
 TloError tloDArrayPushBack(TloDArray *array, const void *data) {
   assert(tloDArrayIsValid(array));
-  assert(tloTypeIsDeepCopyable(array->valueType));
   assert(data);
 
   if (allocateBytesIfNeeded(array) == TLO_ERROR) {
