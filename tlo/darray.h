@@ -48,17 +48,17 @@ TloDArray *tloDArrayMakeCopy(const TloDArray *other);
 void tloDArrayDelete(TloDArray *array);
 
 TloError tloDArrayCopy(TloDArray *array, const TloDArray *other);
-const TloType *tloDArrayGetValueType(const TloDArray *array);
-const TloAllocatorType *tloDArrayGetAllocatorType(const TloDArray *array);
-size_t tloDArrayGetSize(const TloDArray *array);
-size_t tloDArrayGetCapacity(const TloDArray *array);
+const TloType *tloDArrayValueType(const TloDArray *array);
+const TloAllocatorType *tloDArrayAllocatorType(const TloDArray *array);
+size_t tloDArraySize(const TloDArray *array);
+size_t tloDArrayCapacity(const TloDArray *array);
 bool tloDArrayIsEmpty(const TloDArray *array);
-const void *tloDArrayGetElement(const TloDArray *array, size_t index);
-void *tloDArrayGetMutableElement(TloDArray *array, size_t index);
-const void *tloDArrayGetFront(const TloDArray *array);
-void *tloDArrayGetMutableFront(TloDArray *array);
-const void *tloDArrayGetBack(const TloDArray *array);
-void *tloDArrayGetMutableBack(TloDArray *array);
+const void *tloDArrayElement(const TloDArray *array, size_t index);
+void *tloDArrayMutableElement(TloDArray *array, size_t index);
+const void *tloDArrayFront(const TloDArray *array);
+void *tloDArrayMutableFront(TloDArray *array);
+const void *tloDArrayBack(const TloDArray *array);
+void *tloDArrayMutableBack(TloDArray *array);
 
 /*
  * - deep copies data using array->valueType->constructCopy

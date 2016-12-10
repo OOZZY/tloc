@@ -4,14 +4,14 @@
 #include <tlo/test.h>
 #include "tloc_test.h"
 
-#define EXPECT_DARRAY_PROPERTIES(darray, size, isEmpty, valueType,        \
-                                 allocatorType)                           \
-  do {                                                                    \
-    TLO_EXPECT(tloDArrayGetSize(darray) == (size));                       \
-    TLO_EXPECT(tloDArrayGetCapacity(darray) >= tloDArrayGetSize(darray)); \
-    TLO_EXPECT(tloDArrayIsEmpty(darray) == (isEmpty));                    \
-    TLO_EXPECT(tloDArrayGetValueType(darray) == (valueType));             \
-    TLO_EXPECT(tloDArrayGetAllocatorType(darray) == (allocatorType));     \
+#define EXPECT_DARRAY_PROPERTIES(darray, size, isEmpty, valueType,  \
+                                 allocatorType)                     \
+  do {                                                              \
+    TLO_EXPECT(tloDArraySize(darray) == (size));                    \
+    TLO_EXPECT(tloDArrayCapacity(darray) >= tloDArraySize(darray)); \
+    TLO_EXPECT(tloDArrayIsEmpty(darray) == (isEmpty));              \
+    TLO_EXPECT(tloDArrayValueType(darray) == (valueType));          \
+    TLO_EXPECT(tloDArrayAllocatorType(darray) == (allocatorType));  \
   } while (0)
 
 static void testDArrayIntConstructDestructStackSpace(void) {
@@ -43,7 +43,7 @@ static void testDArrayIntConstructDestructHeapSpace(void) {
                                      valueType, allocatorType)                 \
   do {                                                                         \
     EXPECT_DARRAY_PROPERTIES(darray, size, isEmpty, valueType, allocatorType); \
-    TLO_EXPECT(tloDArrayGetCapacity(darray) == (capacity));                    \
+    TLO_EXPECT(tloDArrayCapacity(darray) == (capacity));                       \
   } while (0)
 
 static void testDArrayIntConstructWithCapacityDestructStackSpace(void) {
@@ -100,17 +100,16 @@ static void testDArrayDestructWithNull(void) { tloDArrayDestruct(NULL); }
 
 static void testDArrayDeleteWithNull(void) { tloDArrayDelete(NULL); }
 
-#define EXPECT_DARRAY_INT_ELEMENTS(darray, index, indexValue, frontValue, \
-                                   backValue)                             \
-  do {                                                                    \
-    TLO_EXPECT(*(const int *)tloDArrayGetElement(darray, index) ==        \
-               (indexValue));                                             \
-    TLO_EXPECT(*(int *)tloDArrayGetMutableElement(darray, index) ==       \
-               (indexValue));                                             \
-    TLO_EXPECT(*(const int *)tloDArrayGetFront(darray) == (frontValue));  \
-    TLO_EXPECT(*(int *)tloDArrayGetMutableFront(darray) == (frontValue)); \
-    TLO_EXPECT(*(const int *)tloDArrayGetBack(darray) == (backValue));    \
-    TLO_EXPECT(*(int *)tloDArrayGetMutableBack(darray) == (backValue));   \
+#define EXPECT_DARRAY_INT_ELEMENTS(darray, index, indexValue, frontValue,      \
+                                   backValue)                                  \
+  do {                                                                         \
+    TLO_EXPECT(*(const int *)tloDArrayElement(darray, index) == (indexValue)); \
+    TLO_EXPECT(*(int *)tloDArrayMutableElement(darray, index) ==               \
+               (indexValue));                                                  \
+    TLO_EXPECT(*(const int *)tloDArrayFront(darray) == (frontValue));          \
+    TLO_EXPECT(*(int *)tloDArrayMutableFront(darray) == (frontValue));         \
+    TLO_EXPECT(*(const int *)tloDArrayBack(darray) == (backValue));            \
+    TLO_EXPECT(*(int *)tloDArrayMutableBack(darray) == (backValue));           \
   } while (0)
 
 static void testDArrayIntPushBackOnce(void) {
@@ -232,14 +231,14 @@ static void testDArrayIntConstructCopy(void) {
   TloError error = tloDArrayConstructCopy(copy, ints);
   TLO_ASSERT(!error);
 
-  EXPECT_DARRAY_ALL_PROPERTIES(
-      ints, tloDArrayGetSize(copy), tloDArrayGetCapacity(copy),
-      tloDArrayIsEmpty(copy), tloDArrayGetValueType(copy),
-      tloDArrayGetAllocatorType(copy));
+  EXPECT_DARRAY_ALL_PROPERTIES(ints, tloDArraySize(copy),
+                               tloDArrayCapacity(copy), tloDArrayIsEmpty(copy),
+                               tloDArrayValueType(copy),
+                               tloDArrayAllocatorType(copy));
 
-  for (size_t i = 0; i < tloDArrayGetSize(ints); ++i) {
-    const int *elem1 = tloDArrayGetElement(ints, i);
-    const int *elem2 = tloDArrayGetElement(copy, i);
+  for (size_t i = 0; i < tloDArraySize(ints); ++i) {
+    const int *elem1 = tloDArrayElement(ints, i);
+    const int *elem2 = tloDArrayElement(copy, i);
     TLO_EXPECT(elem1 != elem2);
     TLO_EXPECT(*elem1 == *elem2);
   }
@@ -264,14 +263,14 @@ static void testDArrayIntMakeCopy(void) {
   TloDArray *copy = tloDArrayMakeCopy(ints);
   TLO_ASSERT(copy);
 
-  EXPECT_DARRAY_ALL_PROPERTIES(
-      ints, tloDArrayGetSize(copy), tloDArrayGetCapacity(copy),
-      tloDArrayIsEmpty(copy), tloDArrayGetValueType(copy),
-      tloDArrayGetAllocatorType(copy));
+  EXPECT_DARRAY_ALL_PROPERTIES(ints, tloDArraySize(copy),
+                               tloDArrayCapacity(copy), tloDArrayIsEmpty(copy),
+                               tloDArrayValueType(copy),
+                               tloDArrayAllocatorType(copy));
 
-  for (size_t i = 0; i < tloDArrayGetSize(ints); ++i) {
-    const int *elem1 = tloDArrayGetElement(ints, i);
-    const int *elem2 = tloDArrayGetElement(copy, i);
+  for (size_t i = 0; i < tloDArraySize(ints); ++i) {
+    const int *elem1 = tloDArrayElement(ints, i);
+    const int *elem2 = tloDArrayElement(copy, i);
     TLO_EXPECT(elem1 != elem2);
     TLO_EXPECT(*elem1 == *elem2);
   }
@@ -298,14 +297,14 @@ static void testDArrayIntCopy(void) {
   TloError error = tloDArrayCopy(copy, ints);
   TLO_ASSERT(!error);
 
-  EXPECT_DARRAY_ALL_PROPERTIES(
-      ints, tloDArrayGetSize(copy), tloDArrayGetCapacity(copy),
-      tloDArrayIsEmpty(copy), tloDArrayGetValueType(copy),
-      tloDArrayGetAllocatorType(copy));
+  EXPECT_DARRAY_ALL_PROPERTIES(ints, tloDArraySize(copy),
+                               tloDArrayCapacity(copy), tloDArrayIsEmpty(copy),
+                               tloDArrayValueType(copy),
+                               tloDArrayAllocatorType(copy));
 
-  for (size_t i = 0; i < tloDArrayGetSize(ints); ++i) {
-    const int *elem1 = tloDArrayGetElement(ints, i);
-    const int *elem2 = tloDArrayGetElement(copy, i);
+  for (size_t i = 0; i < tloDArraySize(ints); ++i) {
+    const int *elem1 = tloDArrayElement(ints, i);
+    const int *elem2 = tloDArrayElement(copy, i);
     TLO_EXPECT(elem1 != elem2);
     TLO_EXPECT(*elem1 == *elem2);
   }
@@ -317,23 +316,21 @@ static void testDArrayIntCopy(void) {
   copy = NULL;
 }
 
-#define EXPECT_DARRAY_INTPTR_ELEMENTS(darray, index, indexValue, frontValue, \
-                                      backValue)                             \
-  do {                                                                       \
-    TLO_EXPECT(                                                              \
-        *((const TloIntPtr *)tloDArrayGetElement(darray, index))->ptr ==     \
-        (indexValue));                                                       \
-    TLO_EXPECT(                                                              \
-        *((TloIntPtr *)tloDArrayGetMutableElement(darray, index))->ptr ==    \
-        (indexValue));                                                       \
-    TLO_EXPECT(*((const TloIntPtr *)tloDArrayGetFront(darray))->ptr ==       \
-               (frontValue));                                                \
-    TLO_EXPECT(*((TloIntPtr *)tloDArrayGetMutableFront(darray))->ptr ==      \
-               (frontValue));                                                \
-    TLO_EXPECT(*((const TloIntPtr *)tloDArrayGetBack(darray))->ptr ==        \
-               (backValue));                                                 \
-    TLO_EXPECT(*((TloIntPtr *)tloDArrayGetMutableBack(darray))->ptr ==       \
-               (backValue));                                                 \
+#define EXPECT_DARRAY_INTPTR_ELEMENTS(darray, index, indexValue, frontValue,  \
+                                      backValue)                              \
+  do {                                                                        \
+    TLO_EXPECT(*((const TloIntPtr *)tloDArrayElement(darray, index))->ptr ==  \
+               (indexValue));                                                 \
+    TLO_EXPECT(*((TloIntPtr *)tloDArrayMutableElement(darray, index))->ptr == \
+               (indexValue));                                                 \
+    TLO_EXPECT(*((const TloIntPtr *)tloDArrayFront(darray))->ptr ==           \
+               (frontValue));                                                 \
+    TLO_EXPECT(*((TloIntPtr *)tloDArrayMutableFront(darray))->ptr ==          \
+               (frontValue));                                                 \
+    TLO_EXPECT(*((const TloIntPtr *)tloDArrayBack(darray))->ptr ==            \
+               (backValue));                                                  \
+    TLO_EXPECT(*((TloIntPtr *)tloDArrayMutableBack(darray))->ptr ==           \
+               (backValue));                                                  \
   } while (0)
 
 static void testDArrayIntPtrPushBackOnce(void) {
@@ -447,7 +444,7 @@ static void testDArrayIntPtrPushBackUntilResizeUnorderedRemoveBackUntilEmpty(
                              &tloCountingAllocator);
     EXPECT_DARRAY_INTPTR_ELEMENTS(intPtrs, i, (int)i, 0, (int)i);
 
-    tloDArrayUnorderedRemove(intPtrs, tloDArrayGetSize(intPtrs) - 1);
+    tloDArrayUnorderedRemove(intPtrs, tloDArraySize(intPtrs) - 1);
   }
 
   EXPECT_DARRAY_PROPERTIES(intPtrs, 0, true, &tloIntPtr, &tloCountingAllocator);
@@ -495,10 +492,10 @@ static void testDArrayIntPtrPushBackUntilResizeUnorderedRemoveFrontUntilEmpty(
 
 void testDArray(void) {
   tloCountingAllocatorResetCounts();
-  TLO_EXPECT(tloCountingAllocatorGetMallocCount() == 0);
-  TLO_EXPECT(tloCountingAllocatorGetMallocCount() ==
-             tloCountingAllocatorGetFreeCount());
-  TLO_EXPECT(tloCountingAllocatorGetTotalByteCount() == 0);
+  TLO_EXPECT(tloCountingAllocatorMallocCount() == 0);
+  TLO_EXPECT(tloCountingAllocatorMallocCount() ==
+             tloCountingAllocatorFreeCount());
+  TLO_EXPECT(tloCountingAllocatorTotalByteCount() == 0);
 
   testDArrayIntConstructDestructStackSpace();
   testDArrayIntConstructDestructHeapSpace();
@@ -524,10 +521,10 @@ void testDArray(void) {
   testDArrayIntPtrPushBackUntilResizeUnorderedRemoveBackUntilEmpty();
   testDArrayIntPtrPushBackUntilResizeUnorderedRemoveFrontUntilEmpty();
 
-  TLO_EXPECT(tloCountingAllocatorGetMallocCount() > 0);
-  TLO_EXPECT(tloCountingAllocatorGetMallocCount() ==
-             tloCountingAllocatorGetFreeCount());
-  TLO_EXPECT(tloCountingAllocatorGetTotalByteCount() > 0);
+  TLO_EXPECT(tloCountingAllocatorMallocCount() > 0);
+  TLO_EXPECT(tloCountingAllocatorMallocCount() ==
+             tloCountingAllocatorFreeCount());
+  TLO_EXPECT(tloCountingAllocatorTotalByteCount() > 0);
 
   printf("sizeof(TloDArray): %zu\n", sizeof(TloDArray));
   tloCountingAllocatorPrintCounts();

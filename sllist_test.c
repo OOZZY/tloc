@@ -4,13 +4,13 @@
 #include <tlo/test.h>
 #include "tloc_test.h"
 
-#define EXPECT_SLLIST_PROPERTIES(sllist, size, isEmpty, valueType,    \
-                                 allocatorType)                       \
-  do {                                                                \
-    TLO_EXPECT(tloSLListGetSize(sllist) == (size));                   \
-    TLO_EXPECT(tloSLListIsEmpty(sllist) == (isEmpty));                \
-    TLO_EXPECT(tloSLListGetValueType(sllist) == (valueType));         \
-    TLO_EXPECT(tloSLListGetAllocatorType(sllist) == (allocatorType)); \
+#define EXPECT_SLLIST_PROPERTIES(sllist, size, isEmpty, valueType, \
+                                 allocatorType)                    \
+  do {                                                             \
+    TLO_EXPECT(tloSLListSize(sllist) == (size));                   \
+    TLO_EXPECT(tloSLListIsEmpty(sllist) == (isEmpty));             \
+    TLO_EXPECT(tloSLListValueType(sllist) == (valueType));         \
+    TLO_EXPECT(tloSLListAllocatorType(sllist) == (allocatorType)); \
   } while (0)
 
 static void testSLListIntConstructDestructStackSpace(void) {
@@ -52,12 +52,12 @@ static void testSLListDestructWithNull(void) { tloSLListDestruct(NULL); }
 
 static void testSLListDeleteWithNull(void) { tloSLListDelete(NULL); }
 
-#define EXPECT_SLLIST_INT_ELEMENTS(sllist, frontValue, backValue)         \
-  do {                                                                    \
-    TLO_EXPECT(*(const int *)tloSLListGetFront(sllist) == (frontValue));  \
-    TLO_EXPECT(*(int *)tloSLListGetMutableFront(sllist) == (frontValue)); \
-    TLO_EXPECT(*(const int *)tloSLListGetBack(sllist) == (backValue));    \
-    TLO_EXPECT(*(int *)tloSLListGetMutableBack(sllist) == (backValue));   \
+#define EXPECT_SLLIST_INT_ELEMENTS(sllist, frontValue, backValue)      \
+  do {                                                                 \
+    TLO_EXPECT(*(const int *)tloSLListFront(sllist) == (frontValue));  \
+    TLO_EXPECT(*(int *)tloSLListMutableFront(sllist) == (frontValue)); \
+    TLO_EXPECT(*(const int *)tloSLListBack(sllist) == (backValue));    \
+    TLO_EXPECT(*(int *)tloSLListMutableBack(sllist) == (backValue));   \
   } while (0)
 
 static void testSLListIntPushFrontOnce(void) {
@@ -245,20 +245,20 @@ static void testSLListIntConstructCopy(void) {
   TloError error = tloSLListConstructCopy(copy, ints);
   TLO_ASSERT(!error);
 
-  EXPECT_SLLIST_PROPERTIES(ints, tloSLListGetSize(copy), tloSLListIsEmpty(copy),
-                           tloSLListGetValueType(copy),
-                           tloSLListGetAllocatorType(copy));
+  EXPECT_SLLIST_PROPERTIES(ints, tloSLListSize(copy), tloSLListIsEmpty(copy),
+                           tloSLListValueType(copy),
+                           tloSLListAllocatorType(copy));
 
-  const TloSLLNode *node1 = tloSLLNodeGetHead(ints);
-  const TloSLLNode *node2 = tloSLLNodeGetHead(copy);
+  const TloSLLNode *node1 = tloSLLNodeHead(ints);
+  const TloSLLNode *node2 = tloSLLNodeHead(copy);
   while (node1) {
     TLO_ASSERT(node2);
-    const int *elem1 = tloSLLNodeGetElement(node1);
-    const int *elem2 = tloSLLNodeGetElement(node2);
+    const int *elem1 = tloSLLNodeElement(node1);
+    const int *elem2 = tloSLLNodeElement(node2);
     TLO_EXPECT(elem1 != elem2);
     TLO_EXPECT(*elem1 == *elem2);
-    node1 = tloSLLNodeGetNext(node1);
-    node2 = tloSLLNodeGetNext(node2);
+    node1 = tloSLLNodeNext(node1);
+    node2 = tloSLLNodeNext(node2);
   }
 
   tloSLListDelete(ints);
@@ -281,20 +281,20 @@ static void testSLListIntMakeCopy(void) {
   TloSLList *copy = tloSLListMakeCopy(ints);
   TLO_ASSERT(copy);
 
-  EXPECT_SLLIST_PROPERTIES(ints, tloSLListGetSize(copy), tloSLListIsEmpty(copy),
-                           tloSLListGetValueType(copy),
-                           tloSLListGetAllocatorType(copy));
+  EXPECT_SLLIST_PROPERTIES(ints, tloSLListSize(copy), tloSLListIsEmpty(copy),
+                           tloSLListValueType(copy),
+                           tloSLListAllocatorType(copy));
 
-  const TloSLLNode *node1 = tloSLLNodeGetHead(ints);
-  const TloSLLNode *node2 = tloSLLNodeGetHead(copy);
+  const TloSLLNode *node1 = tloSLLNodeHead(ints);
+  const TloSLLNode *node2 = tloSLLNodeHead(copy);
   while (node1) {
     TLO_ASSERT(node2);
-    const int *elem1 = tloSLLNodeGetElement(node1);
-    const int *elem2 = tloSLLNodeGetElement(node2);
+    const int *elem1 = tloSLLNodeElement(node1);
+    const int *elem2 = tloSLLNodeElement(node2);
     TLO_EXPECT(elem1 != elem2);
     TLO_EXPECT(*elem1 == *elem2);
-    node1 = tloSLLNodeGetNext(node1);
-    node2 = tloSLLNodeGetNext(node2);
+    node1 = tloSLLNodeNext(node1);
+    node2 = tloSLLNodeNext(node2);
   }
 
   tloSLListDelete(ints);
@@ -319,20 +319,20 @@ static void testSLListIntCopy(void) {
   TloError error = tloSLListCopy(copy, ints);
   TLO_ASSERT(!error);
 
-  EXPECT_SLLIST_PROPERTIES(ints, tloSLListGetSize(copy), tloSLListIsEmpty(copy),
-                           tloSLListGetValueType(copy),
-                           tloSLListGetAllocatorType(copy));
+  EXPECT_SLLIST_PROPERTIES(ints, tloSLListSize(copy), tloSLListIsEmpty(copy),
+                           tloSLListValueType(copy),
+                           tloSLListAllocatorType(copy));
 
-  const TloSLLNode *node1 = tloSLLNodeGetHead(ints);
-  const TloSLLNode *node2 = tloSLLNodeGetHead(copy);
+  const TloSLLNode *node1 = tloSLLNodeHead(ints);
+  const TloSLLNode *node2 = tloSLLNodeHead(copy);
   while (node1) {
     TLO_ASSERT(node2);
-    const int *elem1 = tloSLLNodeGetElement(node1);
-    const int *elem2 = tloSLLNodeGetElement(node2);
+    const int *elem1 = tloSLLNodeElement(node1);
+    const int *elem2 = tloSLLNodeElement(node2);
     TLO_EXPECT(elem1 != elem2);
     TLO_EXPECT(*elem1 == *elem2);
-    node1 = tloSLLNodeGetNext(node1);
-    node2 = tloSLLNodeGetNext(node2);
+    node1 = tloSLLNodeNext(node1);
+    node2 = tloSLLNodeNext(node2);
   }
 
   tloSLListDelete(ints);
@@ -342,16 +342,16 @@ static void testSLListIntCopy(void) {
   copy = NULL;
 }
 
-#define EXPECT_SLLIST_INPTR_ELEMENTS(sllist, frontValue, backValue)     \
-  do {                                                                  \
-    TLO_EXPECT(*((const TloIntPtr *)tloSLListGetFront(sllist))->ptr ==  \
-               (frontValue));                                           \
-    TLO_EXPECT(*((TloIntPtr *)tloSLListGetMutableFront(sllist))->ptr == \
-               (frontValue));                                           \
-    TLO_EXPECT(*((const TloIntPtr *)tloSLListGetBack(sllist))->ptr ==   \
-               (backValue));                                            \
-    TLO_EXPECT(*((TloIntPtr *)tloSLListGetMutableBack(sllist))->ptr ==  \
-               (backValue));                                            \
+#define EXPECT_SLLIST_INPTR_ELEMENTS(sllist, frontValue, backValue)  \
+  do {                                                               \
+    TLO_EXPECT(*((const TloIntPtr *)tloSLListFront(sllist))->ptr ==  \
+               (frontValue));                                        \
+    TLO_EXPECT(*((TloIntPtr *)tloSLListMutableFront(sllist))->ptr == \
+               (frontValue));                                        \
+    TLO_EXPECT(*((const TloIntPtr *)tloSLListBack(sllist))->ptr ==   \
+               (backValue));                                         \
+    TLO_EXPECT(*((TloIntPtr *)tloSLListMutableBack(sllist))->ptr ==  \
+               (backValue));                                         \
   } while (0)
 
 static void testSLListIntPtrPushFrontOnce(void) {
@@ -488,10 +488,10 @@ static void testSLListIntPtrPushBackManyTimes(void) {
 
 void testSLList(void) {
   tloCountingAllocatorResetCounts();
-  TLO_EXPECT(tloCountingAllocatorGetMallocCount() == 0);
-  TLO_EXPECT(tloCountingAllocatorGetMallocCount() ==
-             tloCountingAllocatorGetFreeCount());
-  TLO_EXPECT(tloCountingAllocatorGetTotalByteCount() == 0);
+  TLO_EXPECT(tloCountingAllocatorMallocCount() == 0);
+  TLO_EXPECT(tloCountingAllocatorMallocCount() ==
+             tloCountingAllocatorFreeCount());
+  TLO_EXPECT(tloCountingAllocatorTotalByteCount() == 0);
 
   testSLListIntConstructDestructStackSpace();
   testSLListIntConstructDestructHeapSpace();
@@ -518,10 +518,10 @@ void testSLList(void) {
   testSLListIntPtrPushBackOnce();
   testSLListIntPtrPushBackManyTimes();
 
-  TLO_EXPECT(tloCountingAllocatorGetMallocCount() > 0);
-  TLO_EXPECT(tloCountingAllocatorGetMallocCount() ==
-             tloCountingAllocatorGetFreeCount());
-  TLO_EXPECT(tloCountingAllocatorGetTotalByteCount() > 0);
+  TLO_EXPECT(tloCountingAllocatorMallocCount() > 0);
+  TLO_EXPECT(tloCountingAllocatorMallocCount() ==
+             tloCountingAllocatorFreeCount());
+  TLO_EXPECT(tloCountingAllocatorTotalByteCount() > 0);
 
   printf("sizeof(TloSLList): %zu\n", sizeof(TloSLList));
   printf("sizeof(TloSLLNode): %zu\n", sizeof(TloSLLNode));

@@ -42,15 +42,15 @@ void tloCountingAllocatorResetCounts(void) {
   countingAllocatorTotalByteCount = 0;
 }
 
-unsigned long tloCountingAllocatorGetMallocCount(void) {
+unsigned long tloCountingAllocatorMallocCount(void) {
   return countingAllocatorMallocCount;
 }
 
-unsigned long tloCountingAllocatorGetFreeCount(void) {
+unsigned long tloCountingAllocatorFreeCount(void) {
   return countingAllocatorFreeCount;
 }
 
-unsigned long tloCountingAllocatorGetTotalByteCount(void) {
+unsigned long tloCountingAllocatorTotalByteCount(void) {
   return countingAllocatorTotalByteCount;
 }
 

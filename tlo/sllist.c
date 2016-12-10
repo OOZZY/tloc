@@ -160,19 +160,19 @@ TloError tloSLListCopy(TloSLList *list, const TloSLList *other) {
   return TLO_SUCCESS;
 }
 
-const TloType *tloSLListGetValueType(const TloSLList *list) {
+const TloType *tloSLListValueType(const TloSLList *list) {
   assert(tloSLListIsValid(list));
 
   return list->valueType;
 }
 
-const TloAllocatorType *tloSLListGetAllocatorType(const TloSLList *list) {
+const TloAllocatorType *tloSLListAllocatorType(const TloSLList *list) {
   assert(tloSLListIsValid(list));
 
   return list->allocatorType;
 }
 
-size_t tloSLListGetSize(const TloSLList *list) {
+size_t tloSLListSize(const TloSLList *list) {
   assert(tloSLListIsValid(list));
 
   return list->size;
@@ -184,28 +184,28 @@ bool tloSLListIsEmpty(const TloSLList *list) {
   return list->size == 0;
 }
 
-const void *tloSLListGetFront(const TloSLList *list) {
+const void *tloSLListFront(const TloSLList *list) {
   assert(tloSLListIsValid(list));
   assert(!tloSLListIsEmpty(list));
 
   return list->head->bytes;
 }
 
-void *tloSLListGetMutableFront(TloSLList *list) {
+void *tloSLListMutableFront(TloSLList *list) {
   assert(tloSLListIsValid(list));
   assert(!tloSLListIsEmpty(list));
 
   return list->head->bytes;
 }
 
-const void *tloSLListGetBack(const TloSLList *list) {
+const void *tloSLListBack(const TloSLList *list) {
   assert(tloSLListIsValid(list));
   assert(!tloSLListIsEmpty(list));
 
   return list->tail->bytes;
 }
 
-void *tloSLListGetMutableBack(TloSLList *list) {
+void *tloSLListMutableBack(TloSLList *list) {
   assert(tloSLListIsValid(list));
   assert(!tloSLListIsEmpty(list));
 
@@ -357,37 +357,37 @@ TloError tloSLListMoveBack(TloSLList *list, void *data) {
 
 bool tloSLLNodeIsValid(const TloSLLNode *node) { return node && node->bytes; }
 
-const TloSLLNode *tloSLLNodeGetHead(const TloSLList *list) {
+const TloSLLNode *tloSLLNodeHead(const TloSLList *list) {
   assert(tloSLListIsValid(list));
 
   return list->head;
 }
 
-TloSLLNode *tloSLLNodeGetMutableHead(TloSLList *list) {
+TloSLLNode *tloSLLNodeMutableHead(TloSLList *list) {
   assert(tloSLListIsValid(list));
 
   return list->head;
 }
 
-const void *tloSLLNodeGetElement(const TloSLLNode *node) {
+const void *tloSLLNodeElement(const TloSLLNode *node) {
   assert(tloSLLNodeIsValid(node));
 
   return node->bytes;
 }
 
-void *tloSLLNodeGetMutableElement(TloSLLNode *node) {
+void *tloSLLNodeMutableElement(TloSLLNode *node) {
   assert(tloSLLNodeIsValid(node));
 
   return node->bytes;
 }
 
-const TloSLLNode *tloSLLNodeGetNext(const TloSLLNode *node) {
+const TloSLLNode *tloSLLNodeNext(const TloSLLNode *node) {
   assert(tloSLLNodeIsValid(node));
 
   return node->next;
 }
 
-TloSLLNode *tloSLLNodeGetMutableNext(TloSLLNode *node) {
+TloSLLNode *tloSLLNodeMutableNext(TloSLLNode *node) {
   assert(tloSLLNodeIsValid(node));
 
   return node->next;

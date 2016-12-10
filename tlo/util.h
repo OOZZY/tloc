@@ -50,9 +50,9 @@ extern const TloAllocatorType tloCStdLibAllocator;
 
 extern const TloAllocatorType tloCountingAllocator;
 void tloCountingAllocatorResetCounts(void);
-unsigned long tloCountingAllocatorGetMallocCount(void);
-unsigned long tloCountingAllocatorGetFreeCount(void);
-unsigned long tloCountingAllocatorGetTotalByteCount(void);
+unsigned long tloCountingAllocatorMallocCount(void);
+unsigned long tloCountingAllocatorFreeCount(void);
+unsigned long tloCountingAllocatorTotalByteCount(void);
 void tloCountingAllocatorPrintCounts(void);
 
 typedef struct TloIntPtr { int *ptr; } TloIntPtr;
