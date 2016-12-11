@@ -55,9 +55,9 @@ unsigned long tloCountingAllocatorTotalByteCount(void) {
 }
 
 void tloCountingAllocatorPrintCounts(void) {
-  printf("malloc count: %lu\nfree count: %lu\nTotal bytes allocated: %lu\n",
-         countingAllocatorMallocCount, countingAllocatorFreeCount,
-         countingAllocatorTotalByteCount);
+  printf("malloc count: %lu\n", countingAllocatorMallocCount);
+  printf("free count: %lu\n", countingAllocatorFreeCount);
+  printf("Total bytes allocated: %lu\n", countingAllocatorTotalByteCount);
 }
 
 TloError tloIntPtrConstruct(TloIntPtr *ptr) {
