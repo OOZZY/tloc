@@ -21,7 +21,7 @@ TloError tloDArrayConstruct(TloDArray *array, const TloType *valueType,
                             size_t capacity);
 
 /*
- * - deep copies data using other->valueType->constructCopy
+ * - uses tloDArrayPushBack
  */
 TloError tloDArrayConstructCopy(TloDArray *array, const TloDArray *other);
 
@@ -47,7 +47,11 @@ TloDArray *tloDArrayMakeCopy(const TloDArray *other);
  */
 void tloDArrayDelete(TloDArray *array);
 
+/*
+ * - uses tloDArrayConstructCopy and tloDArrayDestruct
+ */
 TloError tloDArrayCopy(TloDArray *array, const TloDArray *other);
+
 const TloType *tloDArrayValueType(const TloDArray *array);
 const TloAllocatorType *tloDArrayAllocatorType(const TloDArray *array);
 size_t tloDArraySize(const TloDArray *array);
@@ -61,7 +65,8 @@ const void *tloDArrayBack(const TloDArray *array);
 void *tloDArrayMutableBack(TloDArray *array);
 
 /*
- * - deep copies data using array->valueType->constructCopy
+ * - deep copies data using array->valueType->constructCopy if it is not null
+ * - otherwise, uses memcpy
  */
 TloError tloDArrayPushBack(TloDArray *array, const void *data);
 

@@ -26,7 +26,7 @@ TloError tloSLListConstruct(TloSLList *list, const TloType *valueType,
                             const TloAllocatorType *allocatorType);
 
 /*
- * - deep copies data using other->valueType->constructCopy
+ * - uses tloSLListPushBack
  */
 TloError tloSLListConstructCopy(TloSLList *list, const TloSLList *other);
 
@@ -51,7 +51,11 @@ TloSLList *tloSLListMakeCopy(const TloSLList *other);
  */
 void tloSLListDelete(TloSLList *list);
 
+/*
+ * - uses tloSLListConstructCopy and tloSLListDestruct
+ */
 TloError tloSLListCopy(TloSLList *list, const TloSLList *other);
+
 const TloType *tloSLListValueType(const TloSLList *list);
 const TloAllocatorType *tloSLListAllocatorType(const TloSLList *list);
 size_t tloSLListSize(const TloSLList *list);
@@ -62,7 +66,8 @@ const void *tloSLListBack(const TloSLList *list);
 void *tloSLListMutableBack(TloSLList *list);
 
 /*
- * - deep copies data using list->valueType->constructCopy
+ * - deep copies data using list->valueType->constructCopy if it is not null
+ * - otherwise, uses memcpy
  */
 TloError tloSLListPushFront(TloSLList *list, const void *data);
 
@@ -77,7 +82,8 @@ TloError tloSLListMoveFront(TloSLList *list, void *data);
 void tloSLListPopFront(TloSLList *list);
 
 /*
- * - deep copies data using list->valueType->constructCopy
+ * - deep copies data using list->valueType->constructCopy if it is not null
+ * - otherwise, uses memcpy
  */
 TloError tloSLListPushBack(TloSLList *list, const void *data);
 
