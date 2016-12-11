@@ -15,21 +15,21 @@ bool tloAllocatorTypeIsValid(const TloAllocatorType *allocatorType) {
 
 const TloAllocatorType tloCStdLibAllocator = {.malloc = malloc, .free = free};
 
-static unsigned long countingAllocatorMallocCount = 0;
-static unsigned long countingAllocatorFreeCount = 0;
-static unsigned long countingAllocatorTotalByteCount = 0;
+static unsigned long mallocCount = 0;
+static unsigned long freeCount = 0;
+static unsigned long totalByteCount = 0;
 
 static void *countingAllocatorMalloc(size_t byteCount) {
-  ++countingAllocatorMallocCount;
+  ++mallocCount;
   void *bytes = malloc(byteCount);
   if (bytes) {
-    countingAllocatorTotalByteCount += byteCount;
+    totalByteCount += byteCount;
   }
   return bytes;
 }
 
 static void countingAllocatorFree(void *bytes) {
-  ++countingAllocatorFreeCount;
+  ++freeCount;
   free(bytes);
 }
 
@@ -37,27 +37,23 @@ const TloAllocatorType tloCountingAllocator = {
     .malloc = countingAllocatorMalloc, .free = countingAllocatorFree};
 
 void tloCountingAllocatorResetCounts(void) {
-  countingAllocatorMallocCount = 0;
-  countingAllocatorFreeCount = 0;
-  countingAllocatorTotalByteCount = 0;
+  mallocCount = 0;
+  freeCount = 0;
+  totalByteCount = 0;
 }
 
-unsigned long tloCountingAllocatorMallocCount(void) {
-  return countingAllocatorMallocCount;
-}
+unsigned long tloCountingAllocatorMallocCount(void) { return mallocCount; }
 
-unsigned long tloCountingAllocatorFreeCount(void) {
-  return countingAllocatorFreeCount;
-}
+unsigned long tloCountingAllocatorFreeCount(void) { return freeCount; }
 
 unsigned long tloCountingAllocatorTotalByteCount(void) {
-  return countingAllocatorTotalByteCount;
+  return totalByteCount;
 }
 
 void tloCountingAllocatorPrintCounts(void) {
-  printf("malloc count: %lu\n", countingAllocatorMallocCount);
-  printf("free count: %lu\n", countingAllocatorFreeCount);
-  printf("Total bytes allocated: %lu\n", countingAllocatorTotalByteCount);
+  printf("malloc count: %lu\n", mallocCount);
+  printf("free count: %lu\n", freeCount);
+  printf("Total bytes allocated: %lu\n", totalByteCount);
 }
 
 TloError tloIntPtrConstruct(TloIntPtr *ptr) {
