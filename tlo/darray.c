@@ -248,12 +248,12 @@ void *tloDArrayMutableBack(TloDArray *array) {
 
 static TloError allocateBytesIfNeeded(TloDArray *array) {
   if (!array->bytes) {
-    array->capacity = STARTING_CAPACITY;
-    array->bytes = array->allocatorType->malloc(array->capacity *
+    array->bytes = array->allocatorType->malloc(STARTING_CAPACITY *
                                                 array->valueType->sizeOf);
     if (!array->bytes) {
       return TLO_ERROR;
     }
+    array->capacity = STARTING_CAPACITY;
   }
   return TLO_SUCCESS;
 }
