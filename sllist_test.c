@@ -13,7 +13,7 @@
     TLO_EXPECT(tloSLListAllocatorType(sllist) == (allocatorType)); \
   } while (0)
 
-static void testSLListIntConstructDestructStackSpace(void) {
+static void testSLListIntConstructDestruct(void) {
   TloSLList ints;
 
   TloError error = tloSLListConstruct(&ints, &tloInt, &tloCountingAllocator);
@@ -22,20 +22,6 @@ static void testSLListIntConstructDestructStackSpace(void) {
   EXPECT_SLLIST_PROPERTIES(&ints, 0, true, &tloInt, &tloCountingAllocator);
 
   tloSLListDestruct(&ints);
-}
-
-static void testSLListIntConstructDestructHeapSpace(void) {
-  TloSLList *ints = malloc(sizeof(*ints));
-  TLO_ASSERT(ints);
-
-  TloError error = tloSLListConstruct(ints, &tloInt, &tloCountingAllocator);
-  TLO_ASSERT(!error);
-
-  EXPECT_SLLIST_PROPERTIES(ints, 0, true, &tloInt, &tloCountingAllocator);
-
-  tloSLListDestruct(ints);
-  free(ints);
-  ints = NULL;
 }
 
 static void testSLListIntMakeDelete(void) {
@@ -493,8 +479,7 @@ void testSLList(void) {
              tloCountingAllocatorFreeCount());
   TLO_EXPECT(tloCountingAllocatorTotalByteCount() == 0);
 
-  testSLListIntConstructDestructStackSpace();
-  testSLListIntConstructDestructHeapSpace();
+  testSLListIntConstructDestruct();
   testSLListIntMakeDelete();
   testSLListDestructWithNull();
   testSLListDeleteWithNull();

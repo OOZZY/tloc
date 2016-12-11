@@ -14,7 +14,7 @@
     TLO_EXPECT(tloDArrayAllocatorType(darray) == (allocatorType));  \
   } while (0)
 
-static void testDArrayIntConstructDestructStackSpace(void) {
+static void testDArrayIntConstructDestruct(void) {
   TloDArray ints;
 
   TloError error = tloDArrayConstruct(&ints, &tloInt, &tloCountingAllocator, 0);
@@ -25,20 +25,6 @@ static void testDArrayIntConstructDestructStackSpace(void) {
   tloDArrayDestruct(&ints);
 }
 
-static void testDArrayIntConstructDestructHeapSpace(void) {
-  TloDArray *ints = malloc(sizeof(*ints));
-  TLO_ASSERT(ints);
-
-  TloError error = tloDArrayConstruct(ints, &tloInt, &tloCountingAllocator, 0);
-  TLO_ASSERT(!error);
-
-  EXPECT_DARRAY_PROPERTIES(ints, 0, true, &tloInt, &tloCountingAllocator);
-
-  tloDArrayDestruct(ints);
-  free(ints);
-  ints = NULL;
-}
-
 #define EXPECT_DARRAY_ALL_PROPERTIES(darray, size, capacity, isEmpty,          \
                                      valueType, allocatorType)                 \
   do {                                                                         \
@@ -46,7 +32,7 @@ static void testDArrayIntConstructDestructHeapSpace(void) {
     TLO_EXPECT(tloDArrayCapacity(darray) == (capacity));                       \
   } while (0)
 
-static void testDArrayIntConstructWithCapacityDestructStackSpace(void) {
+static void testDArrayIntConstructWithCapacityDestruct(void) {
   TloDArray ints;
 
   TloError error =
@@ -57,22 +43,6 @@ static void testDArrayIntConstructWithCapacityDestructStackSpace(void) {
                                &tloCountingAllocator);
 
   tloDArrayDestruct(&ints);
-}
-
-static void testDArrayIntConstructWithCapacityDestructHeapSpace(void) {
-  TloDArray *ints = malloc(sizeof(*ints));
-  TLO_ASSERT(ints);
-
-  TloError error =
-      tloDArrayConstruct(ints, &tloInt, &tloCountingAllocator, SOME_NUMBER);
-  TLO_ASSERT(!error);
-
-  EXPECT_DARRAY_ALL_PROPERTIES(ints, 0, SOME_NUMBER, true, &tloInt,
-                               &tloCountingAllocator);
-
-  tloDArrayDestruct(ints);
-  free(ints);
-  ints = NULL;
 }
 
 static void testDArrayIntMakeDelete(void) {
@@ -497,10 +467,8 @@ void testDArray(void) {
              tloCountingAllocatorFreeCount());
   TLO_EXPECT(tloCountingAllocatorTotalByteCount() == 0);
 
-  testDArrayIntConstructDestructStackSpace();
-  testDArrayIntConstructDestructHeapSpace();
-  testDArrayIntConstructWithCapacityDestructStackSpace();
-  testDArrayIntConstructWithCapacityDestructHeapSpace();
+  testDArrayIntConstructDestruct();
+  testDArrayIntConstructWithCapacityDestruct();
   testDArrayIntMakeDelete();
   testDArrayIntMakeWithCapacityDelete();
   testDArrayDestructWithNull();
