@@ -2,6 +2,7 @@
 #define TLO_TEST_H
 
 #include <stdbool.h>
+#include <stdnoreturn.h>
 
 void tloTestExpect(bool isExpect, bool condition, const char *file, int line,
                    const char *func, const char *conditionString);
@@ -19,6 +20,6 @@ void tloTestExpect(bool isExpect, bool condition, const char *file, int line,
   } while (0)
 
 void tloTestPrintReport(void);
-void tloTestExit(void);
+noreturn void tloTestExit(void);
 
 #endif  // TLO_TEST_H
