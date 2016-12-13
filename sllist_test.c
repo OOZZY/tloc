@@ -46,63 +46,42 @@ static void testSLListDeleteWithNull(void) { tloSLListDelete(NULL); }
     TLO_EXPECT(*(int *)tloSLListMutableBack(sllist) == (backValue));   \
   } while (0)
 
-static void testSLListIntPushFrontOnce(void) {
+static void testSLListIntPushOrMoveFrontOnce(bool testPush) {
   TloSLList *ints = tloSLListMake(&tloInt, &tloCountingAllocator);
   TLO_ASSERT(ints);
 
-  TloError error = tloSLListPushFront(ints, &(int){SOME_NUMBER});
-  TLO_ASSERT(!error);
-
-  EXPECT_SLLIST_PROPERTIES(ints, 1, false, &tloInt, &tloCountingAllocator);
-  EXPECT_SLLIST_INT_ELEMENTS(ints, SOME_NUMBER, SOME_NUMBER);
-
-  tloSLListDelete(ints);
-  ints = NULL;
-}
-
-static void testSLListIntMoveFrontOnce(void) {
-  TloSLList *ints = tloSLListMake(&tloInt, &tloCountingAllocator);
-  TLO_ASSERT(ints);
-
-  int value = SOME_NUMBER;
-  TloError error = tloSLListMoveFront(ints, &value);
-  TLO_ASSERT(!error);
-
-  TLO_EXPECT(value == 0);
-  EXPECT_SLLIST_PROPERTIES(ints, 1, false, &tloInt, &tloCountingAllocator);
-  EXPECT_SLLIST_INT_ELEMENTS(ints, SOME_NUMBER, SOME_NUMBER);
-
-  tloSLListDelete(ints);
-  ints = NULL;
-}
-
-static void testSLListIntPushFrontManyTimes(void) {
-  TloSLList *ints = tloSLListMake(&tloInt, &tloCountingAllocator);
-  TLO_ASSERT(ints);
-
-  for (size_t i = 0; i < SOME_NUMBER; ++i) {
-    TloError error = tloSLListPushFront(ints, &(int){(int)i});
+  if (testPush) {
+    TloError error = tloSLListPushFront(ints, &(int){SOME_NUMBER});
     TLO_ASSERT(!error);
-
-    EXPECT_SLLIST_PROPERTIES(ints, i + 1, false, &tloInt,
-                             &tloCountingAllocator);
-    EXPECT_SLLIST_INT_ELEMENTS(ints, (int)i, 0);
-  }
-
-  tloSLListDelete(ints);
-  ints = NULL;
-}
-
-static void testSLListIntMoveFrontManyTimes(void) {
-  TloSLList *ints = tloSLListMake(&tloInt, &tloCountingAllocator);
-  TLO_ASSERT(ints);
-
-  for (size_t i = 0; i < SOME_NUMBER; ++i) {
-    int value = (int)i;
+  } else {
+    int value = SOME_NUMBER;
     TloError error = tloSLListMoveFront(ints, &value);
     TLO_ASSERT(!error);
-
     TLO_EXPECT(value == 0);
+  }
+
+  EXPECT_SLLIST_PROPERTIES(ints, 1, false, &tloInt, &tloCountingAllocator);
+  EXPECT_SLLIST_INT_ELEMENTS(ints, SOME_NUMBER, SOME_NUMBER);
+
+  tloSLListDelete(ints);
+  ints = NULL;
+}
+
+static void testSLListIntPushOrMoveFrontManyTimes(bool testPush) {
+  TloSLList *ints = tloSLListMake(&tloInt, &tloCountingAllocator);
+  TLO_ASSERT(ints);
+
+  for (size_t i = 0; i < SOME_NUMBER; ++i) {
+    if (testPush) {
+      TloError error = tloSLListPushFront(ints, &(int){(int)i});
+      TLO_ASSERT(!error);
+    } else {
+      int value = (int)i;
+      TloError error = tloSLListMoveFront(ints, &value);
+      TLO_ASSERT(!error);
+      TLO_EXPECT(value == 0);
+    }
+
     EXPECT_SLLIST_PROPERTIES(ints, i + 1, false, &tloInt,
                              &tloCountingAllocator);
     EXPECT_SLLIST_INT_ELEMENTS(ints, (int)i, 0);
@@ -150,63 +129,42 @@ static void testSLListIntPushFrontManyTimesPopFrontUntilEmpty(void) {
   ints = NULL;
 }
 
-static void testSLListIntPushBackOnce(void) {
+static void testSLListIntPushOrMoveBackOnce(bool testPush) {
   TloSLList *ints = tloSLListMake(&tloInt, &tloCountingAllocator);
   TLO_ASSERT(ints);
 
-  TloError error = tloSLListPushBack(ints, &(int){SOME_NUMBER});
-  TLO_ASSERT(!error);
-
-  EXPECT_SLLIST_PROPERTIES(ints, 1, false, &tloInt, &tloCountingAllocator);
-  EXPECT_SLLIST_INT_ELEMENTS(ints, SOME_NUMBER, SOME_NUMBER);
-
-  tloSLListDelete(ints);
-  ints = NULL;
-}
-
-static void testSLListIntMoveBackOnce(void) {
-  TloSLList *ints = tloSLListMake(&tloInt, &tloCountingAllocator);
-  TLO_ASSERT(ints);
-
-  int value = SOME_NUMBER;
-  TloError error = tloSLListMoveBack(ints, &value);
-  TLO_ASSERT(!error);
-
-  TLO_EXPECT(value == 0);
-  EXPECT_SLLIST_PROPERTIES(ints, 1, false, &tloInt, &tloCountingAllocator);
-  EXPECT_SLLIST_INT_ELEMENTS(ints, SOME_NUMBER, SOME_NUMBER);
-
-  tloSLListDelete(ints);
-  ints = NULL;
-}
-
-static void testSLListIntPushBackManyTimes(void) {
-  TloSLList *ints = tloSLListMake(&tloInt, &tloCountingAllocator);
-  TLO_ASSERT(ints);
-
-  for (size_t i = 0; i < SOME_NUMBER; ++i) {
-    TloError error = tloSLListPushBack(ints, &(int){(int)i});
+  if (testPush) {
+    TloError error = tloSLListPushBack(ints, &(int){SOME_NUMBER});
     TLO_ASSERT(!error);
-
-    EXPECT_SLLIST_PROPERTIES(ints, i + 1, false, &tloInt,
-                             &tloCountingAllocator);
-    EXPECT_SLLIST_INT_ELEMENTS(ints, 0, (int)i);
-  }
-
-  tloSLListDelete(ints);
-  ints = NULL;
-}
-
-static void testSLListIntMoveBackManyTimes(void) {
-  TloSLList *ints = tloSLListMake(&tloInt, &tloCountingAllocator);
-  TLO_ASSERT(ints);
-
-  for (size_t i = 0; i < SOME_NUMBER; ++i) {
-    int value = (int)i;
+  } else {
+    int value = SOME_NUMBER;
     TloError error = tloSLListMoveBack(ints, &value);
     TLO_ASSERT(!error);
-
     TLO_EXPECT(value == 0);
+  }
+
+  EXPECT_SLLIST_PROPERTIES(ints, 1, false, &tloInt, &tloCountingAllocator);
+  EXPECT_SLLIST_INT_ELEMENTS(ints, SOME_NUMBER, SOME_NUMBER);
+
+  tloSLListDelete(ints);
+  ints = NULL;
+}
+
+static void testSLListIntPushOrMoveBackManyTimes(bool testPush) {
+  TloSLList *ints = tloSLListMake(&tloInt, &tloCountingAllocator);
+  TLO_ASSERT(ints);
+
+  for (size_t i = 0; i < SOME_NUMBER; ++i) {
+    if (testPush) {
+      TloError error = tloSLListPushBack(ints, &(int){(int)i});
+      TLO_ASSERT(!error);
+    } else {
+      int value = (int)i;
+      TloError error = tloSLListMoveBack(ints, &value);
+      TLO_ASSERT(!error);
+      TLO_EXPECT(value == 0);
+    }
+
     EXPECT_SLLIST_PROPERTIES(ints, i + 1, false, &tloInt,
                              &tloCountingAllocator);
     EXPECT_SLLIST_INT_ELEMENTS(ints, 0, (int)i);
@@ -483,16 +441,16 @@ void testSLList(void) {
   testSLListIntMakeDelete();
   testSLListDestructWithNull();
   testSLListDeleteWithNull();
-  testSLListIntPushFrontOnce();
-  testSLListIntMoveFrontOnce();
-  testSLListIntPushFrontManyTimes();
-  testSLListIntMoveFrontManyTimes();
+  testSLListIntPushOrMoveFrontOnce(true);
+  testSLListIntPushOrMoveFrontOnce(false);
+  testSLListIntPushOrMoveFrontManyTimes(true);
+  testSLListIntPushOrMoveFrontManyTimes(false);
   testSLListIntPushFrontOncePopFrontOnce();
   testSLListIntPushFrontManyTimesPopFrontUntilEmpty();
-  testSLListIntPushBackOnce();
-  testSLListIntMoveBackOnce();
-  testSLListIntPushBackManyTimes();
-  testSLListIntMoveBackManyTimes();
+  testSLListIntPushOrMoveBackOnce(true);
+  testSLListIntPushOrMoveBackOnce(false);
+  testSLListIntPushOrMoveBackManyTimes(true);
+  testSLListIntPushOrMoveBackManyTimes(false);
   testSLListIntConstructCopy();
   testSLListIntMakeCopy();
   testSLListIntCopy();
