@@ -298,7 +298,7 @@ static void testSLListIntCopy(void) {
                (backValue));                                         \
   } while (0)
 
-static void testSLListIntPtrPushFrontOnce(void) {
+static void testSLListIntPtrPushOrMoveFrontOnce(bool testPush) {
   TloSLList *intPtrs = tloSLListMake(&tloIntPtr, &tloCountingAllocator);
   TLO_ASSERT(intPtrs);
 
@@ -306,9 +306,13 @@ static void testSLListIntPtrPushFrontOnce(void) {
   TloError error = tloIntPtrConstruct(&intPtr);
   TLO_ASSERT(!error);
   *intPtr.ptr = SOME_NUMBER;
-  error = tloSLListPushFront(intPtrs, &intPtr);
+  if (testPush) {
+    error = tloSLListPushFront(intPtrs, &intPtr);
+    tloPtrDestruct(&intPtr);
+  } else {
+    error = tloSLListMoveFront(intPtrs, &intPtr);
+  }
   TLO_ASSERT(!error);
-  tloPtrDestruct(&intPtr);
 
   EXPECT_SLLIST_PROPERTIES(intPtrs, 1, false, &tloIntPtr,
                            &tloCountingAllocator);
@@ -318,7 +322,7 @@ static void testSLListIntPtrPushFrontOnce(void) {
   intPtrs = NULL;
 }
 
-static void testSLListIntPtrPushFrontManyTimes(void) {
+static void testSLListIntPtrPushOrMoveFrontManyTimes(bool testPush) {
   TloSLList *intPtrs = tloSLListMake(&tloIntPtr, &tloCountingAllocator);
   TLO_ASSERT(intPtrs);
 
@@ -327,9 +331,13 @@ static void testSLListIntPtrPushFrontManyTimes(void) {
     TloError error = tloIntPtrConstruct(&intPtr);
     TLO_ASSERT(!error);
     *intPtr.ptr = (int)i;
-    error = tloSLListPushFront(intPtrs, &intPtr);
+    if (testPush) {
+      error = tloSLListPushFront(intPtrs, &intPtr);
+      tloPtrDestruct(&intPtr);
+    } else {
+      error = tloSLListMoveFront(intPtrs, &intPtr);
+    }
     TLO_ASSERT(!error);
-    tloPtrDestruct(&intPtr);
 
     EXPECT_SLLIST_PROPERTIES(intPtrs, i + 1, false, &tloIntPtr,
                              &tloCountingAllocator);
@@ -388,7 +396,7 @@ static void testSLListIntPtrPushFrontManyTimesPopFrontUntilEmpty(void) {
   intPtrs = NULL;
 }
 
-static void testSLListIntPtrPushBackOnce(void) {
+static void testSLListIntPtrPushOrMoveBackOnce(bool testPush) {
   TloSLList *intPtrs = tloSLListMake(&tloIntPtr, &tloCountingAllocator);
   TLO_ASSERT(intPtrs);
 
@@ -396,9 +404,13 @@ static void testSLListIntPtrPushBackOnce(void) {
   TloError error = tloIntPtrConstruct(&intPtr);
   TLO_ASSERT(!error);
   *intPtr.ptr = SOME_NUMBER;
-  error = tloSLListPushBack(intPtrs, &intPtr);
+  if (testPush) {
+    error = tloSLListPushBack(intPtrs, &intPtr);
+    tloPtrDestruct(&intPtr);
+  } else {
+    error = tloSLListMoveBack(intPtrs, &intPtr);
+  }
   TLO_ASSERT(!error);
-  tloPtrDestruct(&intPtr);
 
   EXPECT_SLLIST_PROPERTIES(intPtrs, 1, false, &tloIntPtr,
                            &tloCountingAllocator);
@@ -408,7 +420,7 @@ static void testSLListIntPtrPushBackOnce(void) {
   intPtrs = NULL;
 }
 
-static void testSLListIntPtrPushBackManyTimes(void) {
+static void testSLListIntPtrPushOrMoveBackManyTimes(bool testPush) {
   TloSLList *intPtrs = tloSLListMake(&tloIntPtr, &tloCountingAllocator);
   TLO_ASSERT(intPtrs);
 
@@ -417,9 +429,13 @@ static void testSLListIntPtrPushBackManyTimes(void) {
     TloError error = tloIntPtrConstruct(&intPtr);
     TLO_ASSERT(!error);
     *intPtr.ptr = (int)i;
-    error = tloSLListPushBack(intPtrs, &intPtr);
+    if (testPush) {
+      error = tloSLListPushBack(intPtrs, &intPtr);
+      tloPtrDestruct(&intPtr);
+    } else {
+      error = tloSLListMoveBack(intPtrs, &intPtr);
+    }
     TLO_ASSERT(!error);
-    tloPtrDestruct(&intPtr);
 
     EXPECT_SLLIST_PROPERTIES(intPtrs, i + 1, false, &tloIntPtr,
                              &tloCountingAllocator);
@@ -454,12 +470,16 @@ void testSLList(void) {
   testSLListIntConstructCopy();
   testSLListIntMakeCopy();
   testSLListIntCopy();
-  testSLListIntPtrPushFrontOnce();
-  testSLListIntPtrPushFrontManyTimes();
+  testSLListIntPtrPushOrMoveFrontOnce(true);
+  testSLListIntPtrPushOrMoveFrontOnce(false);
+  testSLListIntPtrPushOrMoveFrontManyTimes(true);
+  testSLListIntPtrPushOrMoveFrontManyTimes(false);
   testSLListIntPtrPushFrontOncePopFrontOnce();
   testSLListIntPtrPushFrontManyTimesPopFrontUntilEmpty();
-  testSLListIntPtrPushBackOnce();
-  testSLListIntPtrPushBackManyTimes();
+  testSLListIntPtrPushOrMoveBackOnce(true);
+  testSLListIntPtrPushOrMoveBackOnce(false);
+  testSLListIntPtrPushOrMoveBackManyTimes(true);
+  testSLListIntPtrPushOrMoveBackManyTimes(false);
 
   TLO_EXPECT(tloCountingAllocatorMallocCount() > 0);
   TLO_EXPECT(tloCountingAllocatorMallocCount() ==

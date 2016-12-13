@@ -282,7 +282,7 @@ static void testDArrayIntCopy(void) {
                (backValue));                                                  \
   } while (0)
 
-static void testDArrayIntPtrPushBackOnce(void) {
+static void testDArrayIntPtrPushOrMoveBackOnce(bool testPush) {
   TloDArray *intPtrs = tloDArrayMake(&tloIntPtr, &tloCountingAllocator, 0);
   TLO_ASSERT(intPtrs);
 
@@ -290,9 +290,13 @@ static void testDArrayIntPtrPushBackOnce(void) {
   TloError error = tloIntPtrConstruct(&intPtr);
   TLO_ASSERT(!error);
   *intPtr.ptr = SOME_NUMBER;
-  error = tloDArrayPushBack(intPtrs, &intPtr);
+  if (testPush) {
+    error = tloDArrayPushBack(intPtrs, &intPtr);
+    tloPtrDestruct(&intPtr);
+  } else {
+    error = tloDArrayMoveBack(intPtrs, &intPtr);
+  }
   TLO_ASSERT(!error);
-  tloPtrDestruct(&intPtr);
 
   EXPECT_DARRAY_PROPERTIES(intPtrs, 1, false, &tloIntPtr,
                            &tloCountingAllocator);
@@ -303,7 +307,7 @@ static void testDArrayIntPtrPushBackOnce(void) {
   intPtrs = NULL;
 }
 
-static void testDArrayIntPtrPushBackUntilResize(void) {
+static void testDArrayIntPtrPushOrMoveBackUntilResize(bool testPush) {
   TloDArray *intPtrs = tloDArrayMake(&tloIntPtr, &tloCountingAllocator, 0);
   TLO_ASSERT(intPtrs);
 
@@ -312,9 +316,13 @@ static void testDArrayIntPtrPushBackUntilResize(void) {
     TloError error = tloIntPtrConstruct(&intPtr);
     TLO_ASSERT(!error);
     *intPtr.ptr = (int)i;
-    error = tloDArrayPushBack(intPtrs, &intPtr);
+    if (testPush) {
+      error = tloDArrayPushBack(intPtrs, &intPtr);
+      tloPtrDestruct(&intPtr);
+    } else {
+      error = tloDArrayMoveBack(intPtrs, &intPtr);
+    }
     TLO_ASSERT(!error);
-    tloPtrDestruct(&intPtr);
 
     EXPECT_DARRAY_PROPERTIES(intPtrs, i + 1, false, &tloIntPtr,
                              &tloCountingAllocator);
@@ -461,8 +469,10 @@ void testDArray(void) {
   testDArrayIntConstructCopy();
   testDArrayIntMakeCopy();
   testDArrayIntCopy();
-  testDArrayIntPtrPushBackOnce();
-  testDArrayIntPtrPushBackUntilResize();
+  testDArrayIntPtrPushOrMoveBackOnce(true);
+  testDArrayIntPtrPushOrMoveBackOnce(false);
+  testDArrayIntPtrPushOrMoveBackUntilResize(true);
+  testDArrayIntPtrPushOrMoveBackUntilResize(false);
   testDArrayIntPtrPushBackOncePopBackOnce();
   testDArrayIntPtrPushBackUntilResizePopBackUntilEmpty();
   testDArrayIntPtrPushBackUntilResizeUnorderedRemoveBackUntilEmpty();
