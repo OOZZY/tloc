@@ -86,15 +86,15 @@ static void testDArrayIntPushOrMoveBackOnce(bool testPush) {
   TloDArray *ints = tloDArrayMake(&tloInt, &tloCountingAllocator, 0);
   TLO_ASSERT(ints);
 
+  TloError error;
+  int value = SOME_NUMBER;
   if (testPush) {
-    TloError error = tloDArrayPushBack(ints, &(int){SOME_NUMBER});
-    TLO_ASSERT(!error);
+    error = tloDArrayPushBack(ints, &value);
   } else {
-    int value = SOME_NUMBER;
-    TloError error = tloDArrayMoveBack(ints, &value);
-    TLO_ASSERT(!error);
+    error = tloDArrayMoveBack(ints, &value);
     TLO_EXPECT(value == 0);
   }
+  TLO_ASSERT(!error);
 
   EXPECT_DARRAY_PROPERTIES(ints, 1, false, &tloInt, &tloCountingAllocator);
   EXPECT_DARRAY_INT_ELEMENTS(ints, 0, SOME_NUMBER, SOME_NUMBER, SOME_NUMBER);
@@ -108,15 +108,15 @@ static void testDArrayIntPushOrMoveBackUntilResize(bool testPush) {
   TLO_ASSERT(ints);
 
   for (size_t i = 0; i < SOME_NUMBER; ++i) {
+    TloError error;
+    int value = (int)i;
     if (testPush) {
-      TloError error = tloDArrayPushBack(ints, &(int){(int)i});
-      TLO_ASSERT(!error);
+      error = tloDArrayPushBack(ints, &value);
     } else {
-      int value = (int)i;
-      TloError error = tloDArrayMoveBack(ints, &value);
-      TLO_ASSERT(!error);
+      error = tloDArrayMoveBack(ints, &value);
       TLO_EXPECT(value == 0);
     }
+    TLO_ASSERT(!error);
 
     EXPECT_DARRAY_PROPERTIES(ints, i + 1, false, &tloInt,
                              &tloCountingAllocator);
@@ -295,6 +295,7 @@ static void testDArrayIntPtrPushOrMoveBackOnce(bool testPush) {
     tloPtrDestruct(&intPtr);
   } else {
     error = tloDArrayMoveBack(intPtrs, &intPtr);
+    TLO_EXPECT(intPtr.ptr == NULL);
   }
   TLO_ASSERT(!error);
 
@@ -321,6 +322,7 @@ static void testDArrayIntPtrPushOrMoveBackUntilResize(bool testPush) {
       tloPtrDestruct(&intPtr);
     } else {
       error = tloDArrayMoveBack(intPtrs, &intPtr);
+      TLO_EXPECT(intPtr.ptr == NULL);
     }
     TLO_ASSERT(!error);
 
