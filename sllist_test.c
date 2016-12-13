@@ -364,19 +364,19 @@ static void testSLListIntPtrPushFrontManyTimes(void) {
   TloSLList *intPtrs = tloSLListMake(&tloIntPtr, &tloCountingAllocator);
   TLO_ASSERT(intPtrs);
 
-  TloIntPtr intPtr;
-  TloError error = tloIntPtrConstruct(&intPtr);
-  TLO_ASSERT(!error);
   for (size_t i = 0; i < SOME_NUMBER; ++i) {
+    TloIntPtr intPtr;
+    TloError error = tloIntPtrConstruct(&intPtr);
+    TLO_ASSERT(!error);
     *intPtr.ptr = (int)i;
     error = tloSLListPushFront(intPtrs, &intPtr);
     TLO_ASSERT(!error);
+    tloPtrDestruct(&intPtr);
 
     EXPECT_SLLIST_PROPERTIES(intPtrs, i + 1, false, &tloIntPtr,
                              &tloCountingAllocator);
     EXPECT_SLLIST_INPTR_ELEMENTS(intPtrs, (int)i, 0);
   }
-  tloPtrDestruct(&intPtr);
 
   tloSLListDelete(intPtrs);
   intPtrs = NULL;
@@ -406,15 +406,15 @@ static void testSLListIntPtrPushFrontManyTimesPopFrontUntilEmpty(void) {
   TloSLList *intPtrs = tloSLListMake(&tloIntPtr, &tloCountingAllocator);
   TLO_ASSERT(intPtrs);
 
-  TloIntPtr intPtr;
-  TloError error = tloIntPtrConstruct(&intPtr);
-  TLO_ASSERT(!error);
   for (size_t i = 0; i < SOME_NUMBER; ++i) {
+    TloIntPtr intPtr;
+    TloError error = tloIntPtrConstruct(&intPtr);
+    TLO_ASSERT(!error);
     *intPtr.ptr = (int)i;
     error = tloSLListPushFront(intPtrs, &intPtr);
     TLO_ASSERT(!error);
+    tloPtrDestruct(&intPtr);
   }
-  tloPtrDestruct(&intPtr);
 
   for (size_t i = SOME_NUMBER - 1; i <= SOME_NUMBER - 1; --i) {
     EXPECT_SLLIST_PROPERTIES(intPtrs, i + 1, false, &tloIntPtr,
@@ -454,19 +454,19 @@ static void testSLListIntPtrPushBackManyTimes(void) {
   TloSLList *intPtrs = tloSLListMake(&tloIntPtr, &tloCountingAllocator);
   TLO_ASSERT(intPtrs);
 
-  TloIntPtr intPtr;
-  TloError error = tloIntPtrConstruct(&intPtr);
-  TLO_ASSERT(!error);
   for (size_t i = 0; i < SOME_NUMBER; ++i) {
+    TloIntPtr intPtr;
+    TloError error = tloIntPtrConstruct(&intPtr);
+    TLO_ASSERT(!error);
     *intPtr.ptr = (int)i;
     error = tloSLListPushBack(intPtrs, &intPtr);
     TLO_ASSERT(!error);
+    tloPtrDestruct(&intPtr);
 
     EXPECT_SLLIST_PROPERTIES(intPtrs, i + 1, false, &tloIntPtr,
                              &tloCountingAllocator);
     EXPECT_SLLIST_INPTR_ELEMENTS(intPtrs, 0, (int)i);
   }
-  tloPtrDestruct(&intPtr);
 
   tloSLListDelete(intPtrs);
   intPtrs = NULL;

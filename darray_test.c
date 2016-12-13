@@ -328,19 +328,19 @@ static void testDArrayIntPtrPushBackUntilResize(void) {
   TloDArray *intPtrs = tloDArrayMake(&tloIntPtr, &tloCountingAllocator, 0);
   TLO_ASSERT(intPtrs);
 
-  TloIntPtr intPtr;
-  TloError error = tloIntPtrConstruct(&intPtr);
-  TLO_ASSERT(!error);
   for (size_t i = 0; i < SOME_NUMBER; ++i) {
+    TloIntPtr intPtr;
+    TloError error = tloIntPtrConstruct(&intPtr);
+    TLO_ASSERT(!error);
     *intPtr.ptr = (int)i;
     error = tloDArrayPushBack(intPtrs, &intPtr);
     TLO_ASSERT(!error);
+    tloPtrDestruct(&intPtr);
 
     EXPECT_DARRAY_PROPERTIES(intPtrs, i + 1, false, &tloIntPtr,
                              &tloCountingAllocator);
     EXPECT_DARRAY_INTPTR_ELEMENTS(intPtrs, i, (int)i, 0, (int)i);
   }
-  tloPtrDestruct(&intPtr);
 
   tloDArrayDelete(intPtrs);
   intPtrs = NULL;
@@ -370,15 +370,15 @@ static void testDArrayIntPtrPushBackUntilResizePopBackUntilEmpty(void) {
   TloDArray *intPtrs = tloDArrayMake(&tloIntPtr, &tloCountingAllocator, 0);
   TLO_ASSERT(intPtrs);
 
-  TloIntPtr intPtr;
-  TloError error = tloIntPtrConstruct(&intPtr);
-  TLO_ASSERT(!error);
   for (size_t i = 0; i < SOME_NUMBER; ++i) {
+    TloIntPtr intPtr;
+    TloError error = tloIntPtrConstruct(&intPtr);
+    TLO_ASSERT(!error);
     *intPtr.ptr = (int)i;
     error = tloDArrayPushBack(intPtrs, &intPtr);
     TLO_ASSERT(!error);
+    tloPtrDestruct(&intPtr);
   }
-  tloPtrDestruct(&intPtr);
 
   for (size_t i = SOME_NUMBER - 1; i <= SOME_NUMBER - 1; --i) {
     EXPECT_DARRAY_PROPERTIES(intPtrs, i + 1, false, &tloIntPtr,
@@ -399,15 +399,15 @@ static void testDArrayIntPtrPushBackUntilResizeUnorderedRemoveBackUntilEmpty(
   TloDArray *intPtrs = tloDArrayMake(&tloIntPtr, &tloCountingAllocator, 0);
   TLO_ASSERT(intPtrs);
 
-  TloIntPtr intPtr;
-  TloError error = tloIntPtrConstruct(&intPtr);
-  TLO_ASSERT(!error);
   for (size_t i = 0; i < SOME_NUMBER; ++i) {
+    TloIntPtr intPtr;
+    TloError error = tloIntPtrConstruct(&intPtr);
+    TLO_ASSERT(!error);
     *intPtr.ptr = (int)i;
     error = tloDArrayPushBack(intPtrs, &intPtr);
     TLO_ASSERT(!error);
+    tloPtrDestruct(&intPtr);
   }
-  tloPtrDestruct(&intPtr);
 
   for (size_t i = SOME_NUMBER - 1; i <= SOME_NUMBER - 1; --i) {
     EXPECT_DARRAY_PROPERTIES(intPtrs, i + 1, false, &tloIntPtr,
@@ -428,15 +428,15 @@ static void testDArrayIntPtrPushBackUntilResizeUnorderedRemoveFrontUntilEmpty(
   TloDArray *intPtrs = tloDArrayMake(&tloIntPtr, &tloCountingAllocator, 0);
   TLO_ASSERT(intPtrs);
 
-  TloIntPtr intPtr;
-  TloError error = tloIntPtrConstruct(&intPtr);
-  TLO_ASSERT(!error);
   for (size_t i = 0; i < SOME_NUMBER; ++i) {
+    TloIntPtr intPtr;
+    TloError error = tloIntPtrConstruct(&intPtr);
+    TLO_ASSERT(!error);
     *intPtr.ptr = (int)i;
     error = tloDArrayPushBack(intPtrs, &intPtr);
     TLO_ASSERT(!error);
+    tloPtrDestruct(&intPtr);
   }
-  tloPtrDestruct(&intPtr);
 
   for (size_t i = SOME_NUMBER - 1; i <= SOME_NUMBER - 1; --i) {
     EXPECT_DARRAY_PROPERTIES(intPtrs, i + 1, false, &tloIntPtr,
