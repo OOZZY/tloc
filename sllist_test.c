@@ -95,7 +95,8 @@ static void testSLListIntPushFrontOncePopFrontOnce(void) {
   TloSLList *ints = tloSLListMake(&tloInt, &tloCountingAllocator);
   TLO_ASSERT(ints);
 
-  TloError error = tloSLListPushFront(ints, &(int){SOME_NUMBER});
+  int value = SOME_NUMBER;
+  TloError error = tloSLListPushFront(ints, &value);
   TLO_ASSERT(!error);
 
   tloSLListPopFront(ints);
@@ -111,7 +112,8 @@ static void testSLListIntPushFrontManyTimesPopFrontUntilEmpty(void) {
   TLO_ASSERT(ints);
 
   for (size_t i = 0; i < SOME_NUMBER; ++i) {
-    TloError error = tloSLListPushFront(ints, &(int){(int)i});
+    int value = (int)i;
+    TloError error = tloSLListPushFront(ints, &value);
     TLO_ASSERT(!error);
   }
 

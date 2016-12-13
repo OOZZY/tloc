@@ -131,7 +131,8 @@ static void testDArrayIntPushBackOncePopBackOnce(void) {
   TloDArray *ints = tloDArrayMake(&tloInt, &tloCountingAllocator, 0);
   TLO_ASSERT(ints);
 
-  TloError error = tloDArrayPushBack(ints, &(int){SOME_NUMBER});
+  int value = SOME_NUMBER;
+  TloError error = tloDArrayPushBack(ints, &value);
   TLO_ASSERT(!error);
 
   tloDArrayPopBack(ints);
@@ -147,7 +148,8 @@ static void testDArrayIntPushBackUntilResizePopBackUntilEmpty(void) {
   TLO_ASSERT(ints);
 
   for (size_t i = 0; i < SOME_NUMBER; ++i) {
-    TloError error = tloDArrayPushBack(ints, &(int){(int)i});
+    int value = (int)i;
+    TloError error = tloDArrayPushBack(ints, &value);
     TLO_ASSERT(!error);
   }
 
