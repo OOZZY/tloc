@@ -1,4 +1,13 @@
-# Clone, Build, and Test
+# tloc
+
+A C library.
+
+## Build Requirements
+
+* CMake
+* C11 development environment for which CMake can generate build files
+
+## Clone, Build, and Test
 
 ```
 $ git clone <url/to/tloc.git> # clone into tloc directory
