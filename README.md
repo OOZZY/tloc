@@ -10,7 +10,7 @@ A C library.
 ## Clone, Build, and Test
 
 ```
-$ git clone <url/to/tloc.git> # clone into tloc directory
+$ git clone --branch develop <url/to/tloc.git> # clone into tloc directory
 $ mkdir tlocbuild
 $ cd tlocbuild
 $ cmake -G 'Unix Makefiles' -DCMAKE_BUILD_TYPE=Debug ../tloc
