@@ -9,12 +9,29 @@ A C library.
 
 ## Clone, Build, and Test
 
+Clone into tloc directory.
+
 ```
-$ git clone --branch develop <url/to/tloc.git> # clone into tloc directory
+$ git clone --branch develop <url/to/tloc.git>
+```
+
+Build.
+
+```
 $ mkdir tlocbuild
 $ cd tlocbuild
 $ cmake -G 'Unix Makefiles' -DCMAKE_BUILD_TYPE=Debug ../tloc
 $ make
-$ make test # run tests with make
-$ ./tloc_test # run tests directly
+```
+
+Run tests with make.
+
+```
+$ make test
+```
+
+Run tests directly.
+
+```
+$ ./tloc_test
 ```
