@@ -3,8 +3,8 @@
 #include <stdlib.h>
 
 static int numExpects = 0;
-static int numExpectsFailed = 0;
 static int numAsserts = 0;
+static int numExpectsFailed = 0;
 static int numAssertsFailed = 0;
 
 void tloTestExpect(bool isExpect, bool condition, const char *file, int line,
@@ -31,8 +31,8 @@ void tloTestExpect(bool isExpect, bool condition, const char *file, int line,
 void tloTestPrintReport(void) {
   printf("=========================\n");
   printf("# expects       : %d\n", numExpects);
-  printf("# expects failed: %d\n", numExpectsFailed);
   printf("# asserts       : %d\n", numAsserts);
+  printf("# expects failed: %d\n", numExpectsFailed);
   printf("# asserts failed: %d\n", numAssertsFailed);
   printf("=========================\n");
 }
