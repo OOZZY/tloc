@@ -39,7 +39,9 @@ void tloTestPrintReport(void) {
 
 void tloTestExit(void) {
   if (numExpectsFailed || numAssertsFailed) {
+    puts("[ FAILED  ]");
     exit(EXIT_FAILURE);
   }
+  puts("[ PASSED  ]");
   exit(EXIT_SUCCESS);
 }

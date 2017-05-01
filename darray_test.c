@@ -4,6 +4,14 @@
 #include <tlo/test.h>
 #include "tloc_test.h"
 
+static void testDArrayInitialCounts(void) {
+  tloCountingAllocatorResetCounts();
+  TLO_EXPECT(tloCountingAllocatorMallocCount() == 0);
+  TLO_EXPECT(tloCountingAllocatorMallocCount() ==
+             tloCountingAllocatorFreeCount());
+  TLO_EXPECT(tloCountingAllocatorTotalByteCount() == 0);
+}
+
 #define EXPECT_DARRAY_PROPERTIES(darray, size, isEmpty, valueType,  \
                                  allocatorType)                     \
   do {                                                              \
@@ -451,13 +459,18 @@ static void testDArrayIntPtrPushBackUntilResizeUnorderedRemoveFrontUntilEmpty(
   intPtrs = NULL;
 }
 
-void testDArray(void) {
-  tloCountingAllocatorResetCounts();
-  TLO_EXPECT(tloCountingAllocatorMallocCount() == 0);
+static void testDArrayFinalCounts() {
+  TLO_EXPECT(tloCountingAllocatorMallocCount() > 0);
   TLO_EXPECT(tloCountingAllocatorMallocCount() ==
              tloCountingAllocatorFreeCount());
-  TLO_EXPECT(tloCountingAllocatorTotalByteCount() == 0);
+  TLO_EXPECT(tloCountingAllocatorTotalByteCount() > 0);
 
+  printf("sizeof(TloDArray): %zu\n", sizeof(TloDArray));
+  tloCountingAllocatorPrintCounts();
+}
+
+void testDArray(void) {
+  testDArrayInitialCounts();
   testDArrayIntConstructDestruct();
   testDArrayIntConstructWithCapacityDestruct();
   testDArrayIntMakeDelete();
@@ -481,14 +494,7 @@ void testDArray(void) {
   testDArrayIntPtrPushBackUntilResizePopBackUntilEmpty();
   testDArrayIntPtrPushBackUntilResizeUnorderedRemoveBackUntilEmpty();
   testDArrayIntPtrPushBackUntilResizeUnorderedRemoveFrontUntilEmpty();
-
-  TLO_EXPECT(tloCountingAllocatorMallocCount() > 0);
-  TLO_EXPECT(tloCountingAllocatorMallocCount() ==
-             tloCountingAllocatorFreeCount());
-  TLO_EXPECT(tloCountingAllocatorTotalByteCount() > 0);
-
-  printf("sizeof(TloDArray): %zu\n", sizeof(TloDArray));
-  tloCountingAllocatorPrintCounts();
+  testDArrayFinalCounts();
   puts("==================");
   puts("DArray tests done.");
   puts("==================");

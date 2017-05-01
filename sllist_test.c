@@ -4,6 +4,14 @@
 #include <tlo/test.h>
 #include "tloc_test.h"
 
+static void testSLListInitialCounts() {
+  tloCountingAllocatorResetCounts();
+  TLO_EXPECT(tloCountingAllocatorMallocCount() == 0);
+  TLO_EXPECT(tloCountingAllocatorMallocCount() ==
+             tloCountingAllocatorFreeCount());
+  TLO_EXPECT(tloCountingAllocatorTotalByteCount() == 0);
+}
+
 #define EXPECT_SLLIST_PROPERTIES(sllist, size, isEmpty, valueType, \
                                  allocatorType)                    \
   do {                                                             \
@@ -452,13 +460,19 @@ static void testSLListIntPtrPushOrMoveBackManyTimes(bool testPush) {
   intPtrs = NULL;
 }
 
-void testSLList(void) {
-  tloCountingAllocatorResetCounts();
-  TLO_EXPECT(tloCountingAllocatorMallocCount() == 0);
+static void testSLListFinalCounts() {
+  TLO_EXPECT(tloCountingAllocatorMallocCount() > 0);
   TLO_EXPECT(tloCountingAllocatorMallocCount() ==
              tloCountingAllocatorFreeCount());
-  TLO_EXPECT(tloCountingAllocatorTotalByteCount() == 0);
+  TLO_EXPECT(tloCountingAllocatorTotalByteCount() > 0);
 
+  printf("sizeof(TloSLList): %zu\n", sizeof(TloSLList));
+  printf("sizeof(TloSLLNode): %zu\n", sizeof(TloSLLNode));
+  tloCountingAllocatorPrintCounts();
+}
+
+void testSLList(void) {
+  testSLListInitialCounts();
   testSLListIntConstructDestruct();
   testSLListIntMakeDelete();
   testSLListDestructWithNull();
@@ -486,15 +500,7 @@ void testSLList(void) {
   testSLListIntPtrPushOrMoveBackOnce(false);
   testSLListIntPtrPushOrMoveBackManyTimes(true);
   testSLListIntPtrPushOrMoveBackManyTimes(false);
-
-  TLO_EXPECT(tloCountingAllocatorMallocCount() > 0);
-  TLO_EXPECT(tloCountingAllocatorMallocCount() ==
-             tloCountingAllocatorFreeCount());
-  TLO_EXPECT(tloCountingAllocatorTotalByteCount() > 0);
-
-  printf("sizeof(TloSLList): %zu\n", sizeof(TloSLList));
-  printf("sizeof(TloSLLNode): %zu\n", sizeof(TloSLLNode));
-  tloCountingAllocatorPrintCounts();
+  testSLListFinalCounts();
   puts("==================");
   puts("SLList tests done.");
   puts("==================");
