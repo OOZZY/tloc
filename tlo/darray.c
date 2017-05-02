@@ -218,28 +218,28 @@ const void *tloDArrayFront(const TloDArray *array) {
   assert(tloDArrayIsValid(array));
   assert(!tloDArrayIsEmpty(array));
 
-  return tloDArrayElement(array, 0);
+  return constElement(array, 0);
 }
 
 void *tloDArrayMutableFront(TloDArray *array) {
   assert(tloDArrayIsValid(array));
   assert(!tloDArrayIsEmpty(array));
 
-  return tloDArrayMutableElement(array, 0);
+  return mutableElement(array, 0);
 }
 
 const void *tloDArrayBack(const TloDArray *array) {
   assert(tloDArrayIsValid(array));
   assert(!tloDArrayIsEmpty(array));
 
-  return tloDArrayElement(array, array->size - 1);
+  return constElement(array, array->size - 1);
 }
 
 void *tloDArrayMutableBack(TloDArray *array) {
   assert(tloDArrayIsValid(array));
   assert(!tloDArrayIsEmpty(array));
 
-  return tloDArrayMutableElement(array, array->size - 1);
+  return mutableElement(array, array->size - 1);
 }
 
 #define STARTING_CAPACITY 2
