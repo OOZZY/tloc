@@ -242,7 +242,7 @@ void *tloDArrayMutableBack(TloDArray *array) {
   return mutableElement(array, array->size - 1);
 }
 
-#define STARTING_CAPACITY 2
+#define STARTING_CAPACITY 1
 
 static TloError allocateBytesIfNeeded(TloDArray *array) {
   if (!array->bytes) {
