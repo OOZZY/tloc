@@ -37,20 +37,18 @@ TloError tloDArrayConstruct(TloDArray *array, const TloType *valueType,
   return TLO_SUCCESS;
 }
 
-static const void *constElement(const void *bytes, size_t index,
-                                size_t sizeOfElement) {
-  return (const char *)bytes + index * sizeOfElement;
+static const void *constElement(const TloDArray *array, size_t index) {
+  return (const char *)array->bytes + index * array->valueType->sizeOf;
 }
 
-static void *mutableElement(void *bytes, size_t index, size_t sizeOfElement) {
-  return (char *)bytes + index * sizeOfElement;
+static void *mutableElement(TloDArray *array, size_t index) {
+  return (char *)array->bytes + index * array->valueType->sizeOf;
 }
 
 static TloError pushBackAllElementsOfOther(TloDArray *array,
                                            const TloDArray *other) {
   for (size_t i = 0; i < other->size; ++i) {
-    const void *element =
-        constElement(other->bytes, i, other->valueType->sizeOf);
+    const void *element = constElement(other, i);
     if (tloDArrayPushBack(array, element) == TLO_ERROR) {
       tloDArrayDestruct(array);
       return TLO_ERROR;
@@ -78,7 +76,7 @@ TloError tloDArrayConstructCopy(TloDArray *array, const TloDArray *other) {
 
 static void destructAllElements(TloDArray *array) {
   for (size_t i = 0; i < array->size; ++i) {
-    void *element = mutableElement(array->bytes, i, array->valueType->sizeOf);
+    void *element = mutableElement(array, i);
     if (array->valueType->destruct) {
       array->valueType->destruct(element);
     }
@@ -205,7 +203,7 @@ const void *tloDArrayElement(const TloDArray *array, size_t index) {
   assert(!tloDArrayIsEmpty(array));
   assert(index < array->size);
 
-  return constElement(array->bytes, index, array->valueType->sizeOf);
+  return constElement(array, index);
 }
 
 void *tloDArrayMutableElement(TloDArray *array, size_t index) {
@@ -213,7 +211,7 @@ void *tloDArrayMutableElement(TloDArray *array, size_t index) {
   assert(!tloDArrayIsEmpty(array));
   assert(index < array->size);
 
-  return mutableElement(array->bytes, index, array->valueType->sizeOf);
+  return mutableElement(array, index);
 }
 
 const void *tloDArrayFront(const TloDArray *array) {
@@ -277,8 +275,7 @@ static TloError resizeBytesIfNeeded(TloDArray *array) {
 }
 
 static TloError pushBackCopiedData(TloDArray *array, const void *data) {
-  void *destination =
-      mutableElement(array->bytes, array->size, array->valueType->sizeOf);
+  void *destination = mutableElement(array, array->size);
 
   if (array->valueType->constructCopy) {
     if (array->valueType->constructCopy(destination, data) == TLO_ERROR) {
@@ -313,8 +310,7 @@ TloError tloDArrayPushBack(TloDArray *array, const void *data) {
 }
 
 static TloError pushBackMovedData(TloDArray *array, void *data) {
-  void *destination =
-      mutableElement(array->bytes, array->size, array->valueType->sizeOf);
+  void *destination = mutableElement(array, array->size);
 
   memcpy(destination, data, array->valueType->sizeOf);
   memset(data, 0, array->valueType->sizeOf);
@@ -347,8 +343,7 @@ void tloDArrayPopBack(TloDArray *array) {
   assert(tloDArrayIsValid(array));
   assert(!tloDArrayIsEmpty(array));
 
-  void *back =
-      mutableElement(array->bytes, array->size - 1, array->valueType->sizeOf);
+  void *back = mutableElement(array, array->size - 1);
   if (array->valueType->destruct) {
     array->valueType->destruct(back);
   }
@@ -365,12 +360,11 @@ void tloDArrayUnorderedRemove(TloDArray *array, size_t index) {
     return;
   }
 
-  void *target = mutableElement(array->bytes, index, array->valueType->sizeOf);
+  void *target = mutableElement(array, index);
   if (array->valueType->destruct) {
     array->valueType->destruct(target);
   }
-  void *back =
-      mutableElement(array->bytes, array->size - 1, array->valueType->sizeOf);
+  void *back = mutableElement(array, array->size - 1);
   memcpy(target, back, array->valueType->sizeOf);
   --array->size;
 }
