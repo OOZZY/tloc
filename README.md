@@ -33,5 +33,5 @@ $ make test
 Run tests directly.
 
 ```
-$ ./tloc_test
+$ ./test/tloc_test
 ```
