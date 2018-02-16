@@ -1,6 +1,6 @@
-add_custom_target(tloc_test_headers SOURCES tloc_test.h)
-
-add_executable(tloc_test darray_test.c sllist_test.c tloc_test.c)
+set(tloc_test_headers tloc_test.h)
+set(tloc_test_sources darray_test.c sllist_test.c tloc_test.c)
+add_executable(tloc_test ${tloc_test_headers} ${tloc_test_sources})
 target_include_directories(tloc_test PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 if (MINGW)
   # make both gcc and clang of MSYS2 use the MinGW-w64 version of the printf

@@ -1,2 +1,12 @@
-add_library(tloc STATIC util.c darray.c sllist.c test.c)
+macro(prepend listVar prefix)
+   set(${listVar} "")
+   foreach(item ${ARGN})
+      list(APPEND ${listVar} ${prefix}${item})
+   endforeach(item)
+endmacro(prepend)
+
+set(tloc_headers util.h darray.h sllist.h test.h)
+set(tloc_sources util.c darray.c sllist.c test.c)
+prepend(tloc_headers ${PROJECT_SOURCE_DIR}/include/tlo/ ${tloc_headers})
+add_library(tloc STATIC ${tloc_headers} ${tloc_sources})
 target_include_directories(tloc PUBLIC ${PROJECT_SOURCE_DIR}/include)
