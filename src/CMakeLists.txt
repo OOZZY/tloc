@@ -9,10 +9,10 @@ if ("${CMAKE_C_COMPILER_ID}" STREQUAL "GNU" OR
     "${CMAKE_C_COMPILER_ID}" STREQUAL "Clang")
   if (TLOC_USE_ASAN)
     set(sanitizer_compile_options -fsanitize=address -fsanitize=undefined -O1 -fno-omit-frame-pointer -fno-optimize-sibling-calls)
-    set(sanitizer_link_options -fsanitize=address)
+    set(sanitizer_link_options -fsanitize=address -fsanitize=undefined)
   elseif(TLOC_USE_MSAN)
     set(sanitizer_compile_options -fsanitize=memory -fsanitize=undefined -O1 -fno-omit-frame-pointer -fno-optimize-sibling-calls)
-    set(sanitizer_link_options -fsanitize=memory)
+    set(sanitizer_link_options -fsanitize=memory -fsanitize=undefined)
   endif()
 endif()
 
