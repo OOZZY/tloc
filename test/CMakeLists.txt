@@ -1,8 +1,13 @@
 if (MINGW)
-  # make both gcc and clang of MSYS2 use the MinGW-w64 version of the printf
-  # family which supports %zu
-  set(mingw_compile_options -Wno-used-but-marked-unused)
-  set(mingw_compile_definitions __USE_MINGW_ANSI_STDIO=1)
+  if ("${CMAKE_C_COMPILER_ID}" STREQUAL "GNU" OR
+      "${CMAKE_C_COMPILER_ID}" STREQUAL "Clang")
+    # make both gcc and clang of MSYS2 use the MinGW-w64 version of the printf
+    # family which supports %zu
+    set(mingw_compile_definitions __USE_MINGW_ANSI_STDIO=1)
+    if ("${CMAKE_C_COMPILER_ID}" STREQUAL "Clang")
+      set(mingw_compile_options -Wno-used-but-marked-unused)
+    endif()
+  endif()
 endif()
 
 set(tloc_test_headers tloc_test.h)
