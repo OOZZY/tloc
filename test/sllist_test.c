@@ -3,6 +3,7 @@
 #include <tlo/sllist.h>
 #include <tlo/test.h>
 #include "tloc_test.h"
+#include "util.h"
 
 static void testSLListInitialCounts() {
   tloCountingAllocatorResetCounts();

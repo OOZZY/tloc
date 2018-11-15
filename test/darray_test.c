@@ -3,6 +3,7 @@
 #include <tlo/darray.h>
 #include <tlo/test.h>
 #include "tloc_test.h"
+#include "util.h"
 
 static void testDArrayInitialCounts(void) {
   tloCountingAllocatorResetCounts();
