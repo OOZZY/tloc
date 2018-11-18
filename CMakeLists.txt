@@ -11,6 +11,9 @@ if ("${CMAKE_C_COMPILER_ID}" STREQUAL "Clang")
   set(global_compile_options ${global_compile_options} -Weverything)
 endif()
 
+option(TLOC_USE_ASAN_UBSAN "Tell the compiler to use ASan and UBSan (GNU/Clang only)." OFF)
+option(TLOC_USE_MSAN_UBSAN "Tell the compiler to use MSan and UBSan (Clang only)." OFF)
+
 option(TLOC_COLORED_DIAGNOSTICS "Tell the compiler to use colors in diagnostics (GNU/Clang only)." ON)
 if (TLOC_COLORED_DIAGNOSTICS)
   if ("${CMAKE_C_COMPILER_ID}" STREQUAL "GNU")

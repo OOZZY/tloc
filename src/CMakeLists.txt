@@ -5,12 +5,16 @@ macro(prepend listVar prefix)
    endforeach(item)
 endmacro(prepend)
 
-if ("${CMAKE_C_COMPILER_ID}" STREQUAL "GNU" OR
-    "${CMAKE_C_COMPILER_ID}" STREQUAL "Clang")
-  if (TLOC_USE_ASAN)
+if (TLOC_USE_ASAN_UBSAN AND NOT TLOC_USE_MSAN_UBSAN)
+  if ("${CMAKE_C_COMPILER_ID}" STREQUAL "GNU" OR
+      "${CMAKE_C_COMPILER_ID}" STREQUAL "Clang")
     set(sanitizer_compile_options -fsanitize=address -fsanitize=undefined -O1 -fno-omit-frame-pointer -fno-optimize-sibling-calls)
     set(sanitizer_link_options -fsanitize=address -fsanitize=undefined)
-  elseif(TLOC_USE_MSAN)
+  endif()
+endif()
+
+if (TLOC_USE_MSAN_UBSAN AND NOT TLOC_USE_ASAN_UBSAN)
+  if ("${CMAKE_C_COMPILER_ID}" STREQUAL "Clang")
     set(sanitizer_compile_options -fsanitize=memory -fsanitize=undefined -O1 -fno-omit-frame-pointer -fno-optimize-sibling-calls)
     set(sanitizer_link_options -fsanitize=memory -fsanitize=undefined)
   endif()
