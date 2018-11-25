@@ -3,19 +3,19 @@
 
 #include <tlo/util.h>
 
-extern const TloAllocatorType tloCountingAllocator;
-void tloCountingAllocatorResetCounts(void);
-unsigned long tloCountingAllocatorMallocCount(void);
-unsigned long tloCountingAllocatorFreeCount(void);
-unsigned long tloCountingAllocatorTotalByteCount(void);
-void tloCountingAllocatorPrintCounts(void);
+extern const TloAllocatorType countingAllocator;
+void countingAllocatorResetCounts(void);
+unsigned long countingAllocatorMallocCount(void);
+unsigned long countingAllocatorFreeCount(void);
+unsigned long countingAllocatorTotalByteCount(void);
+void countingAllocatorPrintCounts(void);
 
-typedef struct TloIntPtr {
+typedef struct IntPtr {
   int *ptr;
-} TloIntPtr;
+} IntPtr;
 
-TloError tloIntPtrConstruct(TloIntPtr *ptr);
-TloError tloIntPtrConstructCopy(TloIntPtr *ptr, const TloIntPtr *other);
-extern const TloType tloIntPtr;
+TloError intPtrConstruct(IntPtr *ptr);
+TloError intPtrConstructCopy(IntPtr *ptr, const IntPtr *other);
+extern const TloType intPtrType;
 
 #endif  // UTIL_H

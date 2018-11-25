@@ -21,30 +21,28 @@ static void countingAllocatorFree(void *bytes) {
   free(bytes);
 }
 
-const TloAllocatorType tloCountingAllocator = {
-    .malloc = countingAllocatorMalloc, .free = countingAllocatorFree};
+const TloAllocatorType countingAllocator = {.malloc = countingAllocatorMalloc,
+                                            .free = countingAllocatorFree};
 
-void tloCountingAllocatorResetCounts(void) {
+void countingAllocatorResetCounts(void) {
   mallocCount = 0;
   freeCount = 0;
   totalByteCount = 0;
 }
 
-unsigned long tloCountingAllocatorMallocCount(void) { return mallocCount; }
+unsigned long countingAllocatorMallocCount(void) { return mallocCount; }
 
-unsigned long tloCountingAllocatorFreeCount(void) { return freeCount; }
+unsigned long countingAllocatorFreeCount(void) { return freeCount; }
 
-unsigned long tloCountingAllocatorTotalByteCount(void) {
-  return totalByteCount;
-}
+unsigned long countingAllocatorTotalByteCount(void) { return totalByteCount; }
 
-void tloCountingAllocatorPrintCounts(void) {
+void countingAllocatorPrintCounts(void) {
   printf("malloc count: %lu\n", mallocCount);
   printf("free count: %lu\n", freeCount);
   printf("Total bytes allocated: %lu\n", totalByteCount);
 }
 
-TloError tloIntPtrConstruct(TloIntPtr *ptr) {
+TloError intPtrConstruct(IntPtr *ptr) {
   assert(ptr);
 
   int *newPtr = malloc(sizeof(int));
@@ -57,11 +55,11 @@ TloError tloIntPtrConstruct(TloIntPtr *ptr) {
   return TLO_SUCCESS;
 }
 
-TloError tloIntPtrConstructCopy(TloIntPtr *ptr, const TloIntPtr *other) {
+TloError intPtrConstructCopy(IntPtr *ptr, const IntPtr *other) {
   assert(ptr);
   assert(other && other->ptr);
 
-  if (tloIntPtrConstruct(ptr) == TLO_ERROR) {
+  if (intPtrConstruct(ptr) == TLO_ERROR) {
     return TLO_ERROR;
   }
 
@@ -70,10 +68,10 @@ TloError tloIntPtrConstructCopy(TloIntPtr *ptr, const TloIntPtr *other) {
   return TLO_SUCCESS;
 }
 
-static TloError intPtrConstructCopy(void *bytes, const void *data) {
-  return tloIntPtrConstructCopy(bytes, data);
+static TloError intPtrTypeConstructCopy(void *bytes, const void *data) {
+  return intPtrConstructCopy(bytes, data);
 }
 
-const TloType tloIntPtr = {.sizeOf = sizeof(TloIntPtr),
-                           .constructCopy = intPtrConstructCopy,
-                           .destruct = tloPtrDestruct};
+const TloType intPtrType = {.sizeOf = sizeof(IntPtr),
+                            .constructCopy = intPtrTypeConstructCopy,
+                            .destruct = tloPtrDestruct};
