@@ -14,7 +14,7 @@ typedef struct IntPtr {
   int *ptr;
 } IntPtr;
 
-TloError intPtrConstruct(IntPtr *ptr);
+TloError intPtrConstruct(IntPtr *ptr, int value);
 TloError intPtrConstructCopy(IntPtr *ptr, const IntPtr *other);
 extern const TloType intPtrType;
 

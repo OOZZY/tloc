@@ -308,9 +308,8 @@ static void testSLListIntPtrPushOrMoveFrontOnce(bool testPush) {
   TLO_ASSERT(intPtrs);
 
   IntPtr intPtr;
-  TloError error = intPtrConstruct(&intPtr);
+  TloError error = intPtrConstruct(&intPtr, SOME_NUMBER);
   TLO_ASSERT(!error);
-  *intPtr.ptr = SOME_NUMBER;
   if (testPush) {
     error = tloSLListPushFront(intPtrs, &intPtr);
     tloPtrDestruct(&intPtr);
@@ -333,9 +332,8 @@ static void testSLListIntPtrPushOrMoveFrontManyTimes(bool testPush) {
 
   for (size_t i = 0; i < SOME_NUMBER; ++i) {
     IntPtr intPtr;
-    TloError error = intPtrConstruct(&intPtr);
+    TloError error = intPtrConstruct(&intPtr, (int)i);
     TLO_ASSERT(!error);
-    *intPtr.ptr = (int)i;
     if (testPush) {
       error = tloSLListPushFront(intPtrs, &intPtr);
       tloPtrDestruct(&intPtr);
@@ -359,9 +357,8 @@ static void testSLListIntPtrPushFrontOncePopFrontOnce(void) {
   TLO_ASSERT(intPtrs);
 
   IntPtr intPtr;
-  TloError error = intPtrConstruct(&intPtr);
+  TloError error = intPtrConstruct(&intPtr, SOME_NUMBER);
   TLO_ASSERT(!error);
-  *intPtr.ptr = SOME_NUMBER;
   error = tloSLListPushFront(intPtrs, &intPtr);
   TLO_ASSERT(!error);
   tloPtrDestruct(&intPtr);
@@ -380,9 +377,8 @@ static void testSLListIntPtrPushFrontManyTimesPopFrontUntilEmpty(void) {
 
   for (size_t i = 0; i < SOME_NUMBER; ++i) {
     IntPtr intPtr;
-    TloError error = intPtrConstruct(&intPtr);
+    TloError error = intPtrConstruct(&intPtr, (int)i);
     TLO_ASSERT(!error);
-    *intPtr.ptr = (int)i;
     error = tloSLListPushFront(intPtrs, &intPtr);
     TLO_ASSERT(!error);
     tloPtrDestruct(&intPtr);
@@ -407,9 +403,8 @@ static void testSLListIntPtrPushOrMoveBackOnce(bool testPush) {
   TLO_ASSERT(intPtrs);
 
   IntPtr intPtr;
-  TloError error = intPtrConstruct(&intPtr);
+  TloError error = intPtrConstruct(&intPtr, SOME_NUMBER);
   TLO_ASSERT(!error);
-  *intPtr.ptr = SOME_NUMBER;
   if (testPush) {
     error = tloSLListPushBack(intPtrs, &intPtr);
     tloPtrDestruct(&intPtr);
@@ -432,9 +427,8 @@ static void testSLListIntPtrPushOrMoveBackManyTimes(bool testPush) {
 
   for (size_t i = 0; i < SOME_NUMBER; ++i) {
     IntPtr intPtr;
-    TloError error = intPtrConstruct(&intPtr);
+    TloError error = intPtrConstruct(&intPtr, (int)i);
     TLO_ASSERT(!error);
-    *intPtr.ptr = (int)i;
     if (testPush) {
       error = tloSLListPushBack(intPtrs, &intPtr);
       tloPtrDestruct(&intPtr);

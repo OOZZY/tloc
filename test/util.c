@@ -42,7 +42,7 @@ void countingAllocatorPrintCounts(void) {
   printf("Total bytes allocated: %lu\n", totalByteCount);
 }
 
-TloError intPtrConstruct(IntPtr *ptr) {
+TloError intPtrConstruct(IntPtr *ptr, int value) {
   assert(ptr);
 
   int *newPtr = malloc(sizeof(int));
@@ -50,6 +50,7 @@ TloError intPtrConstruct(IntPtr *ptr) {
     return TLO_ERROR;
   }
 
+  *newPtr = value;
   ptr->ptr = newPtr;
 
   return TLO_SUCCESS;
@@ -59,7 +60,7 @@ TloError intPtrConstructCopy(IntPtr *ptr, const IntPtr *other) {
   assert(ptr);
   assert(other && other->ptr);
 
-  if (intPtrConstruct(ptr) == TLO_ERROR) {
+  if (intPtrConstruct(ptr, 0) == TLO_ERROR) {
     return TLO_ERROR;
   }
 

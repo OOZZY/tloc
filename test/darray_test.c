@@ -293,9 +293,8 @@ static void testDArrayIntPtrPushOrMoveBackOnce(bool testPush) {
   TLO_ASSERT(intPtrs);
 
   IntPtr intPtr;
-  TloError error = intPtrConstruct(&intPtr);
+  TloError error = intPtrConstruct(&intPtr, SOME_NUMBER);
   TLO_ASSERT(!error);
-  *intPtr.ptr = SOME_NUMBER;
   if (testPush) {
     error = tloDArrayPushBack(intPtrs, &intPtr);
     tloPtrDestruct(&intPtr);
@@ -319,9 +318,8 @@ static void testDArrayIntPtrPushOrMoveBackUntilResize(bool testPush) {
 
   for (size_t i = 0; i < SOME_NUMBER; ++i) {
     IntPtr intPtr;
-    TloError error = intPtrConstruct(&intPtr);
+    TloError error = intPtrConstruct(&intPtr, (int)i);
     TLO_ASSERT(!error);
-    *intPtr.ptr = (int)i;
     if (testPush) {
       error = tloDArrayPushBack(intPtrs, &intPtr);
       tloPtrDestruct(&intPtr);
@@ -345,9 +343,8 @@ static void testDArrayIntPtrPushBackOncePopBackOnce(void) {
   TLO_ASSERT(intPtrs);
 
   IntPtr intPtr;
-  TloError error = intPtrConstruct(&intPtr);
+  TloError error = intPtrConstruct(&intPtr, SOME_NUMBER);
   TLO_ASSERT(!error);
-  *intPtr.ptr = SOME_NUMBER;
   error = tloDArrayPushBack(intPtrs, &intPtr);
   TLO_ASSERT(!error);
   tloPtrDestruct(&intPtr);
@@ -366,9 +363,8 @@ static void testDArrayIntPtrPushBackUntilResizePopBackUntilEmpty(void) {
 
   for (size_t i = 0; i < SOME_NUMBER; ++i) {
     IntPtr intPtr;
-    TloError error = intPtrConstruct(&intPtr);
+    TloError error = intPtrConstruct(&intPtr, (int)i);
     TLO_ASSERT(!error);
-    *intPtr.ptr = (int)i;
     error = tloDArrayPushBack(intPtrs, &intPtr);
     TLO_ASSERT(!error);
     tloPtrDestruct(&intPtr);
@@ -395,9 +391,8 @@ static void testDArrayIntPtrPushBackUntilResizeUnorderedRemoveBackUntilEmpty(
 
   for (size_t i = 0; i < SOME_NUMBER; ++i) {
     IntPtr intPtr;
-    TloError error = intPtrConstruct(&intPtr);
+    TloError error = intPtrConstruct(&intPtr, (int)i);
     TLO_ASSERT(!error);
-    *intPtr.ptr = (int)i;
     error = tloDArrayPushBack(intPtrs, &intPtr);
     TLO_ASSERT(!error);
     tloPtrDestruct(&intPtr);
@@ -424,9 +419,8 @@ static void testDArrayIntPtrPushBackUntilResizeUnorderedRemoveFrontUntilEmpty(
 
   for (size_t i = 0; i < SOME_NUMBER; ++i) {
     IntPtr intPtr;
-    TloError error = intPtrConstruct(&intPtr);
+    TloError error = intPtrConstruct(&intPtr, (int)i);
     TLO_ASSERT(!error);
-    *intPtr.ptr = (int)i;
     error = tloDArrayPushBack(intPtrs, &intPtr);
     TLO_ASSERT(!error);
     tloPtrDestruct(&intPtr);
