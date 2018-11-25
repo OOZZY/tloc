@@ -74,24 +74,6 @@ static TloError intPtrConstructCopy(void *bytes, const void *data) {
   return tloIntPtrConstructCopy(bytes, data);
 }
 
-void tloPtrDestruct(void *ptr) {
-  int **ptrptr = ptr;
-
-  if (!ptrptr) {
-    return;
-  }
-
-  if (!*ptrptr) {
-    return;
-  }
-
-  free(*ptrptr);
-  *ptrptr = NULL;
-}
-
 const TloType tloIntPtr = {.sizeOf = sizeof(TloIntPtr),
                            .constructCopy = intPtrConstructCopy,
                            .destruct = tloPtrDestruct};
-
-const TloType tloPtr = {
-    .sizeOf = sizeof(int *), .constructCopy = NULL, .destruct = tloPtrDestruct};

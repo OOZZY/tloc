@@ -48,4 +48,14 @@ bool tloAllocatorTypeIsValid(const TloAllocatorType *allocatorType);
 
 extern const TloAllocatorType tloCStdLibAllocator;
 
+void tloPtrDestruct(void *ptr);
+
+/*
+ * for containers where elements:
+ * - are pointers
+ * - don't need to be deep copied (constructCopy won't be used)
+ * - need to be destructed by calling just free on each of them
+ */
+extern const TloType tloPtr;
+
 #endif  // TLO_UTIL_H

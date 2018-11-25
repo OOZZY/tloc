@@ -11,3 +11,21 @@ bool tloAllocatorTypeIsValid(const TloAllocatorType *allocatorType) {
 }
 
 const TloAllocatorType tloCStdLibAllocator = {.malloc = malloc, .free = free};
+
+void tloPtrDestruct(void *ptr) {
+  int **ptrptr = ptr;
+
+  if (!ptrptr) {
+    return;
+  }
+
+  if (!*ptrptr) {
+    return;
+  }
+
+  free(*ptrptr);
+  *ptrptr = NULL;
+}
+
+const TloType tloPtr = {
+    .sizeOf = sizeof(int *), .constructCopy = NULL, .destruct = tloPtrDestruct};
