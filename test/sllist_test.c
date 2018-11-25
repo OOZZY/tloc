@@ -297,7 +297,7 @@ static void testSLListIntCopy(void) {
   copy = NULL;
 }
 
-#define EXPECT_SLLIST_INPTR_ELEMENTS(sllist, frontValue, backValue)            \
+#define EXPECT_SLLIST_INTPTR_ELEMENTS(sllist, frontValue, backValue)           \
   do {                                                                         \
     TLO_EXPECT(*((const IntPtr *)tloSLListFront(sllist))->ptr ==               \
                (frontValue));                                                  \
@@ -326,7 +326,7 @@ static void testSLListIntPtrPushOrMoveFrontOnce(bool testPush) {
   TLO_ASSERT(!error);
 
   EXPECT_SLLIST_PROPERTIES(intPtrs, 1, false, &intPtrType, &countingAllocator);
-  EXPECT_SLLIST_INPTR_ELEMENTS(intPtrs, SOME_NUMBER, SOME_NUMBER);
+  EXPECT_SLLIST_INTPTR_ELEMENTS(intPtrs, SOME_NUMBER, SOME_NUMBER);
 
   tloSLListDelete(intPtrs);
   intPtrs = NULL;
@@ -353,7 +353,7 @@ static void testSLListIntPtrPushOrMoveFrontManyTimes(bool testPush) {
 
     EXPECT_SLLIST_PROPERTIES(intPtrs, i + 1, false, &intPtrType,
                              &countingAllocator);
-    EXPECT_SLLIST_INPTR_ELEMENTS(intPtrs, (int)i, 0);
+    EXPECT_SLLIST_INTPTR_ELEMENTS(intPtrs, (int)i, 0);
   }
 
   tloSLListDelete(intPtrs);
@@ -395,7 +395,7 @@ static void testSLListIntPtrPushFrontManyTimesPopFrontUntilEmpty(void) {
   for (size_t i = SOME_NUMBER - 1; i <= SOME_NUMBER - 1; --i) {
     EXPECT_SLLIST_PROPERTIES(intPtrs, i + 1, false, &intPtrType,
                              &countingAllocator);
-    EXPECT_SLLIST_INPTR_ELEMENTS(intPtrs, (int)i, 0);
+    EXPECT_SLLIST_INTPTR_ELEMENTS(intPtrs, (int)i, 0);
 
     tloSLListPopFront(intPtrs);
   }
@@ -425,7 +425,7 @@ static void testSLListIntPtrPushOrMoveBackOnce(bool testPush) {
   TLO_ASSERT(!error);
 
   EXPECT_SLLIST_PROPERTIES(intPtrs, 1, false, &intPtrType, &countingAllocator);
-  EXPECT_SLLIST_INPTR_ELEMENTS(intPtrs, SOME_NUMBER, SOME_NUMBER);
+  EXPECT_SLLIST_INTPTR_ELEMENTS(intPtrs, SOME_NUMBER, SOME_NUMBER);
 
   tloSLListDelete(intPtrs);
   intPtrs = NULL;
@@ -452,7 +452,7 @@ static void testSLListIntPtrPushOrMoveBackManyTimes(bool testPush) {
 
     EXPECT_SLLIST_PROPERTIES(intPtrs, i + 1, false, &intPtrType,
                              &countingAllocator);
-    EXPECT_SLLIST_INPTR_ELEMENTS(intPtrs, 0, (int)i);
+    EXPECT_SLLIST_INTPTR_ELEMENTS(intPtrs, 0, (int)i);
   }
 
   tloSLListDelete(intPtrs);
