@@ -95,12 +95,13 @@ static void testDArrayIntPushOrMoveBackOnce(bool testPush) {
   TLO_ASSERT(ints);
 
   TloError error;
-  int value = SOME_NUMBER;
   if (testPush) {
+    int value = SOME_NUMBER;
     error = tloDArrayPushBack(ints, &value);
   } else {
-    error = tloDArrayMoveBack(ints, &value);
-    TLO_EXPECT(value == 0);
+    int *value = makeInt(SOME_NUMBER);
+    TLO_ASSERT(value);
+    error = tloDArrayMoveBack(ints, value);
   }
   TLO_ASSERT(!error);
 
@@ -117,12 +118,13 @@ static void testDArrayIntPushOrMoveBackUntilResize(bool testPush) {
 
   for (size_t i = 0; i < SOME_NUMBER; ++i) {
     TloError error;
-    int value = (int)i;
     if (testPush) {
+      int value = (int)i;
       error = tloDArrayPushBack(ints, &value);
     } else {
-      error = tloDArrayMoveBack(ints, &value);
-      TLO_EXPECT(value == 0);
+      int *value = makeInt((int)i);
+      TLO_ASSERT(value);
+      error = tloDArrayMoveBack(ints, value);
     }
     TLO_ASSERT(!error);
 
@@ -292,15 +294,17 @@ static void testDArrayIntPtrPushOrMoveBackOnce(bool testPush) {
   TloDArray *intPtrs = tloDArrayMake(&intPtrType, &countingAllocator, 0);
   TLO_ASSERT(intPtrs);
 
-  IntPtr intPtr;
-  TloError error = intPtrConstruct(&intPtr, SOME_NUMBER);
-  TLO_ASSERT(!error);
+  TloError error;
   if (testPush) {
+    IntPtr intPtr;
+    error = intPtrConstruct(&intPtr, SOME_NUMBER);
+    TLO_ASSERT(!error);
     error = tloDArrayPushBack(intPtrs, &intPtr);
     tloPtrDestruct(&intPtr);
   } else {
-    error = tloDArrayMoveBack(intPtrs, &intPtr);
-    TLO_EXPECT(intPtr.ptr == NULL);
+    IntPtr *intPtr = intPtrMake(SOME_NUMBER);
+    TLO_ASSERT(intPtr);
+    error = tloDArrayMoveBack(intPtrs, intPtr);
   }
   TLO_ASSERT(!error);
 
@@ -317,15 +321,17 @@ static void testDArrayIntPtrPushOrMoveBackUntilResize(bool testPush) {
   TLO_ASSERT(intPtrs);
 
   for (size_t i = 0; i < SOME_NUMBER; ++i) {
-    IntPtr intPtr;
-    TloError error = intPtrConstruct(&intPtr, (int)i);
-    TLO_ASSERT(!error);
+    TloError error;
     if (testPush) {
+      IntPtr intPtr;
+      error = intPtrConstruct(&intPtr, (int)i);
+      TLO_ASSERT(!error);
       error = tloDArrayPushBack(intPtrs, &intPtr);
       tloPtrDestruct(&intPtr);
     } else {
-      error = tloDArrayMoveBack(intPtrs, &intPtr);
-      TLO_EXPECT(intPtr.ptr == NULL);
+      IntPtr *intPtr = intPtrMake((int)i);
+      TLO_ASSERT(intPtr);
+      error = tloDArrayMoveBack(intPtrs, intPtr);
     }
     TLO_ASSERT(!error);
 

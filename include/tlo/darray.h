@@ -71,7 +71,9 @@ void *tloDArrayMutableBack(TloDArray *array);
 TloError tloDArrayPushBack(TloDArray *array, const void *data);
 
 /*
- * - shallow copies data using memcpy then zeroes out data using memset
+ * - assumes data points to an object whose memory was allocated by
+ *   allocatorType->malloc
+ * - takes ownership of the object
  */
 TloError tloDArrayMoveBack(TloDArray *array, void *data);
 

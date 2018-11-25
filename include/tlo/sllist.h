@@ -72,7 +72,9 @@ void *tloSLListMutableBack(TloSLList *list);
 TloError tloSLListPushFront(TloSLList *list, const void *data);
 
 /*
- * - shallow copies data using memcpy then zeroes out data using memset
+ * - assumes data points to an object whose memory was allocated by
+ *   allocatorType->malloc
+ * - takes ownership of the object
  */
 TloError tloSLListMoveFront(TloSLList *list, void *data);
 
@@ -88,7 +90,9 @@ void tloSLListPopFront(TloSLList *list);
 TloError tloSLListPushBack(TloSLList *list, const void *data);
 
 /*
- * - shallow copies data using memcpy then zeroes out data using memset
+ * - assumes data points to an object whose memory was allocated by
+ *   allocatorType->malloc
+ * - takes ownership of the object
  */
 TloError tloSLListMoveBack(TloSLList *list, void *data);
 

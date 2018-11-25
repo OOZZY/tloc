@@ -270,15 +270,7 @@ static TloSLLNode *makeNodeWithMovedData(TloSLList *list, void *data) {
     return NULL;
   }
 
-  node->bytes = list->allocatorType->malloc(list->valueType->sizeOf);
-  if (!node->bytes) {
-    list->allocatorType->free(node);
-    return NULL;
-  }
-
-  memcpy(node->bytes, data, list->valueType->sizeOf);
-  memset(data, 0, list->valueType->sizeOf);
-
+  node->bytes = data;
   node->next = NULL;
   return node;
 }

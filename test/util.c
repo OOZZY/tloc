@@ -42,6 +42,16 @@ void countingAllocatorPrintCounts(void) {
   printf("Total bytes allocated: %lu\n", totalByteCount);
 }
 
+int *makeInt(int value) {
+  int *i = countingAllocatorMalloc(sizeof(*i));
+  if (!i) {
+    return NULL;
+  }
+
+  *i = value;
+  return i;
+}
+
 TloError intPtrConstruct(IntPtr *ptr, int value) {
   assert(ptr);
 
@@ -67,6 +77,20 @@ TloError intPtrConstructCopy(IntPtr *ptr, const IntPtr *other) {
   *ptr->ptr = *other->ptr;
 
   return TLO_SUCCESS;
+}
+
+IntPtr *intPtrMake(int value) {
+  IntPtr *ptr = countingAllocatorMalloc(sizeof(*ptr));
+  if (!ptr) {
+    return NULL;
+  }
+
+  if (intPtrConstruct(ptr, value) == TLO_ERROR) {
+    countingAllocatorFree(ptr);
+    return NULL;
+  }
+
+  return ptr;
 }
 
 static TloError intPtrTypeConstructCopy(void *bytes, const void *data) {

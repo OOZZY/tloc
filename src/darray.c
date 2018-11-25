@@ -313,7 +313,7 @@ static TloError pushBackMovedData(TloDArray *array, void *data) {
   void *destination = mutableElement(array, array->size);
 
   memcpy(destination, data, array->valueType->sizeOf);
-  memset(data, 0, array->valueType->sizeOf);
+  array->allocatorType->free(data);
 
   ++array->size;
 
