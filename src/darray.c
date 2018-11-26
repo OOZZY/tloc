@@ -2,54 +2,9 @@
 #include <assert.h>
 #include <string.h>
 
-static bool isValid(const TloList *list);
-static void destruct(TloList *list);
-static size_t size(const TloList *list);
-static bool isEmpty(const TloList *list);
-static const void *front(const TloList *list);
-static void *mutableFront(TloList *list);
-static const void *back(const TloList *list);
-static void *mutableBack(TloList *list);
-static TloError pushBack(TloList *list, const void *data);
-static TloError moveBack(TloList *list, void *data);
-
-static const TloListVTable vTable = {.isValid = isValid,
-                                     .destruct = destruct,
-                                     .size = size,
-                                     .isEmpty = isEmpty,
-                                     .front = front,
-                                     .mutableFront = mutableFront,
-                                     .back = back,
-                                     .mutableBack = mutableBack,
-                                     .pushBack = pushBack,
-                                     .moveBack = moveBack};
-
 static bool isValid(const TloList *list) {
   const TloDArray *array = (const TloDArray *)list;
   return tloListIsValid(list) && (array->size <= array->capacity);
-}
-
-TloError tloDArrayConstruct(TloDArray *array, const TloType *valueType,
-                            const TloAllocatorType *allocatorType,
-                            size_t capacity) {
-  assert(array);
-  assert(tloTypeIsValid(valueType));
-  assert(allocatorType == NULL || tloAllocatorTypeIsValid(allocatorType));
-
-  void *newBytes = NULL;
-  if (capacity) {
-    newBytes = allocatorType->malloc(capacity * valueType->sizeOf);
-    if (!newBytes) {
-      return TLO_ERROR;
-    }
-  }
-
-  tloListConstruct(&array->list, &vTable, valueType, allocatorType);
-  array->bytes = newBytes;
-  array->size = 0;
-  array->capacity = capacity;
-
-  return TLO_SUCCESS;
 }
 
 static const void *constElement(const TloDArray *array, size_t index) {
@@ -58,36 +13,6 @@ static const void *constElement(const TloDArray *array, size_t index) {
 
 static void *mutableElement(TloDArray *array, size_t index) {
   return (char *)array->bytes + index * array->list.valueType->sizeOf;
-}
-
-static TloError pushBackAllElementsOfOther(TloDArray *array,
-                                           const TloDArray *other) {
-  for (size_t i = 0; i < other->size; ++i) {
-    const void *element = constElement(other, i);
-    if (pushBack(&array->list, element) == TLO_ERROR) {
-      destruct(&array->list);
-      return TLO_ERROR;
-    }
-  }
-
-  return TLO_SUCCESS;
-}
-
-TloError tloDArrayConstructCopy(TloDArray *array, const TloDArray *other) {
-  assert(array);
-  assert(isValid(&other->list));
-
-  if (tloDArrayConstruct(array, other->list.valueType,
-                         other->list.allocatorType,
-                         other->capacity) == TLO_ERROR) {
-    return TLO_ERROR;
-  }
-
-  if (pushBackAllElementsOfOther(array, other) == TLO_ERROR) {
-    return TLO_ERROR;
-  }
-
-  return TLO_SUCCESS;
 }
 
 static void destructAllElements(TloDArray *array) {
@@ -117,62 +42,6 @@ static void destruct(TloList *list) {
   array->bytes = NULL;
 }
 
-TloDArray *tloDArrayMake(const TloType *valueType,
-                         const TloAllocatorType *allocatorType,
-                         size_t capacity) {
-  assert(tloTypeIsValid(valueType));
-
-  if (!allocatorType) {
-    allocatorType = &tloCStdLibAllocator;
-  }
-
-  assert(tloAllocatorTypeIsValid(allocatorType));
-
-  TloDArray *array = allocatorType->malloc(sizeof(*array));
-  if (!array) {
-    return NULL;
-  }
-
-  if (tloDArrayConstruct(array, valueType, allocatorType, capacity) ==
-      TLO_ERROR) {
-    allocatorType->free(array);
-    return NULL;
-  }
-
-  return array;
-}
-
-TloDArray *tloDArrayMakeCopy(const TloDArray *other) {
-  assert(isValid(&other->list));
-
-  TloDArray *array = other->list.allocatorType->malloc(sizeof(*array));
-  if (!array) {
-    return NULL;
-  }
-
-  if (tloDArrayConstructCopy(array, other) == TLO_ERROR) {
-    other->list.allocatorType->free(array);
-    return NULL;
-  }
-
-  return array;
-}
-
-TloError tloDArrayCopy(TloDArray *array, const TloDArray *other) {
-  assert(isValid(&array->list));
-  assert(isValid(&other->list));
-
-  TloDArray copy;
-  if (tloDArrayConstructCopy(&copy, other) == TLO_ERROR) {
-    return TLO_ERROR;
-  }
-
-  destruct(&array->list);
-  memcpy(array, &copy, sizeof(TloDArray));
-
-  return TLO_SUCCESS;
-}
-
 static size_t size(const TloList *list) {
   assert(isValid(list));
 
@@ -180,33 +49,11 @@ static size_t size(const TloList *list) {
   return array->size;
 }
 
-size_t tloDArrayCapacity(const TloDArray *array) {
-  assert(isValid(&array->list));
-
-  return array->capacity;
-}
-
 static bool isEmpty(const TloList *list) {
   assert(isValid(list));
 
   const TloDArray *array = (const TloDArray *)list;
   return array->size == 0;
-}
-
-const void *tloDArrayElement(const TloDArray *array, size_t index) {
-  assert(isValid(&array->list));
-  assert(!isEmpty(&array->list));
-  assert(index < array->size);
-
-  return constElement(array, index);
-}
-
-void *tloDArrayMutableElement(TloDArray *array, size_t index) {
-  assert(isValid(&array->list));
-  assert(!isEmpty(&array->list));
-  assert(index < array->size);
-
-  return mutableElement(array, index);
 }
 
 static const void *front(const TloList *list) {
@@ -338,6 +185,148 @@ static TloError moveBack(TloList *list, void *data) {
   }
 
   return TLO_SUCCESS;
+}
+
+static const TloListVTable vTable = {.isValid = isValid,
+                                     .destruct = destruct,
+                                     .size = size,
+                                     .isEmpty = isEmpty,
+                                     .front = front,
+                                     .mutableFront = mutableFront,
+                                     .back = back,
+                                     .mutableBack = mutableBack,
+                                     .pushBack = pushBack,
+                                     .moveBack = moveBack};
+
+TloError tloDArrayConstruct(TloDArray *array, const TloType *valueType,
+                            const TloAllocatorType *allocatorType,
+                            size_t capacity) {
+  assert(array);
+  assert(tloTypeIsValid(valueType));
+  assert(allocatorType == NULL || tloAllocatorTypeIsValid(allocatorType));
+
+  void *newBytes = NULL;
+  if (capacity) {
+    newBytes = allocatorType->malloc(capacity * valueType->sizeOf);
+    if (!newBytes) {
+      return TLO_ERROR;
+    }
+  }
+
+  tloListConstruct(&array->list, &vTable, valueType, allocatorType);
+  array->bytes = newBytes;
+  array->size = 0;
+  array->capacity = capacity;
+
+  return TLO_SUCCESS;
+}
+
+static TloError pushBackAllElementsOfOther(TloDArray *array,
+                                           const TloDArray *other) {
+  for (size_t i = 0; i < other->size; ++i) {
+    const void *element = constElement(other, i);
+    if (pushBack(&array->list, element) == TLO_ERROR) {
+      destruct(&array->list);
+      return TLO_ERROR;
+    }
+  }
+
+  return TLO_SUCCESS;
+}
+
+TloError tloDArrayConstructCopy(TloDArray *array, const TloDArray *other) {
+  assert(array);
+  assert(isValid(&other->list));
+
+  if (tloDArrayConstruct(array, other->list.valueType,
+                         other->list.allocatorType,
+                         other->capacity) == TLO_ERROR) {
+    return TLO_ERROR;
+  }
+
+  if (pushBackAllElementsOfOther(array, other) == TLO_ERROR) {
+    return TLO_ERROR;
+  }
+
+  return TLO_SUCCESS;
+}
+
+TloDArray *tloDArrayMake(const TloType *valueType,
+                         const TloAllocatorType *allocatorType,
+                         size_t capacity) {
+  assert(tloTypeIsValid(valueType));
+
+  if (!allocatorType) {
+    allocatorType = &tloCStdLibAllocator;
+  }
+
+  assert(tloAllocatorTypeIsValid(allocatorType));
+
+  TloDArray *array = allocatorType->malloc(sizeof(*array));
+  if (!array) {
+    return NULL;
+  }
+
+  if (tloDArrayConstruct(array, valueType, allocatorType, capacity) ==
+      TLO_ERROR) {
+    allocatorType->free(array);
+    return NULL;
+  }
+
+  return array;
+}
+
+TloDArray *tloDArrayMakeCopy(const TloDArray *other) {
+  assert(isValid(&other->list));
+
+  TloDArray *array = other->list.allocatorType->malloc(sizeof(*array));
+  if (!array) {
+    return NULL;
+  }
+
+  if (tloDArrayConstructCopy(array, other) == TLO_ERROR) {
+    other->list.allocatorType->free(array);
+    return NULL;
+  }
+
+  return array;
+}
+
+TloError tloDArrayCopy(TloDArray *array, const TloDArray *other) {
+  assert(isValid(&array->list));
+  assert(isValid(&other->list));
+
+  TloDArray copy;
+  if (tloDArrayConstructCopy(&copy, other) == TLO_ERROR) {
+    return TLO_ERROR;
+  }
+
+  destruct(&array->list);
+  memcpy(array, &copy, sizeof(TloDArray));
+
+  return TLO_SUCCESS;
+}
+
+size_t tloDArrayCapacity(const TloDArray *array) {
+  assert(isValid(&array->list));
+
+  return array->capacity;
+}
+
+const void *tloDArrayElement(const TloDArray *array, size_t index) {
+  assert(isValid(&array->list));
+  assert(!isEmpty(&array->list));
+  assert(index < array->size);
+
+  return constElement(array, index);
+}
+
+void *tloDArrayMutableElement(TloDArray *array, size_t index) {
+  assert(isValid(&array->list));
+  assert(!isEmpty(&array->list));
+  assert(index < array->size);
+
+  return mutableElement(array, index);
 }
 
 void tloDArrayPopBack(TloDArray *array) {
