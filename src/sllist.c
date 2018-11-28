@@ -2,9 +2,31 @@
 #include <assert.h>
 #include <string.h>
 
-bool tloSLListIsValid(const TloSLList *llist) {
-  return llist && tloTypeIsValid(llist->valueType) &&
-         tloAllocatorTypeIsValid(llist->allocatorType) &&
+static bool isValid(const TloList *list);
+static void destruct(TloList *list);
+static size_t size(const TloList *list);
+static bool isEmpty(const TloList *list);
+static const void *front(const TloList *list);
+static void *mutableFront(TloList *list);
+static const void *back(const TloList *list);
+static void *mutableBack(TloList *list);
+static TloError pushBack(TloList *list, const void *data);
+static TloError moveBack(TloList *list, void *data);
+
+static const TloListVTable vTable = {.isValid = isValid,
+                                     .destruct = destruct,
+                                     .size = size,
+                                     .isEmpty = isEmpty,
+                                     .front = front,
+                                     .mutableFront = mutableFront,
+                                     .back = back,
+                                     .mutableBack = mutableBack,
+                                     .pushBack = pushBack,
+                                     .moveBack = moveBack};
+
+static bool isValid(const TloList *list) {
+  const TloSLList *llist = (const TloSLList *)list;
+  return tloListIsValid(list) &&
          ((llist->head == NULL) == (llist->size == 0)) &&
          ((llist->tail == NULL) == (llist->size == 0)) &&
          ((llist->head == NULL) == (llist->tail == NULL)) &&
@@ -17,15 +39,9 @@ TloError tloSLListConstruct(TloSLList *llist, const TloType *valueType,
                             const TloAllocatorType *allocatorType) {
   assert(llist);
   assert(tloTypeIsValid(valueType));
+  assert(allocatorType == NULL || tloAllocatorTypeIsValid(allocatorType));
 
-  if (!allocatorType) {
-    allocatorType = &tloCStdLibAllocator;
-  }
-
-  assert(tloAllocatorTypeIsValid(allocatorType));
-
-  llist->valueType = valueType;
-  llist->allocatorType = allocatorType;
+  tloListConstruct(&llist->list, &vTable, valueType, allocatorType);
   llist->head = NULL;
   llist->tail = NULL;
   llist->size = 0;
@@ -37,8 +53,8 @@ static TloError pushBackAllElementsOfOther(TloSLList *llist,
                                            const TloSLList *other) {
   for (TloSLLNode *node = other->head; node; node = node->next) {
     const void *element = node->bytes;
-    if (tloSLListPushBack(llist, element) == TLO_ERROR) {
-      tloSLListDestruct(llist);
+    if (pushBack(&llist->list, element) == TLO_ERROR) {
+      destruct(&llist->list);
       return TLO_ERROR;
     }
   }
@@ -48,10 +64,10 @@ static TloError pushBackAllElementsOfOther(TloSLList *llist,
 
 TloError tloSLListConstructCopy(TloSLList *llist, const TloSLList *other) {
   assert(llist);
-  assert(tloSLListIsValid(other));
+  assert(isValid(&other->list));
 
-  if (tloSLListConstruct(llist, other->valueType, other->allocatorType) ==
-      TLO_ERROR) {
+  if (tloSLListConstruct(llist, other->list.valueType,
+                         other->list.allocatorType) == TLO_ERROR) {
     return TLO_ERROR;
   }
 
@@ -68,23 +84,24 @@ static void destructAllElementsAndFreeAllNodes(TloSLList *llist) {
   while (current) {
     TloSLLNode *next = current->next;
 
-    if (llist->valueType->destruct) {
-      llist->valueType->destruct(current->bytes);
+    if (llist->list.valueType->destruct) {
+      llist->list.valueType->destruct(current->bytes);
     }
-    llist->allocatorType->free(current->bytes);
-    llist->allocatorType->free(current);
+    llist->list.allocatorType->free(current->bytes);
+    llist->list.allocatorType->free(current);
 
     current = next;
   }
 }
 
-void tloSLListDestruct(TloSLList *llist) {
-  if (!llist) {
+static void destruct(TloList *list) {
+  if (!list) {
     return;
   }
 
-  assert(tloSLListIsValid(llist));
+  assert(isValid(list));
 
+  TloSLList *llist = (TloSLList *)list;
   if (!llist->head) {
     return;
   }
@@ -119,120 +136,103 @@ TloSLList *tloSLListMake(const TloType *valueType,
 }
 
 TloSLList *tloSLListMakeCopy(const TloSLList *other) {
-  assert(tloSLListIsValid(other));
+  assert(isValid(&other->list));
 
-  TloSLList *llist = other->allocatorType->malloc(sizeof(*llist));
+  TloSLList *llist = other->list.allocatorType->malloc(sizeof(*llist));
   if (!llist) {
     return NULL;
   }
 
   if (tloSLListConstructCopy(llist, other) == TLO_ERROR) {
-    other->allocatorType->free(llist);
+    other->list.allocatorType->free(llist);
     return NULL;
   }
 
   return llist;
 }
 
-void tloSLListDelete(TloSLList *llist) {
-  if (!llist) {
-    return;
-  }
-
-  assert(tloSLListIsValid(llist));
-
-  tloSLListDestruct(llist);
-  TloFreeFunction free = llist->allocatorType->free;
-  free(llist);
-}
-
 TloError tloSLListCopy(TloSLList *llist, const TloSLList *other) {
-  assert(tloSLListIsValid(llist));
-  assert(tloSLListIsValid(other));
+  assert(isValid(&llist->list));
+  assert(isValid(&other->list));
 
   TloSLList copy;
   if (tloSLListConstructCopy(&copy, other) == TLO_ERROR) {
     return TLO_ERROR;
   }
 
-  tloSLListDestruct(llist);
+  destruct(&llist->list);
   memcpy(llist, &copy, sizeof(TloSLList));
 
   return TLO_SUCCESS;
 }
 
-const TloType *tloSLListValueType(const TloSLList *llist) {
-  assert(tloSLListIsValid(llist));
+static size_t size(const TloList *list) {
+  assert(isValid(list));
 
-  return llist->valueType;
-}
-
-const TloAllocatorType *tloSLListAllocatorType(const TloSLList *llist) {
-  assert(tloSLListIsValid(llist));
-
-  return llist->allocatorType;
-}
-
-size_t tloSLListSize(const TloSLList *llist) {
-  assert(tloSLListIsValid(llist));
-
+  const TloSLList *llist = (const TloSLList *)list;
   return llist->size;
 }
 
-bool tloSLListIsEmpty(const TloSLList *llist) {
-  assert(tloSLListIsValid(llist));
+static bool isEmpty(const TloList *list) {
+  assert(isValid(list));
 
+  const TloSLList *llist = (const TloSLList *)list;
   return llist->size == 0;
 }
 
-const void *tloSLListFront(const TloSLList *llist) {
-  assert(tloSLListIsValid(llist));
-  assert(!tloSLListIsEmpty(llist));
+static const void *front(const TloList *list) {
+  assert(isValid(list));
+  assert(!isEmpty(list));
 
+  const TloSLList *llist = (const TloSLList *)list;
   return llist->head->bytes;
 }
 
-void *tloSLListMutableFront(TloSLList *llist) {
-  assert(tloSLListIsValid(llist));
-  assert(!tloSLListIsEmpty(llist));
+static void *mutableFront(TloList *list) {
+  assert(isValid(list));
+  assert(!isEmpty(list));
 
+  TloSLList *llist = (TloSLList *)list;
   return llist->head->bytes;
 }
 
-const void *tloSLListBack(const TloSLList *llist) {
-  assert(tloSLListIsValid(llist));
-  assert(!tloSLListIsEmpty(llist));
+static const void *back(const TloList *list) {
+  assert(isValid(list));
+  assert(!isEmpty(list));
 
+  const TloSLList *llist = (const TloSLList *)list;
   return llist->tail->bytes;
 }
 
-void *tloSLListMutableBack(TloSLList *llist) {
-  assert(tloSLListIsValid(llist));
-  assert(!tloSLListIsEmpty(llist));
+static void *mutableBack(TloList *list) {
+  assert(isValid(list));
+  assert(!isEmpty(list));
 
+  TloSLList *llist = (TloSLList *)list;
   return llist->tail->bytes;
 }
 
 static TloSLLNode *makeNodeWithCopiedData(TloSLList *llist, const void *data) {
-  TloSLLNode *node = llist->allocatorType->malloc(sizeof(*node));
+  TloSLLNode *node = llist->list.allocatorType->malloc(sizeof(*node));
   if (!node) {
     return NULL;
   }
 
-  node->bytes = llist->allocatorType->malloc(llist->valueType->sizeOf);
+  node->bytes =
+      llist->list.allocatorType->malloc(llist->list.valueType->sizeOf);
   if (!node->bytes) {
-    llist->allocatorType->free(node);
+    llist->list.allocatorType->free(node);
     return NULL;
   }
 
-  if (llist->valueType->constructCopy) {
-    if (llist->valueType->constructCopy(node->bytes, data) == TLO_ERROR) {
-      llist->allocatorType->free(node->bytes);
-      llist->allocatorType->free(node);
+  if (llist->list.valueType->constructCopy) {
+    if (llist->list.valueType->constructCopy(node->bytes, data) == TLO_ERROR) {
+      llist->list.allocatorType->free(node->bytes);
+      llist->list.allocatorType->free(node);
       return NULL;
     }
   } else {
-    memcpy(node->bytes, data, llist->valueType->sizeOf);
+    memcpy(node->bytes, data, llist->list.valueType->sizeOf);
   }
 
   node->next = NULL;
@@ -252,7 +252,7 @@ static void pushFrontNode(TloSLList *llist, TloSLLNode *node) {
 }
 
 TloError tloSLListPushFront(TloSLList *llist, const void *data) {
-  assert(tloSLListIsValid(llist));
+  assert(isValid(&llist->list));
   assert(data);
 
   TloSLLNode *newNode = makeNodeWithCopiedData(llist, data);
@@ -266,7 +266,7 @@ TloError tloSLListPushFront(TloSLList *llist, const void *data) {
 }
 
 static TloSLLNode *makeNodeWithMovedData(TloSLList *llist, void *data) {
-  TloSLLNode *node = llist->allocatorType->malloc(sizeof(*node));
+  TloSLLNode *node = llist->list.allocatorType->malloc(sizeof(*node));
   if (!node) {
     return NULL;
   }
@@ -277,7 +277,7 @@ static TloSLLNode *makeNodeWithMovedData(TloSLList *llist, void *data) {
 }
 
 TloError tloSLListMoveFront(TloSLList *llist, void *data) {
-  assert(tloSLListIsValid(llist));
+  assert(isValid(&llist->list));
   assert(data);
 
   TloSLLNode *newNode = makeNodeWithMovedData(llist, data);
@@ -291,16 +291,16 @@ TloError tloSLListMoveFront(TloSLList *llist, void *data) {
 }
 
 void tloSLListPopFront(TloSLList *llist) {
-  assert(tloSLListIsValid(llist));
-  assert(!tloSLListIsEmpty(llist));
+  assert(isValid(&llist->list));
+  assert(!isEmpty(&llist->list));
 
   TloSLLNode *frontNode = llist->head;
   llist->head = llist->head->next;
-  if (llist->valueType->destruct) {
-    llist->valueType->destruct(frontNode->bytes);
+  if (llist->list.valueType->destruct) {
+    llist->list.valueType->destruct(frontNode->bytes);
   }
-  llist->allocatorType->free(frontNode->bytes);
-  llist->allocatorType->free(frontNode);
+  llist->list.allocatorType->free(frontNode->bytes);
+  llist->list.allocatorType->free(frontNode);
   --llist->size;
 
   if (!llist->head) {
@@ -320,10 +320,11 @@ static void pushBackNode(TloSLList *llist, TloSLLNode *node) {
   ++llist->size;
 }
 
-TloError tloSLListPushBack(TloSLList *llist, const void *data) {
-  assert(tloSLListIsValid(llist));
+static TloError pushBack(TloList *list, const void *data) {
+  assert(isValid(list));
   assert(data);
 
+  TloSLList *llist = (TloSLList *)list;
   TloSLLNode *newNode = makeNodeWithCopiedData(llist, data);
   if (!newNode) {
     return TLO_ERROR;
@@ -334,10 +335,11 @@ TloError tloSLListPushBack(TloSLList *llist, const void *data) {
   return TLO_SUCCESS;
 }
 
-TloError tloSLListMoveBack(TloSLList *llist, void *data) {
-  assert(tloSLListIsValid(llist));
+static TloError moveBack(TloList *list, void *data) {
+  assert(isValid(list));
   assert(data);
 
+  TloSLList *llist = (TloSLList *)list;
   TloSLLNode *newNode = makeNodeWithMovedData(llist, data);
   if (!newNode) {
     return TLO_ERROR;
@@ -351,13 +353,13 @@ TloError tloSLListMoveBack(TloSLList *llist, void *data) {
 bool tloSLLNodeIsValid(const TloSLLNode *node) { return node && node->bytes; }
 
 const TloSLLNode *tloSLLNodeHead(const TloSLList *llist) {
-  assert(tloSLListIsValid(llist));
+  assert(isValid(&llist->list));
 
   return llist->head;
 }
 
 TloSLLNode *tloSLLNodeMutableHead(TloSLList *llist) {
-  assert(tloSLListIsValid(llist));
+  assert(isValid(&llist->list));
 
   return llist->head;
 }

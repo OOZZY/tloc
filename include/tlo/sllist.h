@@ -1,7 +1,7 @@
 #ifndef TLO_SLLIST_H
 #define TLO_SLLIST_H
 
-#include "tlo/util.h"
+#include "tlo/list.h"
 
 /*
  * - singly-linked list
@@ -13,15 +13,15 @@ typedef struct TloSLLNode {
 } TloSLLNode;
 
 typedef struct TloSLList {
+  // public, use only for passing to tloList and tlovList functions
+  TloList list;
+
   // private
-  const TloType *valueType;
-  const TloAllocatorType *allocatorType;
   TloSLLNode *head;
   TloSLLNode *tail;
   size_t size;
 } TloSLList;
 
-bool tloSLListIsValid(const TloSLList *llist);
 TloError tloSLListConstruct(TloSLList *llist, const TloType *valueType,
                             const TloAllocatorType *allocatorType);
 
@@ -29,11 +29,6 @@ TloError tloSLListConstruct(TloSLList *llist, const TloType *valueType,
  * - uses tloSLListPushBack
  */
 TloError tloSLListConstructCopy(TloSLList *llist, const TloSLList *other);
-
-/*
- * - uses llist->valueType->destruct if it is not NULL
- */
-void tloSLListDestruct(TloSLList *llist);
 
 /*
  * - allocatorType->malloc then tloSLListConstruct
@@ -47,23 +42,9 @@ TloSLList *tloSLListMake(const TloType *valueType,
 TloSLList *tloSLListMakeCopy(const TloSLList *other);
 
 /*
- * - tloSLListDestruct then llist->allocatorType->free
- */
-void tloSLListDelete(TloSLList *llist);
-
-/*
  * - uses tloSLListConstructCopy and tloSLListDestruct
  */
 TloError tloSLListCopy(TloSLList *llist, const TloSLList *other);
-
-const TloType *tloSLListValueType(const TloSLList *llist);
-const TloAllocatorType *tloSLListAllocatorType(const TloSLList *llist);
-size_t tloSLListSize(const TloSLList *llist);
-bool tloSLListIsEmpty(const TloSLList *llist);
-const void *tloSLListFront(const TloSLList *llist);
-void *tloSLListMutableFront(TloSLList *llist);
-const void *tloSLListBack(const TloSLList *llist);
-void *tloSLListMutableBack(TloSLList *llist);
 
 /*
  * - deep copies data using llist->valueType->constructCopy if it is not null
@@ -82,19 +63,6 @@ TloError tloSLListMoveFront(TloSLList *llist, void *data);
  * - uses llist->valueType->destruct if it is not NULL
  */
 void tloSLListPopFront(TloSLList *llist);
-
-/*
- * - deep copies data using llist->valueType->constructCopy if it is not null
- * - otherwise, uses memcpy
- */
-TloError tloSLListPushBack(TloSLList *llist, const void *data);
-
-/*
- * - assumes data points to an object whose memory was allocated by
- *   allocatorType->malloc
- * - takes ownership of the object
- */
-TloError tloSLListMoveBack(TloSLList *llist, void *data);
 
 bool tloSLLNodeIsValid(const TloSLLNode *node);
 const TloSLLNode *tloSLLNodeHead(const TloSLList *llist);
