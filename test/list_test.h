@@ -18,4 +18,19 @@
     }                                                              \
   } while (0)
 
+#define EXPECT_LIST_INT_ELEMENTS(_list, _frontValue, _backValue, _index,    \
+                                 _indexValue)                               \
+  do {                                                                      \
+    TLO_EXPECT(*(const int *)tlovListFront(_list) == (_frontValue));        \
+    TLO_EXPECT(*(int *)tlovListMutableFront(_list) == (_frontValue));       \
+    TLO_EXPECT(*(const int *)tlovListBack(_list) == (_backValue));          \
+    TLO_EXPECT(*(int *)tlovListMutableBack(_list) == (_backValue));         \
+    if (strcmp(tlovListType(_list), "TloDArray") == 0) {                    \
+      TLO_EXPECT(*(const int *)tloDArrayElement((const TloDArray *)(_list), \
+                                                _index) == (_indexValue));  \
+      TLO_EXPECT(*(int *)tloDArrayMutableElement((TloDArray *)(_list),      \
+                                                 _index) == (_indexValue)); \
+    }                                                                       \
+  } while (0)
+
 #endif  // LIST_TEST_H

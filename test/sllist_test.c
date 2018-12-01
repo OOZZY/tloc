@@ -36,14 +36,6 @@ static void testSLListIntMakeDelete(void) {
 
 static void testSLListDeleteWithNull(void) { tloListDelete(NULL); }
 
-#define EXPECT_SLLIST_INT_ELEMENTS(sllist, frontValue, backValue)              \
-  do {                                                                         \
-    TLO_EXPECT(*(const int *)tlovListFront(&(sllist)->list) == (frontValue));  \
-    TLO_EXPECT(*(int *)tlovListMutableFront(&(sllist)->list) == (frontValue)); \
-    TLO_EXPECT(*(const int *)tlovListBack(&(sllist)->list) == (backValue));    \
-    TLO_EXPECT(*(int *)tlovListMutableBack(&(sllist)->list) == (backValue));   \
-  } while (0)
-
 static void testSLListIntPushOrMoveFrontOnce(bool testPush) {
   TloSLList *ints = tloSLListMake(&tloInt, &countingAllocator);
   TLO_ASSERT(ints);
@@ -60,7 +52,8 @@ static void testSLListIntPushOrMoveFrontOnce(bool testPush) {
   TLO_ASSERT(!error);
 
   EXPECT_LIST_PROPERTIES(&ints->list, 1, false, &tloInt, &countingAllocator);
-  EXPECT_SLLIST_INT_ELEMENTS(ints, SOME_NUMBER, SOME_NUMBER);
+  EXPECT_LIST_INT_ELEMENTS(&ints->list, SOME_NUMBER, SOME_NUMBER, 0,
+                           SOME_NUMBER);
 
   tloListDelete(&ints->list);
   ints = NULL;
@@ -84,7 +77,7 @@ static void testSLListIntPushOrMoveFrontManyTimes(bool testPush) {
 
     EXPECT_LIST_PROPERTIES(&ints->list, i + 1, false, &tloInt,
                            &countingAllocator);
-    EXPECT_SLLIST_INT_ELEMENTS(ints, (int)i, 0);
+    EXPECT_LIST_INT_ELEMENTS(&ints->list, (int)i, 0, i, 0);
   }
 
   tloListDelete(&ints->list);
@@ -120,7 +113,7 @@ static void testSLListIntPushFrontManyTimesPopFrontUntilEmpty(void) {
   for (size_t i = SOME_NUMBER - 1; i <= SOME_NUMBER - 1; --i) {
     EXPECT_LIST_PROPERTIES(&ints->list, i + 1, false, &tloInt,
                            &countingAllocator);
-    EXPECT_SLLIST_INT_ELEMENTS(ints, (int)i, 0);
+    EXPECT_LIST_INT_ELEMENTS(&ints->list, (int)i, 0, i, 0);
 
     tloSLListPopFront(ints);
   }
@@ -147,7 +140,8 @@ static void testSLListIntPushOrMoveBackOnce(bool testPush) {
   TLO_ASSERT(!error);
 
   EXPECT_LIST_PROPERTIES(&ints->list, 1, false, &tloInt, &countingAllocator);
-  EXPECT_SLLIST_INT_ELEMENTS(ints, SOME_NUMBER, SOME_NUMBER);
+  EXPECT_LIST_INT_ELEMENTS(&ints->list, SOME_NUMBER, SOME_NUMBER, 0,
+                           SOME_NUMBER);
 
   tloListDelete(&ints->list);
   ints = NULL;
@@ -171,7 +165,7 @@ static void testSLListIntPushOrMoveBackManyTimes(bool testPush) {
 
     EXPECT_LIST_PROPERTIES(&ints->list, i + 1, false, &tloInt,
                            &countingAllocator);
-    EXPECT_SLLIST_INT_ELEMENTS(ints, 0, (int)i);
+    EXPECT_LIST_INT_ELEMENTS(&ints->list, 0, (int)i, i, (int)i);
   }
 
   tloListDelete(&ints->list);

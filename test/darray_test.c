@@ -68,18 +68,6 @@ static void testDArrayIntMakeWithCapacityDelete(void) {
 
 static void testDArrayDeleteWithNull(void) { tloListDelete(NULL); }
 
-#define EXPECT_DARRAY_INT_ELEMENTS(darray, index, indexValue, frontValue,      \
-                                   backValue)                                  \
-  do {                                                                         \
-    TLO_EXPECT(*(const int *)tloDArrayElement(darray, index) == (indexValue)); \
-    TLO_EXPECT(*(int *)tloDArrayMutableElement(darray, index) ==               \
-               (indexValue));                                                  \
-    TLO_EXPECT(*(const int *)tlovListFront(&(darray)->list) == (frontValue));  \
-    TLO_EXPECT(*(int *)tlovListMutableFront(&(darray)->list) == (frontValue)); \
-    TLO_EXPECT(*(const int *)tlovListBack(&(darray)->list) == (backValue));    \
-    TLO_EXPECT(*(int *)tlovListMutableBack(&(darray)->list) == (backValue));   \
-  } while (0)
-
 static void testDArrayIntPushOrMoveBackOnce(bool testPush) {
   TloDArray *ints = tloDArrayMake(&tloInt, &countingAllocator, 0);
   TLO_ASSERT(ints);
@@ -96,7 +84,8 @@ static void testDArrayIntPushOrMoveBackOnce(bool testPush) {
   TLO_ASSERT(!error);
 
   EXPECT_LIST_PROPERTIES(&ints->list, 1, false, &tloInt, &countingAllocator);
-  EXPECT_DARRAY_INT_ELEMENTS(ints, 0, SOME_NUMBER, SOME_NUMBER, SOME_NUMBER);
+  EXPECT_LIST_INT_ELEMENTS(&ints->list, SOME_NUMBER, SOME_NUMBER, 0,
+                           SOME_NUMBER);
 
   tloListDelete(&ints->list);
   ints = NULL;
@@ -120,7 +109,7 @@ static void testDArrayIntPushOrMoveBackUntilResize(bool testPush) {
 
     EXPECT_LIST_PROPERTIES(&ints->list, i + 1, false, &tloInt,
                            &countingAllocator);
-    EXPECT_DARRAY_INT_ELEMENTS(ints, i, (int)i, 0, (int)i);
+    EXPECT_LIST_INT_ELEMENTS(&ints->list, 0, (int)i, i, (int)i);
   }
 
   tloListDelete(&ints->list);
@@ -156,7 +145,7 @@ static void testDArrayIntPushBackUntilResizePopBackUntilEmpty(void) {
   for (size_t i = SOME_NUMBER - 1; i <= SOME_NUMBER - 1; --i) {
     EXPECT_LIST_PROPERTIES(&ints->list, i + 1, false, &tloInt,
                            &countingAllocator);
-    EXPECT_DARRAY_INT_ELEMENTS(ints, i, (int)i, 0, (int)i);
+    EXPECT_LIST_INT_ELEMENTS(&ints->list, 0, (int)i, i, (int)i);
 
     tloDArrayPopBack(ints);
   }
