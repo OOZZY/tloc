@@ -2,10 +2,10 @@
 #include <assert.h>
 
 bool tloListVTableIsValid(const TloListVTable *vTable) {
-  return vTable && vTable->isValid && vTable->destruct && vTable->size &&
-         vTable->isEmpty && vTable->front && vTable->mutableFront &&
-         vTable->back && vTable->mutableBack && vTable->pushBack &&
-         vTable->moveBack;
+  return vTable && vTable->type && vTable->isValid && vTable->destruct &&
+         vTable->size && vTable->isEmpty && vTable->front &&
+         vTable->mutableFront && vTable->back && vTable->mutableBack &&
+         vTable->pushBack && vTable->moveBack;
 }
 
 bool tloListIsValid(const TloList *list) {
@@ -53,6 +53,12 @@ const TloAllocatorType *tloListAllocatorType(const TloList *list) {
   assert(tlovListIsValid(list));
 
   return list->allocatorType;
+}
+
+const char *tlovListType(const TloList *list) {
+  assert(tloListIsValid(list));
+
+  return list->vTable->type;
 }
 
 bool tlovListIsValid(const TloList *list) {

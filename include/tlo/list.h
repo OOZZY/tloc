@@ -7,6 +7,7 @@ typedef struct TloList TloList;
 
 typedef struct TloListVTable {
   // private
+  const char *type;
   bool (*isValid)(const TloList *list);
   void (*destruct)(TloList *list);
   size_t (*size)(const TloList *list);
@@ -41,6 +42,7 @@ void tloListDelete(TloList *list);
 const TloType *tloListValueType(const TloList *list);
 const TloAllocatorType *tloListAllocatorType(const TloList *list);
 
+const char *tlovListType(const TloList *list);
 bool tlovListIsValid(const TloList *list);
 
 /*

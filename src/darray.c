@@ -187,7 +187,8 @@ static TloError moveBack(TloList *list, void *data) {
   return TLO_SUCCESS;
 }
 
-static const TloListVTable vTable = {.isValid = isValid,
+static const TloListVTable vTable = {.type = "TloDArray",
+                                     .isValid = isValid,
                                      .destruct = destruct,
                                      .size = size,
                                      .isEmpty = isEmpty,
