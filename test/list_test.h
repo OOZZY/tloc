@@ -4,6 +4,8 @@
 #include <string.h>
 #include <tlo/darray.h>
 #include <tlo/list.h>
+#include <tlo/test.h>
+#include "util.h"
 
 #define EXPECT_LIST_PROPERTIES(_list, _size, _isEmpty, _valueType, \
                                _allocatorType)                     \
@@ -31,6 +33,24 @@
       TLO_EXPECT(*(int *)tloDArrayMutableElement((TloDArray *)(_list),      \
                                                  _index) == (_indexValue)); \
     }                                                                       \
+  } while (0)
+
+#define EXPECT_LIST_INTPTR_ELEMENTS(_list, _frontValue, _backValue, _index,    \
+                                    _indexValue)                               \
+  do {                                                                         \
+    TLO_EXPECT(*((const IntPtr *)tlovListFront(_list))->ptr == (_frontValue)); \
+    TLO_EXPECT(*((IntPtr *)tlovListMutableFront(_list))->ptr ==                \
+               (_frontValue));                                                 \
+    TLO_EXPECT(*((const IntPtr *)tlovListBack(_list))->ptr == (_backValue));   \
+    TLO_EXPECT(*((IntPtr *)tlovListMutableBack(_list))->ptr == (_backValue));  \
+    if (strcmp(tlovListType(_list), "TloDArray") == 0) {                       \
+      TLO_EXPECT(*((const IntPtr *)tloDArrayElement(                           \
+                       (const TloDArray *)(_list), _index))                    \
+                      ->ptr == (_indexValue));                                 \
+      TLO_EXPECT(                                                              \
+          *((IntPtr *)tloDArrayMutableElement((TloDArray *)(_list), _index))   \
+               ->ptr == (_indexValue));                                        \
+    }                                                                          \
   } while (0)
 
 #endif  // LIST_TEST_H

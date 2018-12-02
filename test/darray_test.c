@@ -256,23 +256,6 @@ static void testDArrayIntCopy(void) {
   copy = NULL;
 }
 
-#define EXPECT_DARRAY_INTPTR_ELEMENTS(darray, index, indexValue, frontValue, \
-                                      backValue)                             \
-  do {                                                                       \
-    TLO_EXPECT(*((const IntPtr *)tloDArrayElement(darray, index))->ptr ==    \
-               (indexValue));                                                \
-    TLO_EXPECT(*((IntPtr *)tloDArrayMutableElement(darray, index))->ptr ==   \
-               (indexValue));                                                \
-    TLO_EXPECT(*((const IntPtr *)tlovListFront(&(darray)->list))->ptr ==     \
-               (frontValue));                                                \
-    TLO_EXPECT(*((IntPtr *)tlovListMutableFront(&(darray)->list))->ptr ==    \
-               (frontValue));                                                \
-    TLO_EXPECT(*((const IntPtr *)tlovListBack(&(darray)->list))->ptr ==      \
-               (backValue));                                                 \
-    TLO_EXPECT(*((IntPtr *)tlovListMutableBack(&(darray)->list))->ptr ==     \
-               (backValue));                                                 \
-  } while (0)
-
 static void testDArrayIntPtrPushOrMoveBackOnce(bool testPush) {
   TloDArray *intPtrs = tloDArrayMake(&intPtrType, &countingAllocator, 0);
   TLO_ASSERT(intPtrs);
@@ -293,8 +276,8 @@ static void testDArrayIntPtrPushOrMoveBackOnce(bool testPush) {
 
   EXPECT_LIST_PROPERTIES(&intPtrs->list, 1, false, &intPtrType,
                          &countingAllocator);
-  EXPECT_DARRAY_INTPTR_ELEMENTS(intPtrs, 0, SOME_NUMBER, SOME_NUMBER,
-                                SOME_NUMBER);
+  EXPECT_LIST_INTPTR_ELEMENTS(&intPtrs->list, SOME_NUMBER, SOME_NUMBER, 0,
+                              SOME_NUMBER);
 
   tloListDelete(&intPtrs->list);
   intPtrs = NULL;
@@ -321,7 +304,7 @@ static void testDArrayIntPtrPushOrMoveBackUntilResize(bool testPush) {
 
     EXPECT_LIST_PROPERTIES(&intPtrs->list, i + 1, false, &intPtrType,
                            &countingAllocator);
-    EXPECT_DARRAY_INTPTR_ELEMENTS(intPtrs, i, (int)i, 0, (int)i);
+    EXPECT_LIST_INTPTR_ELEMENTS(&intPtrs->list, 0, (int)i, i, (int)i);
   }
 
   tloListDelete(&intPtrs->list);
@@ -364,7 +347,7 @@ static void testDArrayIntPtrPushBackUntilResizePopBackUntilEmpty(void) {
   for (size_t i = SOME_NUMBER - 1; i <= SOME_NUMBER - 1; --i) {
     EXPECT_LIST_PROPERTIES(&intPtrs->list, i + 1, false, &intPtrType,
                            &countingAllocator);
-    EXPECT_DARRAY_INTPTR_ELEMENTS(intPtrs, i, (int)i, 0, (int)i);
+    EXPECT_LIST_INTPTR_ELEMENTS(&intPtrs->list, 0, (int)i, i, (int)i);
 
     tloDArrayPopBack(intPtrs);
   }
@@ -393,7 +376,7 @@ static void testDArrayIntPtrPushBackUntilResizeUnorderedRemoveBackUntilEmpty(
   for (size_t i = SOME_NUMBER - 1; i <= SOME_NUMBER - 1; --i) {
     EXPECT_LIST_PROPERTIES(&intPtrs->list, i + 1, false, &intPtrType,
                            &countingAllocator);
-    EXPECT_DARRAY_INTPTR_ELEMENTS(intPtrs, i, (int)i, 0, (int)i);
+    EXPECT_LIST_INTPTR_ELEMENTS(&intPtrs->list, 0, (int)i, i, (int)i);
 
     tloDArrayUnorderedRemove(intPtrs, tlovListSize(&intPtrs->list) - 1);
   }
@@ -424,12 +407,13 @@ static void testDArrayIntPtrPushBackUntilResizeUnorderedRemoveFrontUntilEmpty(
                            &countingAllocator);
 
     if (i == SOME_NUMBER - 1) {
-      EXPECT_DARRAY_INTPTR_ELEMENTS(intPtrs, i, SOME_NUMBER - 1, 0,
-                                    SOME_NUMBER - 1);
+      EXPECT_LIST_INTPTR_ELEMENTS(&intPtrs->list, 0, SOME_NUMBER - 1, i,
+                                  SOME_NUMBER - 1);
     } else if (i == 0) {
-      EXPECT_DARRAY_INTPTR_ELEMENTS(intPtrs, i, 1, 1, 1);
+      EXPECT_LIST_INTPTR_ELEMENTS(&intPtrs->list, 1, 1, i, 1);
     } else {
-      EXPECT_DARRAY_INTPTR_ELEMENTS(intPtrs, i, (int)i, (int)i + 1, (int)i);
+      EXPECT_LIST_INTPTR_ELEMENTS(&intPtrs->list, (int)i + 1, (int)i, i,
+                                  (int)i);
     }
 
     tloDArrayUnorderedRemove(intPtrs, 0);
