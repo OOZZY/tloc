@@ -7,6 +7,8 @@
 #include <tlo/test.h>
 #include "util.h"
 
+#define SOME_NUMBER 42
+
 #define EXPECT_LIST_PROPERTIES(_list, _size, _isEmpty, _valueType, \
                                _allocatorType)                     \
   do {                                                             \
@@ -52,5 +54,10 @@
                ->ptr == (_indexValue));                                        \
     }                                                                          \
   } while (0)
+
+void testListIntPushOrMoveBackOnce(TloList *ints, bool testPush);
+void testListIntPushOrMoveBackManyTimes(TloList *ints, bool testPush);
+void testListIntPtrPushOrMoveBackOnce(TloList *intPtrs, bool testPush);
+void testListIntPtrPushOrMoveBackManyTimes(TloList *intPtrs, bool testPush);
 
 #endif  // LIST_TEST_H

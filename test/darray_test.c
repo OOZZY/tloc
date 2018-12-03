@@ -68,54 +68,6 @@ static void testDArrayIntMakeWithCapacityDelete(void) {
 
 static void testDArrayDeleteWithNull(void) { tloListDelete(NULL); }
 
-static void testDArrayIntPushOrMoveBackOnce(bool testPush) {
-  TloDArray *ints = tloDArrayMake(&tloInt, &countingAllocator, 0);
-  TLO_ASSERT(ints);
-
-  TloError error;
-  if (testPush) {
-    int value = SOME_NUMBER;
-    error = tlovListPushBack(&ints->list, &value);
-  } else {
-    int *value = makeInt(SOME_NUMBER);
-    TLO_ASSERT(value);
-    error = tlovListMoveBack(&ints->list, value);
-  }
-  TLO_ASSERT(!error);
-
-  EXPECT_LIST_PROPERTIES(&ints->list, 1, false, &tloInt, &countingAllocator);
-  EXPECT_LIST_INT_ELEMENTS(&ints->list, SOME_NUMBER, SOME_NUMBER, 0,
-                           SOME_NUMBER);
-
-  tloListDelete(&ints->list);
-  ints = NULL;
-}
-
-static void testDArrayIntPushOrMoveBackUntilResize(bool testPush) {
-  TloDArray *ints = tloDArrayMake(&tloInt, &countingAllocator, 0);
-  TLO_ASSERT(ints);
-
-  for (size_t i = 0; i < SOME_NUMBER; ++i) {
-    TloError error;
-    if (testPush) {
-      int value = (int)i;
-      error = tlovListPushBack(&ints->list, &value);
-    } else {
-      int *value = makeInt((int)i);
-      TLO_ASSERT(value);
-      error = tlovListMoveBack(&ints->list, value);
-    }
-    TLO_ASSERT(!error);
-
-    EXPECT_LIST_PROPERTIES(&ints->list, i + 1, false, &tloInt,
-                           &countingAllocator);
-    EXPECT_LIST_INT_ELEMENTS(&ints->list, 0, (int)i, i, (int)i);
-  }
-
-  tloListDelete(&ints->list);
-  ints = NULL;
-}
-
 static void testDArrayIntPushBackOncePopBackOnce(void) {
   TloDArray *ints = tloDArrayMake(&tloInt, &countingAllocator, 0);
   TLO_ASSERT(ints);
@@ -256,61 +208,6 @@ static void testDArrayIntCopy(void) {
   copy = NULL;
 }
 
-static void testDArrayIntPtrPushOrMoveBackOnce(bool testPush) {
-  TloDArray *intPtrs = tloDArrayMake(&intPtrType, &countingAllocator, 0);
-  TLO_ASSERT(intPtrs);
-
-  TloError error;
-  if (testPush) {
-    IntPtr intPtr;
-    error = intPtrConstruct(&intPtr, SOME_NUMBER);
-    TLO_ASSERT(!error);
-    error = tlovListPushBack(&intPtrs->list, &intPtr);
-    tloPtrDestruct(&intPtr);
-  } else {
-    IntPtr *intPtr = intPtrMake(SOME_NUMBER);
-    TLO_ASSERT(intPtr);
-    error = tlovListMoveBack(&intPtrs->list, intPtr);
-  }
-  TLO_ASSERT(!error);
-
-  EXPECT_LIST_PROPERTIES(&intPtrs->list, 1, false, &intPtrType,
-                         &countingAllocator);
-  EXPECT_LIST_INTPTR_ELEMENTS(&intPtrs->list, SOME_NUMBER, SOME_NUMBER, 0,
-                              SOME_NUMBER);
-
-  tloListDelete(&intPtrs->list);
-  intPtrs = NULL;
-}
-
-static void testDArrayIntPtrPushOrMoveBackUntilResize(bool testPush) {
-  TloDArray *intPtrs = tloDArrayMake(&intPtrType, &countingAllocator, 0);
-  TLO_ASSERT(intPtrs);
-
-  for (size_t i = 0; i < SOME_NUMBER; ++i) {
-    TloError error;
-    if (testPush) {
-      IntPtr intPtr;
-      error = intPtrConstruct(&intPtr, (int)i);
-      TLO_ASSERT(!error);
-      error = tlovListPushBack(&intPtrs->list, &intPtr);
-      tloPtrDestruct(&intPtr);
-    } else {
-      IntPtr *intPtr = intPtrMake((int)i);
-      TLO_ASSERT(intPtr);
-      error = tlovListMoveBack(&intPtrs->list, intPtr);
-    }
-    TLO_ASSERT(!error);
-
-    EXPECT_LIST_PROPERTIES(&intPtrs->list, i + 1, false, &intPtrType,
-                           &countingAllocator);
-    EXPECT_LIST_INTPTR_ELEMENTS(&intPtrs->list, 0, (int)i, i, (int)i);
-  }
-
-  tloListDelete(&intPtrs->list);
-  intPtrs = NULL;
-}
-
 static void testDArrayIntPtrPushBackOncePopBackOnce(void) {
   TloDArray *intPtrs = tloDArrayMake(&intPtrType, &countingAllocator, 0);
   TLO_ASSERT(intPtrs);
@@ -442,19 +339,27 @@ void testDArray(void) {
   testDArrayIntMakeDelete();
   testDArrayIntMakeWithCapacityDelete();
   testDArrayDeleteWithNull();
-  testDArrayIntPushOrMoveBackOnce(true);
-  testDArrayIntPushOrMoveBackOnce(false);
-  testDArrayIntPushOrMoveBackUntilResize(true);
-  testDArrayIntPushOrMoveBackUntilResize(false);
+  testListIntPushOrMoveBackOnce(
+      (TloList *)tloDArrayMake(&tloInt, &countingAllocator, 0), true);
+  testListIntPushOrMoveBackOnce(
+      (TloList *)tloDArrayMake(&tloInt, &countingAllocator, 0), false);
+  testListIntPushOrMoveBackManyTimes(
+      (TloList *)tloDArrayMake(&tloInt, &countingAllocator, 0), true);
+  testListIntPushOrMoveBackManyTimes(
+      (TloList *)tloDArrayMake(&tloInt, &countingAllocator, 0), false);
   testDArrayIntPushBackOncePopBackOnce();
   testDArrayIntPushBackUntilResizePopBackUntilEmpty();
   testDArrayIntConstructCopy();
   testDArrayIntMakeCopy();
   testDArrayIntCopy();
-  testDArrayIntPtrPushOrMoveBackOnce(true);
-  testDArrayIntPtrPushOrMoveBackOnce(false);
-  testDArrayIntPtrPushOrMoveBackUntilResize(true);
-  testDArrayIntPtrPushOrMoveBackUntilResize(false);
+  testListIntPtrPushOrMoveBackOnce(
+      (TloList *)tloDArrayMake(&intPtrType, &countingAllocator, 0), true);
+  testListIntPtrPushOrMoveBackOnce(
+      (TloList *)tloDArrayMake(&intPtrType, &countingAllocator, 0), false);
+  testListIntPtrPushOrMoveBackManyTimes(
+      (TloList *)tloDArrayMake(&intPtrType, &countingAllocator, 0), true);
+  testListIntPtrPushOrMoveBackManyTimes(
+      (TloList *)tloDArrayMake(&intPtrType, &countingAllocator, 0), false);
   testDArrayIntPtrPushBackOncePopBackOnce();
   testDArrayIntPtrPushBackUntilResizePopBackUntilEmpty();
   testDArrayIntPtrPushBackUntilResizeUnorderedRemoveBackUntilEmpty();
