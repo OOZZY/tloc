@@ -29,7 +29,7 @@ static void testDArrayIntConstructDestruct(void) {
   do {                                                                    \
     EXPECT_LIST_PROPERTIES(&(_darray)->list, _size, _isEmpty, _valueType, \
                            _allocatorType);                               \
-    TLO_EXPECT(tloDArrayCapacity(_darray) == (_capacity));                \
+    TLO_EXPECT(tlovListCapacity(&(_darray)->list) == (_capacity));        \
   } while (0)
 
 static void testDArrayIntConstructWithCapacityDestruct(void) {
@@ -71,12 +71,13 @@ static void testDArrayDeleteWithNull(void) { tloListDelete(NULL); }
 static void testDArrayIntPushBackOncePopBackOnce(void) {
   TloDArray *ints = tloDArrayMake(&tloInt, &countingAllocator, 0);
   TLO_ASSERT(ints);
+  TLO_ASSERT(tloListHasFunctions(&ints->list, TLO_LIST_POP_BACK));
 
   int value = SOME_NUMBER;
   TloError error = tlovListPushBack(&ints->list, &value);
   TLO_ASSERT(!error);
 
-  tloDArrayPopBack(ints);
+  tlovListPopBack(&ints->list);
 
   EXPECT_LIST_PROPERTIES(&ints->list, 0, true, &tloInt, &countingAllocator);
 
@@ -87,6 +88,7 @@ static void testDArrayIntPushBackOncePopBackOnce(void) {
 static void testDArrayIntPushBackUntilResizePopBackUntilEmpty(void) {
   TloDArray *ints = tloDArrayMake(&tloInt, &countingAllocator, 0);
   TLO_ASSERT(ints);
+  TLO_ASSERT(tloListHasFunctions(&ints->list, TLO_LIST_POP_BACK));
 
   for (size_t i = 0; i < SOME_NUMBER; ++i) {
     int value = (int)i;
@@ -99,7 +101,7 @@ static void testDArrayIntPushBackUntilResizePopBackUntilEmpty(void) {
                            &countingAllocator);
     EXPECT_LIST_INT_ELEMENTS(&ints->list, 0, (int)i, i, (int)i);
 
-    tloDArrayPopBack(ints);
+    tlovListPopBack(&ints->list);
   }
 
   EXPECT_LIST_PROPERTIES(&ints->list, 0, true, &tloInt, &countingAllocator);
@@ -124,13 +126,13 @@ static void testDArrayIntConstructCopy(void) {
   TLO_ASSERT(!error);
 
   EXPECT_DARRAY_ALL_PROPERTIES(
-      ints, tlovListSize(&copy->list), tloDArrayCapacity(copy),
+      ints, tlovListSize(&copy->list), tlovListCapacity(&copy->list),
       tlovListIsEmpty(&copy->list), tloListValueType(&copy->list),
       tloListAllocatorType(&copy->list));
 
   for (size_t i = 0; i < tlovListSize(&ints->list); ++i) {
-    const int *elem1 = tloDArrayElement(ints, i);
-    const int *elem2 = tloDArrayElement(copy, i);
+    const int *elem1 = tlovListElement(&ints->list, i);
+    const int *elem2 = tlovListElement(&copy->list, i);
     TLO_EXPECT(elem1 != elem2);
     TLO_EXPECT(*elem1 == *elem2);
   }
@@ -156,13 +158,13 @@ static void testDArrayIntMakeCopy(void) {
   TLO_ASSERT(copy);
 
   EXPECT_DARRAY_ALL_PROPERTIES(
-      ints, tlovListSize(&copy->list), tloDArrayCapacity(copy),
+      ints, tlovListSize(&copy->list), tlovListCapacity(&copy->list),
       tlovListIsEmpty(&copy->list), tloListValueType(&copy->list),
       tloListAllocatorType(&copy->list));
 
   for (size_t i = 0; i < tlovListSize(&ints->list); ++i) {
-    const int *elem1 = tloDArrayElement(ints, i);
-    const int *elem2 = tloDArrayElement(copy, i);
+    const int *elem1 = tlovListElement(&ints->list, i);
+    const int *elem2 = tlovListElement(&copy->list, i);
     TLO_EXPECT(elem1 != elem2);
     TLO_EXPECT(*elem1 == *elem2);
   }
@@ -190,13 +192,13 @@ static void testDArrayIntCopy(void) {
   TLO_ASSERT(!error);
 
   EXPECT_DARRAY_ALL_PROPERTIES(
-      ints, tlovListSize(&copy->list), tloDArrayCapacity(copy),
+      ints, tlovListSize(&copy->list), tlovListCapacity(&copy->list),
       tlovListIsEmpty(&copy->list), tloListValueType(&copy->list),
       tloListAllocatorType(&copy->list));
 
   for (size_t i = 0; i < tlovListSize(&ints->list); ++i) {
-    const int *elem1 = tloDArrayElement(ints, i);
-    const int *elem2 = tloDArrayElement(copy, i);
+    const int *elem1 = tlovListElement(&ints->list, i);
+    const int *elem2 = tlovListElement(&copy->list, i);
     TLO_EXPECT(elem1 != elem2);
     TLO_EXPECT(*elem1 == *elem2);
   }
@@ -211,6 +213,7 @@ static void testDArrayIntCopy(void) {
 static void testDArrayIntPtrPushBackOncePopBackOnce(void) {
   TloDArray *intPtrs = tloDArrayMake(&intPtrType, &countingAllocator, 0);
   TLO_ASSERT(intPtrs);
+  TLO_ASSERT(tloListHasFunctions(&intPtrs->list, TLO_LIST_POP_BACK));
 
   IntPtr intPtr;
   TloError error = intPtrConstruct(&intPtr, SOME_NUMBER);
@@ -219,7 +222,7 @@ static void testDArrayIntPtrPushBackOncePopBackOnce(void) {
   TLO_ASSERT(!error);
   tloPtrDestruct(&intPtr);
 
-  tloDArrayPopBack(intPtrs);
+  tlovListPopBack(&intPtrs->list);
 
   EXPECT_LIST_PROPERTIES(&intPtrs->list, 0, true, &intPtrType,
                          &countingAllocator);
@@ -231,6 +234,7 @@ static void testDArrayIntPtrPushBackOncePopBackOnce(void) {
 static void testDArrayIntPtrPushBackUntilResizePopBackUntilEmpty(void) {
   TloDArray *intPtrs = tloDArrayMake(&intPtrType, &countingAllocator, 0);
   TLO_ASSERT(intPtrs);
+  TLO_ASSERT(tloListHasFunctions(&intPtrs->list, TLO_LIST_POP_BACK));
 
   for (size_t i = 0; i < SOME_NUMBER; ++i) {
     IntPtr intPtr;
@@ -246,7 +250,7 @@ static void testDArrayIntPtrPushBackUntilResizePopBackUntilEmpty(void) {
                            &countingAllocator);
     EXPECT_LIST_INTPTR_ELEMENTS(&intPtrs->list, 0, (int)i, i, (int)i);
 
-    tloDArrayPopBack(intPtrs);
+    tlovListPopBack(&intPtrs->list);
   }
 
   EXPECT_LIST_PROPERTIES(&intPtrs->list, 0, true, &intPtrType,
@@ -260,6 +264,7 @@ static void testDArrayIntPtrPushBackUntilResizeUnorderedRemoveBackUntilEmpty(
     void) {
   TloDArray *intPtrs = tloDArrayMake(&intPtrType, &countingAllocator, 0);
   TLO_ASSERT(intPtrs);
+  TLO_ASSERT(tloListHasFunctions(&intPtrs->list, TLO_LIST_UNORDERED_REMOVE));
 
   for (size_t i = 0; i < SOME_NUMBER; ++i) {
     IntPtr intPtr;
@@ -275,7 +280,7 @@ static void testDArrayIntPtrPushBackUntilResizeUnorderedRemoveBackUntilEmpty(
                            &countingAllocator);
     EXPECT_LIST_INTPTR_ELEMENTS(&intPtrs->list, 0, (int)i, i, (int)i);
 
-    tloDArrayUnorderedRemove(intPtrs, tlovListSize(&intPtrs->list) - 1);
+    tlovListUnorderedRemove(&intPtrs->list, tlovListSize(&intPtrs->list) - 1);
   }
 
   EXPECT_LIST_PROPERTIES(&intPtrs->list, 0, true, &intPtrType,
@@ -289,6 +294,7 @@ static void testDArrayIntPtrPushBackUntilResizeUnorderedRemoveFrontUntilEmpty(
     void) {
   TloDArray *intPtrs = tloDArrayMake(&intPtrType, &countingAllocator, 0);
   TLO_ASSERT(intPtrs);
+  TLO_ASSERT(tloListHasFunctions(&intPtrs->list, TLO_LIST_UNORDERED_REMOVE));
 
   for (size_t i = 0; i < SOME_NUMBER; ++i) {
     IntPtr intPtr;
@@ -313,7 +319,7 @@ static void testDArrayIntPtrPushBackUntilResizeUnorderedRemoveFrontUntilEmpty(
                                   (int)i);
     }
 
-    tloDArrayUnorderedRemove(intPtrs, 0);
+    tlovListUnorderedRemove(&intPtrs->list, 0);
   }
 
   EXPECT_LIST_PROPERTIES(&intPtrs->list, 0, true, &intPtrType,

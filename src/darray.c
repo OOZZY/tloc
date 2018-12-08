@@ -187,6 +187,63 @@ static TloError darrayMoveBack(TloList *list, void *data) {
   return TLO_SUCCESS;
 }
 
+static size_t darrayCapacity(const TloList *list) {
+  assert(darrayIsValid(list));
+
+  const TloDArray *array = (const TloDArray *)list;
+  return array->capacity;
+}
+
+static const void *darrayElement(const TloList *list, size_t index) {
+  assert(darrayIsValid(list));
+  assert(!darrayIsEmpty(list));
+  const TloDArray *array = (const TloDArray *)list;
+  assert(index < array->size);
+
+  return constElement(array, index);
+}
+
+static void *darrayMutableElement(TloList *list, size_t index) {
+  assert(darrayIsValid(list));
+  assert(!darrayIsEmpty(list));
+  TloDArray *array = (TloDArray *)list;
+  assert(index < array->size);
+
+  return mutableElement(array, index);
+}
+
+static void darrayPopBack(TloList *list) {
+  assert(darrayIsValid(list));
+  assert(!darrayIsEmpty(list));
+
+  TloDArray *array = (TloDArray *)list;
+  void *back = mutableElement(array, array->size - 1);
+  if (array->list.valueType->destruct) {
+    array->list.valueType->destruct(back);
+  }
+  --array->size;
+}
+
+static void darrayUnorderedRemove(TloList *list, size_t index) {
+  assert(darrayIsValid(list));
+  assert(!darrayIsEmpty(list));
+  TloDArray *array = (TloDArray *)list;
+  assert(index < array->size);
+
+  if (index == array->size - 1) {
+    darrayPopBack(list);
+    return;
+  }
+
+  void *target = mutableElement(array, index);
+  if (array->list.valueType->destruct) {
+    array->list.valueType->destruct(target);
+  }
+  void *back = mutableElement(array, array->size - 1);
+  memcpy(target, back, array->list.valueType->sizeOf);
+  --array->size;
+}
+
 static const TloListVTable vTable = {.type = "TloDArray",
                                      .isValid = darrayIsValid,
                                      .destruct = darrayDestruct,
@@ -197,7 +254,12 @@ static const TloListVTable vTable = {.type = "TloDArray",
                                      .back = darrayBack,
                                      .mutableBack = darrayMutableBack,
                                      .pushBack = darrayPushBack,
-                                     .moveBack = darrayMoveBack};
+                                     .moveBack = darrayMoveBack,
+                                     .capacity = darrayCapacity,
+                                     .element = darrayElement,
+                                     .mutableElement = darrayMutableElement,
+                                     .popBack = darrayPopBack,
+                                     .unorderedRemove = darrayUnorderedRemove};
 
 TloError tloDArrayConstruct(TloDArray *array, const TloType *valueType,
                             const TloAllocatorType *allocatorType,
@@ -306,56 +368,4 @@ TloError tloDArrayCopy(TloDArray *array, const TloDArray *other) {
   memcpy(array, &copy, sizeof(TloDArray));
 
   return TLO_SUCCESS;
-}
-
-size_t tloDArrayCapacity(const TloDArray *array) {
-  assert(darrayIsValid(&array->list));
-
-  return array->capacity;
-}
-
-const void *tloDArrayElement(const TloDArray *array, size_t index) {
-  assert(darrayIsValid(&array->list));
-  assert(!darrayIsEmpty(&array->list));
-  assert(index < array->size);
-
-  return constElement(array, index);
-}
-
-void *tloDArrayMutableElement(TloDArray *array, size_t index) {
-  assert(darrayIsValid(&array->list));
-  assert(!darrayIsEmpty(&array->list));
-  assert(index < array->size);
-
-  return mutableElement(array, index);
-}
-
-void tloDArrayPopBack(TloDArray *array) {
-  assert(darrayIsValid(&array->list));
-  assert(!darrayIsEmpty(&array->list));
-
-  void *back = mutableElement(array, array->size - 1);
-  if (array->list.valueType->destruct) {
-    array->list.valueType->destruct(back);
-  }
-  --array->size;
-}
-
-void tloDArrayUnorderedRemove(TloDArray *array, size_t index) {
-  assert(darrayIsValid(&array->list));
-  assert(!darrayIsEmpty(&array->list));
-  assert(index < array->size);
-
-  if (index == array->size - 1) {
-    tloDArrayPopBack(array);
-    return;
-  }
-
-  void *target = mutableElement(array, index);
-  if (array->list.valueType->destruct) {
-    array->list.valueType->destruct(target);
-  }
-  void *back = mutableElement(array, array->size - 1);
-  memcpy(target, back, array->list.valueType->sizeOf);
-  --array->size;
 }

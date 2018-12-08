@@ -42,18 +42,4 @@ TloDArray *tloDArrayMakeCopy(const TloDArray *other);
  */
 TloError tloDArrayCopy(TloDArray *array, const TloDArray *other);
 
-size_t tloDArrayCapacity(const TloDArray *array);
-const void *tloDArrayElement(const TloDArray *array, size_t index);
-void *tloDArrayMutableElement(TloDArray *array, size_t index);
-
-/*
- * - uses array->valueType->destruct if it is not NULL
- */
-void tloDArrayPopBack(TloDArray *array);
-
-/*
- * - uses array->valueType->destruct if it is not NULL
- */
-void tloDArrayUnorderedRemove(TloDArray *array, size_t index);
-
 #endif  // TLO_DARRAY_H
