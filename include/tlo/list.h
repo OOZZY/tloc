@@ -101,19 +101,37 @@ const void *tlovListElement(const TloList *list, size_t index);
 // assumes tloListHasFunctions(list, TLO_LIST_ELEMENT)
 void *tlovListMutableElement(TloList *list, size_t index);
 
-// assumes tloListHasFunctions(list, TLO_LIST_PUSH_FRONT)
+/*
+ * - assumes tloListHasFunctions(list, TLO_LIST_PUSH_FRONT)
+ * - deep copies data using list->valueType->constructCopy if it is not null
+ * - otherwise, uses memcpy
+ */
 TloError tlovListPushFront(TloList *list, const void *data);
 
-// assumes tloListHasFunctions(list, TLO_LIST_PUSH_FRONT)
+/*
+ * - assumes tloListHasFunctions(list, TLO_LIST_PUSH_FRONT)
+ * - assumes data points to an object whose memory was allocated by
+ *   allocatorType->malloc
+ * - takes ownership of the object
+ */
 TloError tlovListMoveFront(TloList *list, void *data);
 
-// assumes tloListHasFunctions(list, TLO_LIST_POP_FRONT)
+/*
+ * - assumes tloListHasFunctions(list, TLO_LIST_POP_FRONT)
+ * - uses list->valueType->destruct if it is not NULL
+ */
 void tlovListPopFront(TloList *list);
 
-// assumes tloListHasFunctions(list, TLO_LIST_POP_BACK)
+/*
+ * - assumes tloListHasFunctions(list, TLO_LIST_POP_BACK)
+ * - uses array->valueType->destruct if it is not NULL
+ */
 void tlovListPopBack(TloList *list);
 
-// assumes tloListHasFunctions(list, TLO_LIST_UNORDERED_REMOVE)
+/*
+ * - assumes tloListHasFunctions(list, TLO_LIST_UNORDERED_REMOVE)
+ * - uses array->valueType->destruct if it is not NULL
+ */
 void tlovListUnorderedRemove(TloList *list, size_t index);
 
 #endif  // TLO_LIST_H
