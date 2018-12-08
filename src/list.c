@@ -55,6 +55,42 @@ const TloAllocatorType *tloListAllocatorType(const TloList *list) {
   return list->allocatorType;
 }
 
+static unsigned char getFunctions(const TloListVTable *vTable) {
+  unsigned char functions = 0;
+
+  if (vTable->capacity) {
+    functions |= TLO_LIST_CAPACITY;
+  }
+
+  if (vTable->element && vTable->mutableElement) {
+    functions |= TLO_LIST_ELEMENT;
+  }
+
+  if (vTable->pushFront && vTable->moveFront) {
+    functions |= TLO_LIST_PUSH_FRONT;
+  }
+
+  if (vTable->popFront) {
+    functions |= TLO_LIST_POP_FRONT;
+  }
+
+  if (vTable->popBack) {
+    functions |= TLO_LIST_POP_BACK;
+  }
+
+  if (vTable->unorderedRemove) {
+    functions |= TLO_LIST_UNORDERED_REMOVE;
+  }
+
+  return functions;
+}
+
+bool tloListHasFunctions(const TloList *list, unsigned char functions) {
+  assert(tloListIsValid(list));
+
+  return (getFunctions(list->vTable) & functions) == functions;
+}
+
 const char *tlovListType(const TloList *list) {
   assert(tloListIsValid(list));
 
@@ -119,4 +155,60 @@ TloError tlovListMoveBack(TloList *list, void *data) {
   assert(tloListIsValid(list));
 
   return list->vTable->moveBack(list, data);
+}
+
+size_t tlovListCapacity(const TloList *list) {
+  assert(tloListIsValid(list));
+  assert(tloListHasFunctions(list, TLO_LIST_CAPACITY));
+
+  return list->vTable->capacity(list);
+}
+
+const void *tlovListElement(const TloList *list, size_t index) {
+  assert(tloListIsValid(list));
+  assert(tloListHasFunctions(list, TLO_LIST_ELEMENT));
+
+  return list->vTable->element(list, index);
+}
+
+void *tlovListMutableElement(TloList *list, size_t index) {
+  assert(tloListIsValid(list));
+  assert(tloListHasFunctions(list, TLO_LIST_ELEMENT));
+
+  return list->vTable->mutableElement(list, index);
+}
+
+TloError tlovListPushFront(TloList *list, const void *data) {
+  assert(tloListIsValid(list));
+  assert(tloListHasFunctions(list, TLO_LIST_PUSH_FRONT));
+
+  return list->vTable->pushFront(list, data);
+}
+
+TloError tlovListMoveFront(TloList *list, void *data) {
+  assert(tloListIsValid(list));
+  assert(tloListHasFunctions(list, TLO_LIST_PUSH_FRONT));
+
+  return list->vTable->moveFront(list, data);
+}
+
+void tlovListPopFront(TloList *list) {
+  assert(tloListIsValid(list));
+  assert(tloListHasFunctions(list, TLO_LIST_POP_FRONT));
+
+  list->vTable->popFront(list);
+}
+
+void tlovListPopBack(TloList *list) {
+  assert(tloListIsValid(list));
+  assert(tloListHasFunctions(list, TLO_LIST_POP_BACK));
+
+  list->vTable->popBack(list);
+}
+
+void tlovListUnorderedRemove(TloList *list, size_t index) {
+  assert(tloListIsValid(list));
+  assert(tloListHasFunctions(list, TLO_LIST_UNORDERED_REMOVE));
+
+  list->vTable->unorderedRemove(list, index);
 }

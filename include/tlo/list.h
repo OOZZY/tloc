@@ -7,6 +7,8 @@ typedef struct TloList TloList;
 
 typedef struct TloListVTable {
   // private
+
+  // all of the following must be implemented
   const char *type;
   bool (*isValid)(const TloList *list);
   void (*destruct)(TloList *list);
@@ -18,9 +20,28 @@ typedef struct TloListVTable {
   void *(*mutableBack)(TloList *list);
   TloError (*pushBack)(TloList *list, const void *data);
   TloError (*moveBack)(TloList *list, void *data);
+
+  // all of the following are optional
+  size_t (*capacity)(const TloList *list);
+  const void *(*element)(const TloList *list, size_t index);
+  void *(*mutableElement)(TloList *list, size_t index);
+  TloError (*pushFront)(TloList *list, const void *data);
+  TloError (*moveFront)(TloList *list, void *data);
+  void (*popFront)(TloList *list);
+  void (*popBack)(TloList *list);
+  void (*unorderedRemove)(TloList *list, size_t index);
 } TloListVTable;
 
 bool tloListVTableIsValid(const TloListVTable *vTable);
+
+typedef enum TloListOptionalFunction {
+  TLO_LIST_CAPACITY = 1U,
+  TLO_LIST_ELEMENT = 1U << 1,
+  TLO_LIST_PUSH_FRONT = 1U << 2,
+  TLO_LIST_POP_FRONT = 1U << 3,
+  TLO_LIST_POP_BACK = 1U << 4,
+  TLO_LIST_UNORDERED_REMOVE = 1U << 5
+} TloListOptionalFunction;
 
 struct TloList {
   // private
@@ -41,6 +62,7 @@ void tloListDelete(TloList *list);
 
 const TloType *tloListValueType(const TloList *list);
 const TloAllocatorType *tloListAllocatorType(const TloList *list);
+bool tloListHasFunctions(const TloList *list, unsigned char functions);
 
 const char *tlovListType(const TloList *list);
 bool tlovListIsValid(const TloList *list);
@@ -69,5 +91,29 @@ TloError tlovListPushBack(TloList *list, const void *data);
  * - takes ownership of the object
  */
 TloError tlovListMoveBack(TloList *list, void *data);
+
+// assumes tloListHasFunctions(list, TLO_LIST_CAPACITY)
+size_t tlovListCapacity(const TloList *list);
+
+// assumes tloListHasFunctions(list, TLO_LIST_ELEMENT)
+const void *tlovListElement(const TloList *list, size_t index);
+
+// assumes tloListHasFunctions(list, TLO_LIST_ELEMENT)
+void *tlovListMutableElement(TloList *list, size_t index);
+
+// assumes tloListHasFunctions(list, TLO_LIST_PUSH_FRONT)
+TloError tlovListPushFront(TloList *list, const void *data);
+
+// assumes tloListHasFunctions(list, TLO_LIST_PUSH_FRONT)
+TloError tlovListMoveFront(TloList *list, void *data);
+
+// assumes tloListHasFunctions(list, TLO_LIST_POP_FRONT)
+void tlovListPopFront(TloList *list);
+
+// assumes tloListHasFunctions(list, TLO_LIST_POP_BACK)
+void tlovListPopBack(TloList *list);
+
+// assumes tloListHasFunctions(list, TLO_LIST_UNORDERED_REMOVE)
+void tlovListUnorderedRemove(TloList *list, size_t index);
 
 #endif  // TLO_LIST_H
