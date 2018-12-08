@@ -2,7 +2,7 @@
 #include <assert.h>
 #include <string.h>
 
-static bool isValid(const TloList *list) {
+static bool sllistIsValid(const TloList *list) {
   const TloSLList *llist = (const TloSLList *)list;
   return tloListIsValid(list) &&
          ((llist->head == NULL) == (llist->size == 0)) &&
@@ -29,12 +29,12 @@ static void destructAllElementsAndFreeAllNodes(TloSLList *llist) {
   }
 }
 
-static void destruct(TloList *list) {
+static void sllistDestruct(TloList *list) {
   if (!list) {
     return;
   }
 
-  assert(isValid(list));
+  assert(sllistIsValid(list));
 
   TloSLList *llist = (TloSLList *)list;
   if (!llist->head) {
@@ -47,47 +47,47 @@ static void destruct(TloList *list) {
   llist->tail = NULL;
 }
 
-static size_t size(const TloList *list) {
-  assert(isValid(list));
+static size_t sllistSize(const TloList *list) {
+  assert(sllistIsValid(list));
 
   const TloSLList *llist = (const TloSLList *)list;
   return llist->size;
 }
 
-static bool isEmpty(const TloList *list) {
-  assert(isValid(list));
+static bool sllistIsEmpty(const TloList *list) {
+  assert(sllistIsValid(list));
 
   const TloSLList *llist = (const TloSLList *)list;
   return llist->size == 0;
 }
 
-static const void *front(const TloList *list) {
-  assert(isValid(list));
-  assert(!isEmpty(list));
+static const void *sllistFront(const TloList *list) {
+  assert(sllistIsValid(list));
+  assert(!sllistIsEmpty(list));
 
   const TloSLList *llist = (const TloSLList *)list;
   return llist->head->bytes;
 }
 
-static void *mutableFront(TloList *list) {
-  assert(isValid(list));
-  assert(!isEmpty(list));
+static void *sllistMutableFront(TloList *list) {
+  assert(sllistIsValid(list));
+  assert(!sllistIsEmpty(list));
 
   TloSLList *llist = (TloSLList *)list;
   return llist->head->bytes;
 }
 
-static const void *back(const TloList *list) {
-  assert(isValid(list));
-  assert(!isEmpty(list));
+static const void *sllistBack(const TloList *list) {
+  assert(sllistIsValid(list));
+  assert(!sllistIsEmpty(list));
 
   const TloSLList *llist = (const TloSLList *)list;
   return llist->tail->bytes;
 }
 
-static void *mutableBack(TloList *list) {
-  assert(isValid(list));
-  assert(!isEmpty(list));
+static void *sllistMutableBack(TloList *list) {
+  assert(sllistIsValid(list));
+  assert(!sllistIsEmpty(list));
 
   TloSLList *llist = (TloSLList *)list;
   return llist->tail->bytes;
@@ -132,8 +132,8 @@ static void pushBackNode(TloSLList *llist, TloSLLNode *node) {
   ++llist->size;
 }
 
-static TloError pushBack(TloList *list, const void *data) {
-  assert(isValid(list));
+static TloError sllistPushBack(TloList *list, const void *data) {
+  assert(sllistIsValid(list));
   assert(data);
 
   TloSLList *llist = (TloSLList *)list;
@@ -158,8 +158,8 @@ static TloSLLNode *makeNodeWithMovedData(TloSLList *llist, void *data) {
   return node;
 }
 
-static TloError moveBack(TloList *list, void *data) {
-  assert(isValid(list));
+static TloError sllistMoveBack(TloList *list, void *data) {
+  assert(sllistIsValid(list));
   assert(data);
 
   TloSLList *llist = (TloSLList *)list;
@@ -174,16 +174,16 @@ static TloError moveBack(TloList *list, void *data) {
 }
 
 static const TloListVTable vTable = {.type = "TloSLList",
-                                     .isValid = isValid,
-                                     .destruct = destruct,
-                                     .size = size,
-                                     .isEmpty = isEmpty,
-                                     .front = front,
-                                     .mutableFront = mutableFront,
-                                     .back = back,
-                                     .mutableBack = mutableBack,
-                                     .pushBack = pushBack,
-                                     .moveBack = moveBack};
+                                     .isValid = sllistIsValid,
+                                     .destruct = sllistDestruct,
+                                     .size = sllistSize,
+                                     .isEmpty = sllistIsEmpty,
+                                     .front = sllistFront,
+                                     .mutableFront = sllistMutableFront,
+                                     .back = sllistBack,
+                                     .mutableBack = sllistMutableBack,
+                                     .pushBack = sllistPushBack,
+                                     .moveBack = sllistMoveBack};
 
 TloError tloSLListConstruct(TloSLList *llist, const TloType *valueType,
                             const TloAllocatorType *allocatorType) {
@@ -203,8 +203,8 @@ static TloError pushBackAllElementsOfOther(TloSLList *llist,
                                            const TloSLList *other) {
   for (TloSLLNode *node = other->head; node; node = node->next) {
     const void *element = node->bytes;
-    if (pushBack(&llist->list, element) == TLO_ERROR) {
-      destruct(&llist->list);
+    if (sllistPushBack(&llist->list, element) == TLO_ERROR) {
+      sllistDestruct(&llist->list);
       return TLO_ERROR;
     }
   }
@@ -214,7 +214,7 @@ static TloError pushBackAllElementsOfOther(TloSLList *llist,
 
 TloError tloSLListConstructCopy(TloSLList *llist, const TloSLList *other) {
   assert(llist);
-  assert(isValid(&other->list));
+  assert(sllistIsValid(&other->list));
 
   if (tloSLListConstruct(llist, other->list.valueType,
                          other->list.allocatorType) == TLO_ERROR) {
@@ -252,7 +252,7 @@ TloSLList *tloSLListMake(const TloType *valueType,
 }
 
 TloSLList *tloSLListMakeCopy(const TloSLList *other) {
-  assert(isValid(&other->list));
+  assert(sllistIsValid(&other->list));
 
   TloSLList *llist = other->list.allocatorType->malloc(sizeof(*llist));
   if (!llist) {
@@ -268,15 +268,15 @@ TloSLList *tloSLListMakeCopy(const TloSLList *other) {
 }
 
 TloError tloSLListCopy(TloSLList *llist, const TloSLList *other) {
-  assert(isValid(&llist->list));
-  assert(isValid(&other->list));
+  assert(sllistIsValid(&llist->list));
+  assert(sllistIsValid(&other->list));
 
   TloSLList copy;
   if (tloSLListConstructCopy(&copy, other) == TLO_ERROR) {
     return TLO_ERROR;
   }
 
-  destruct(&llist->list);
+  sllistDestruct(&llist->list);
   memcpy(llist, &copy, sizeof(TloSLList));
 
   return TLO_SUCCESS;
@@ -295,7 +295,7 @@ static void pushFrontNode(TloSLList *llist, TloSLLNode *node) {
 }
 
 TloError tloSLListPushFront(TloSLList *llist, const void *data) {
-  assert(isValid(&llist->list));
+  assert(sllistIsValid(&llist->list));
   assert(data);
 
   TloSLLNode *newNode = makeNodeWithCopiedData(llist, data);
@@ -309,7 +309,7 @@ TloError tloSLListPushFront(TloSLList *llist, const void *data) {
 }
 
 TloError tloSLListMoveFront(TloSLList *llist, void *data) {
-  assert(isValid(&llist->list));
+  assert(sllistIsValid(&llist->list));
   assert(data);
 
   TloSLLNode *newNode = makeNodeWithMovedData(llist, data);
@@ -323,8 +323,8 @@ TloError tloSLListMoveFront(TloSLList *llist, void *data) {
 }
 
 void tloSLListPopFront(TloSLList *llist) {
-  assert(isValid(&llist->list));
-  assert(!isEmpty(&llist->list));
+  assert(sllistIsValid(&llist->list));
+  assert(!sllistIsEmpty(&llist->list));
 
   TloSLLNode *frontNode = llist->head;
   llist->head = llist->head->next;
@@ -343,13 +343,13 @@ void tloSLListPopFront(TloSLList *llist) {
 bool tloSLLNodeIsValid(const TloSLLNode *node) { return node && node->bytes; }
 
 const TloSLLNode *tloSLLNodeHead(const TloSLList *llist) {
-  assert(isValid(&llist->list));
+  assert(sllistIsValid(&llist->list));
 
   return llist->head;
 }
 
 TloSLLNode *tloSLLNodeMutableHead(TloSLList *llist) {
-  assert(isValid(&llist->list));
+  assert(sllistIsValid(&llist->list));
 
   return llist->head;
 }

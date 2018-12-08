@@ -2,7 +2,7 @@
 #include <assert.h>
 #include <string.h>
 
-static bool isValid(const TloList *list) {
+static bool darrayIsValid(const TloList *list) {
   const TloDArray *array = (const TloDArray *)list;
   return tloListIsValid(list) && (array->size <= array->capacity);
 }
@@ -24,12 +24,12 @@ static void destructAllElements(TloDArray *array) {
   }
 }
 
-static void destruct(TloList *list) {
+static void darrayDestruct(TloList *list) {
   if (!list) {
     return;
   }
 
-  assert(isValid(list));
+  assert(darrayIsValid(list));
 
   TloDArray *array = (TloDArray *)list;
   if (!array->bytes) {
@@ -42,47 +42,47 @@ static void destruct(TloList *list) {
   array->bytes = NULL;
 }
 
-static size_t size(const TloList *list) {
-  assert(isValid(list));
+static size_t darraySize(const TloList *list) {
+  assert(darrayIsValid(list));
 
   const TloDArray *array = (const TloDArray *)list;
   return array->size;
 }
 
-static bool isEmpty(const TloList *list) {
-  assert(isValid(list));
+static bool darrayIsEmpty(const TloList *list) {
+  assert(darrayIsValid(list));
 
   const TloDArray *array = (const TloDArray *)list;
   return array->size == 0;
 }
 
-static const void *front(const TloList *list) {
-  assert(isValid(list));
-  assert(!isEmpty(list));
+static const void *darrayFront(const TloList *list) {
+  assert(darrayIsValid(list));
+  assert(!darrayIsEmpty(list));
 
   const TloDArray *array = (const TloDArray *)list;
   return constElement(array, 0);
 }
 
-static void *mutableFront(TloList *list) {
-  assert(isValid(list));
-  assert(!isEmpty(list));
+static void *darrayMutableFront(TloList *list) {
+  assert(darrayIsValid(list));
+  assert(!darrayIsEmpty(list));
 
   TloDArray *array = (TloDArray *)list;
   return mutableElement(array, 0);
 }
 
-static const void *back(const TloList *list) {
-  assert(isValid(list));
-  assert(!isEmpty(list));
+static const void *darrayBack(const TloList *list) {
+  assert(darrayIsValid(list));
+  assert(!darrayIsEmpty(list));
 
   const TloDArray *array = (const TloDArray *)list;
   return constElement(array, array->size - 1);
 }
 
-static void *mutableBack(TloList *list) {
-  assert(isValid(list));
-  assert(!isEmpty(list));
+static void *darrayMutableBack(TloList *list) {
+  assert(darrayIsValid(list));
+  assert(!darrayIsEmpty(list));
 
   TloDArray *array = (TloDArray *)list;
   return mutableElement(array, array->size - 1);
@@ -136,8 +136,8 @@ static TloError pushBackCopiedData(TloDArray *array, const void *data) {
   return TLO_SUCCESS;
 }
 
-static TloError pushBack(TloList *list, const void *data) {
-  assert(isValid(list));
+static TloError darrayPushBack(TloList *list, const void *data) {
+  assert(darrayIsValid(list));
   assert(data);
 
   TloDArray *array = (TloDArray *)list;
@@ -167,8 +167,8 @@ static TloError pushBackMovedData(TloDArray *array, void *data) {
   return TLO_SUCCESS;
 }
 
-static TloError moveBack(TloList *list, void *data) {
-  assert(isValid(list));
+static TloError darrayMoveBack(TloList *list, void *data) {
+  assert(darrayIsValid(list));
   assert(data);
 
   TloDArray *array = (TloDArray *)list;
@@ -188,16 +188,16 @@ static TloError moveBack(TloList *list, void *data) {
 }
 
 static const TloListVTable vTable = {.type = "TloDArray",
-                                     .isValid = isValid,
-                                     .destruct = destruct,
-                                     .size = size,
-                                     .isEmpty = isEmpty,
-                                     .front = front,
-                                     .mutableFront = mutableFront,
-                                     .back = back,
-                                     .mutableBack = mutableBack,
-                                     .pushBack = pushBack,
-                                     .moveBack = moveBack};
+                                     .isValid = darrayIsValid,
+                                     .destruct = darrayDestruct,
+                                     .size = darraySize,
+                                     .isEmpty = darrayIsEmpty,
+                                     .front = darrayFront,
+                                     .mutableFront = darrayMutableFront,
+                                     .back = darrayBack,
+                                     .mutableBack = darrayMutableBack,
+                                     .pushBack = darrayPushBack,
+                                     .moveBack = darrayMoveBack};
 
 TloError tloDArrayConstruct(TloDArray *array, const TloType *valueType,
                             const TloAllocatorType *allocatorType,
@@ -226,8 +226,8 @@ static TloError pushBackAllElementsOfOther(TloDArray *array,
                                            const TloDArray *other) {
   for (size_t i = 0; i < other->size; ++i) {
     const void *element = constElement(other, i);
-    if (pushBack(&array->list, element) == TLO_ERROR) {
-      destruct(&array->list);
+    if (darrayPushBack(&array->list, element) == TLO_ERROR) {
+      darrayDestruct(&array->list);
       return TLO_ERROR;
     }
   }
@@ -237,7 +237,7 @@ static TloError pushBackAllElementsOfOther(TloDArray *array,
 
 TloError tloDArrayConstructCopy(TloDArray *array, const TloDArray *other) {
   assert(array);
-  assert(isValid(&other->list));
+  assert(darrayIsValid(&other->list));
 
   if (tloDArrayConstruct(array, other->list.valueType,
                          other->list.allocatorType,
@@ -278,7 +278,7 @@ TloDArray *tloDArrayMake(const TloType *valueType,
 }
 
 TloDArray *tloDArrayMakeCopy(const TloDArray *other) {
-  assert(isValid(&other->list));
+  assert(darrayIsValid(&other->list));
 
   TloDArray *array = other->list.allocatorType->malloc(sizeof(*array));
   if (!array) {
@@ -294,45 +294,45 @@ TloDArray *tloDArrayMakeCopy(const TloDArray *other) {
 }
 
 TloError tloDArrayCopy(TloDArray *array, const TloDArray *other) {
-  assert(isValid(&array->list));
-  assert(isValid(&other->list));
+  assert(darrayIsValid(&array->list));
+  assert(darrayIsValid(&other->list));
 
   TloDArray copy;
   if (tloDArrayConstructCopy(&copy, other) == TLO_ERROR) {
     return TLO_ERROR;
   }
 
-  destruct(&array->list);
+  darrayDestruct(&array->list);
   memcpy(array, &copy, sizeof(TloDArray));
 
   return TLO_SUCCESS;
 }
 
 size_t tloDArrayCapacity(const TloDArray *array) {
-  assert(isValid(&array->list));
+  assert(darrayIsValid(&array->list));
 
   return array->capacity;
 }
 
 const void *tloDArrayElement(const TloDArray *array, size_t index) {
-  assert(isValid(&array->list));
-  assert(!isEmpty(&array->list));
+  assert(darrayIsValid(&array->list));
+  assert(!darrayIsEmpty(&array->list));
   assert(index < array->size);
 
   return constElement(array, index);
 }
 
 void *tloDArrayMutableElement(TloDArray *array, size_t index) {
-  assert(isValid(&array->list));
-  assert(!isEmpty(&array->list));
+  assert(darrayIsValid(&array->list));
+  assert(!darrayIsEmpty(&array->list));
   assert(index < array->size);
 
   return mutableElement(array, index);
 }
 
 void tloDArrayPopBack(TloDArray *array) {
-  assert(isValid(&array->list));
-  assert(!isEmpty(&array->list));
+  assert(darrayIsValid(&array->list));
+  assert(!darrayIsEmpty(&array->list));
 
   void *back = mutableElement(array, array->size - 1);
   if (array->list.valueType->destruct) {
@@ -342,8 +342,8 @@ void tloDArrayPopBack(TloDArray *array) {
 }
 
 void tloDArrayUnorderedRemove(TloDArray *array, size_t index) {
-  assert(isValid(&array->list));
-  assert(!isEmpty(&array->list));
+  assert(darrayIsValid(&array->list));
+  assert(!darrayIsEmpty(&array->list));
   assert(index < array->size);
 
   if (index == array->size - 1) {
