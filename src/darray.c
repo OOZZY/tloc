@@ -318,12 +318,7 @@ TloDArray *tloDArrayMake(const TloType *valueType,
                          const TloAllocatorType *allocatorType,
                          size_t capacity) {
   assert(tloTypeIsValid(valueType));
-
-  if (!allocatorType) {
-    allocatorType = &tloCStdLibAllocator;
-  }
-
-  assert(tloAllocatorTypeIsValid(allocatorType));
+  assert(allocatorType == NULL || tloAllocatorTypeIsValid(allocatorType));
 
   TloDArray *array = allocatorType->malloc(sizeof(*array));
   if (!array) {
