@@ -1,8 +1,6 @@
 #ifndef LIST_TEST_H
 #define LIST_TEST_H
 
-#include <string.h>
-#include <tlo/darray.h>
 #include <tlo/list.h>
 #include <tlo/test.h>
 #include "util.h"
