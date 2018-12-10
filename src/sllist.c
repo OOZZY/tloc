@@ -173,6 +173,67 @@ static TloError sllistMoveBack(TloList *list, void *data) {
   return TLO_SUCCESS;
 }
 
+static void pushFrontNode(TloSLList *llist, TloSLLNode *node) {
+  if (!llist->head) {
+    llist->head = node;
+    llist->tail = llist->head;
+  } else {
+    node->next = llist->head;
+    llist->head = node;
+  }
+
+  ++llist->size;
+}
+
+static TloError sllistPushFront(TloList *list, const void *data) {
+  assert(sllistIsValid(list));
+  assert(data);
+
+  TloSLList *llist = (TloSLList *)list;
+  TloSLLNode *newNode = makeNodeWithCopiedData(llist, data);
+  if (!newNode) {
+    return TLO_ERROR;
+  }
+
+  pushFrontNode(llist, newNode);
+
+  return TLO_SUCCESS;
+}
+
+static TloError sllistMoveFront(TloList *list, void *data) {
+  assert(sllistIsValid(list));
+  assert(data);
+
+  TloSLList *llist = (TloSLList *)list;
+  TloSLLNode *newNode = makeNodeWithMovedData(llist, data);
+  if (!newNode) {
+    return TLO_ERROR;
+  }
+
+  pushFrontNode(llist, newNode);
+
+  return TLO_SUCCESS;
+}
+
+static void sllistPopFront(TloList *list) {
+  assert(sllistIsValid(list));
+  assert(!sllistIsEmpty(list));
+
+  TloSLList *llist = (TloSLList *)list;
+  TloSLLNode *frontNode = llist->head;
+  llist->head = llist->head->next;
+  if (llist->list.valueType->destruct) {
+    llist->list.valueType->destruct(frontNode->bytes);
+  }
+  llist->list.allocatorType->free(frontNode->bytes);
+  llist->list.allocatorType->free(frontNode);
+  --llist->size;
+
+  if (!llist->head) {
+    llist->tail = NULL;
+  }
+}
+
 static const TloListVTable vTable = {.type = "TloSLList",
                                      .isValid = sllistIsValid,
                                      .destruct = sllistDestruct,
@@ -183,7 +244,10 @@ static const TloListVTable vTable = {.type = "TloSLList",
                                      .back = sllistBack,
                                      .mutableBack = sllistMutableBack,
                                      .pushBack = sllistPushBack,
-                                     .moveBack = sllistMoveBack};
+                                     .moveBack = sllistMoveBack,
+                                     .pushFront = sllistPushFront,
+                                     .moveFront = sllistMoveFront,
+                                     .popFront = sllistPopFront};
 
 TloError tloSLListConstruct(TloSLList *llist, const TloType *valueType,
                             const TloAllocatorType *allocatorType) {
@@ -275,64 +339,6 @@ TloError tloSLListCopy(TloSLList *llist, const TloSLList *other) {
   memcpy(llist, &copy, sizeof(TloSLList));
 
   return TLO_SUCCESS;
-}
-
-static void pushFrontNode(TloSLList *llist, TloSLLNode *node) {
-  if (!llist->head) {
-    llist->head = node;
-    llist->tail = llist->head;
-  } else {
-    node->next = llist->head;
-    llist->head = node;
-  }
-
-  ++llist->size;
-}
-
-TloError tloSLListPushFront(TloSLList *llist, const void *data) {
-  assert(sllistIsValid(&llist->list));
-  assert(data);
-
-  TloSLLNode *newNode = makeNodeWithCopiedData(llist, data);
-  if (!newNode) {
-    return TLO_ERROR;
-  }
-
-  pushFrontNode(llist, newNode);
-
-  return TLO_SUCCESS;
-}
-
-TloError tloSLListMoveFront(TloSLList *llist, void *data) {
-  assert(sllistIsValid(&llist->list));
-  assert(data);
-
-  TloSLLNode *newNode = makeNodeWithMovedData(llist, data);
-  if (!newNode) {
-    return TLO_ERROR;
-  }
-
-  pushFrontNode(llist, newNode);
-
-  return TLO_SUCCESS;
-}
-
-void tloSLListPopFront(TloSLList *llist) {
-  assert(sllistIsValid(&llist->list));
-  assert(!sllistIsEmpty(&llist->list));
-
-  TloSLLNode *frontNode = llist->head;
-  llist->head = llist->head->next;
-  if (llist->list.valueType->destruct) {
-    llist->list.valueType->destruct(frontNode->bytes);
-  }
-  llist->list.allocatorType->free(frontNode->bytes);
-  llist->list.allocatorType->free(frontNode);
-  --llist->size;
-
-  if (!llist->head) {
-    llist->tail = NULL;
-  }
 }
 
 bool tloSLLNodeIsValid(const TloSLLNode *node) { return node && node->bytes; }

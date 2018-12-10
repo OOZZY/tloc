@@ -39,15 +39,16 @@ static void testSLListDeleteWithNull(void) { tloListDelete(NULL); }
 static void testSLListIntPushOrMoveFrontOnce(bool testPush) {
   TloSLList *ints = tloSLListMake(&tloInt, &countingAllocator);
   TLO_ASSERT(ints);
+  TLO_ASSERT(tloListHasFunctions(&ints->list, TLO_LIST_PUSH_FRONT));
 
   TloError error;
   if (testPush) {
     int value = SOME_NUMBER;
-    error = tloSLListPushFront(ints, &value);
+    error = tlovListPushFront(&ints->list, &value);
   } else {
     int *value = makeInt(SOME_NUMBER);
     TLO_ASSERT(value);
-    error = tloSLListMoveFront(ints, value);
+    error = tlovListMoveFront(&ints->list, value);
   }
   TLO_ASSERT(!error);
 
@@ -62,16 +63,17 @@ static void testSLListIntPushOrMoveFrontOnce(bool testPush) {
 static void testSLListIntPushOrMoveFrontManyTimes(bool testPush) {
   TloSLList *ints = tloSLListMake(&tloInt, &countingAllocator);
   TLO_ASSERT(ints);
+  TLO_ASSERT(tloListHasFunctions(&ints->list, TLO_LIST_PUSH_FRONT));
 
   for (size_t i = 0; i < SOME_NUMBER; ++i) {
     TloError error;
     if (testPush) {
       int value = (int)i;
-      error = tloSLListPushFront(ints, &value);
+      error = tlovListPushFront(&ints->list, &value);
     } else {
       int *value = makeInt((int)i);
       TLO_ASSERT(value);
-      error = tloSLListMoveFront(ints, value);
+      error = tlovListMoveFront(&ints->list, value);
     }
     TLO_ASSERT(!error);
 
@@ -87,12 +89,14 @@ static void testSLListIntPushOrMoveFrontManyTimes(bool testPush) {
 static void testSLListIntPushFrontOncePopFrontOnce(void) {
   TloSLList *ints = tloSLListMake(&tloInt, &countingAllocator);
   TLO_ASSERT(ints);
+  TLO_ASSERT(tloListHasFunctions(&ints->list,
+                                 TLO_LIST_PUSH_FRONT | TLO_LIST_POP_FRONT));
 
   int value = SOME_NUMBER;
-  TloError error = tloSLListPushFront(ints, &value);
+  TloError error = tlovListPushFront(&ints->list, &value);
   TLO_ASSERT(!error);
 
-  tloSLListPopFront(ints);
+  tlovListPopFront(&ints->list);
 
   EXPECT_LIST_PROPERTIES(&ints->list, 0, true, &tloInt, &countingAllocator);
 
@@ -103,10 +107,12 @@ static void testSLListIntPushFrontOncePopFrontOnce(void) {
 static void testSLListIntPushFrontManyTimesPopFrontUntilEmpty(void) {
   TloSLList *ints = tloSLListMake(&tloInt, &countingAllocator);
   TLO_ASSERT(ints);
+  TLO_ASSERT(tloListHasFunctions(&ints->list,
+                                 TLO_LIST_PUSH_FRONT | TLO_LIST_POP_FRONT));
 
   for (size_t i = 0; i < SOME_NUMBER; ++i) {
     int value = (int)i;
-    TloError error = tloSLListPushFront(ints, &value);
+    TloError error = tlovListPushFront(&ints->list, &value);
     TLO_ASSERT(!error);
   }
 
@@ -115,7 +121,7 @@ static void testSLListIntPushFrontManyTimesPopFrontUntilEmpty(void) {
                            &countingAllocator);
     EXPECT_LIST_INT_ELEMENTS(&ints->list, (int)i, 0, i, 0);
 
-    tloSLListPopFront(ints);
+    tlovListPopFront(&ints->list);
   }
 
   EXPECT_LIST_PROPERTIES(&ints->list, 0, true, &tloInt, &countingAllocator);
@@ -239,18 +245,19 @@ static void testSLListIntCopy(void) {
 static void testSLListIntPtrPushOrMoveFrontOnce(bool testPush) {
   TloSLList *intPtrs = tloSLListMake(&intPtrType, &countingAllocator);
   TLO_ASSERT(intPtrs);
+  TLO_ASSERT(tloListHasFunctions(&intPtrs->list, TLO_LIST_PUSH_FRONT));
 
   TloError error;
   if (testPush) {
     IntPtr intPtr;
     error = intPtrConstruct(&intPtr, SOME_NUMBER);
     TLO_ASSERT(!error);
-    error = tloSLListPushFront(intPtrs, &intPtr);
+    error = tlovListPushFront(&intPtrs->list, &intPtr);
     tloPtrDestruct(&intPtr);
   } else {
     IntPtr *intPtr = intPtrMake(SOME_NUMBER);
     TLO_ASSERT(intPtr);
-    error = tloSLListMoveFront(intPtrs, intPtr);
+    error = tlovListMoveFront(&intPtrs->list, intPtr);
   }
   TLO_ASSERT(!error);
 
@@ -266,6 +273,7 @@ static void testSLListIntPtrPushOrMoveFrontOnce(bool testPush) {
 static void testSLListIntPtrPushOrMoveFrontManyTimes(bool testPush) {
   TloSLList *intPtrs = tloSLListMake(&intPtrType, &countingAllocator);
   TLO_ASSERT(intPtrs);
+  TLO_ASSERT(tloListHasFunctions(&intPtrs->list, TLO_LIST_PUSH_FRONT));
 
   for (size_t i = 0; i < SOME_NUMBER; ++i) {
     TloError error;
@@ -273,12 +281,12 @@ static void testSLListIntPtrPushOrMoveFrontManyTimes(bool testPush) {
       IntPtr intPtr;
       error = intPtrConstruct(&intPtr, (int)i);
       TLO_ASSERT(!error);
-      error = tloSLListPushFront(intPtrs, &intPtr);
+      error = tlovListPushFront(&intPtrs->list, &intPtr);
       tloPtrDestruct(&intPtr);
     } else {
       IntPtr *intPtr = intPtrMake((int)i);
       TLO_ASSERT(intPtr);
-      error = tloSLListMoveFront(intPtrs, intPtr);
+      error = tlovListMoveFront(&intPtrs->list, intPtr);
     }
     TLO_ASSERT(!error);
 
@@ -294,15 +302,17 @@ static void testSLListIntPtrPushOrMoveFrontManyTimes(bool testPush) {
 static void testSLListIntPtrPushFrontOncePopFrontOnce(void) {
   TloSLList *intPtrs = tloSLListMake(&intPtrType, &countingAllocator);
   TLO_ASSERT(intPtrs);
+  TLO_ASSERT(tloListHasFunctions(&intPtrs->list,
+                                 TLO_LIST_PUSH_FRONT | TLO_LIST_POP_FRONT));
 
   IntPtr intPtr;
   TloError error = intPtrConstruct(&intPtr, SOME_NUMBER);
   TLO_ASSERT(!error);
-  error = tloSLListPushFront(intPtrs, &intPtr);
+  error = tlovListPushFront(&intPtrs->list, &intPtr);
   TLO_ASSERT(!error);
   tloPtrDestruct(&intPtr);
 
-  tloSLListPopFront(intPtrs);
+  tlovListPopFront(&intPtrs->list);
 
   EXPECT_LIST_PROPERTIES(&intPtrs->list, 0, true, &intPtrType,
                          &countingAllocator);
@@ -314,12 +324,14 @@ static void testSLListIntPtrPushFrontOncePopFrontOnce(void) {
 static void testSLListIntPtrPushFrontManyTimesPopFrontUntilEmpty(void) {
   TloSLList *intPtrs = tloSLListMake(&intPtrType, &countingAllocator);
   TLO_ASSERT(intPtrs);
+  TLO_ASSERT(tloListHasFunctions(&intPtrs->list,
+                                 TLO_LIST_PUSH_FRONT | TLO_LIST_POP_FRONT));
 
   for (size_t i = 0; i < SOME_NUMBER; ++i) {
     IntPtr intPtr;
     TloError error = intPtrConstruct(&intPtr, (int)i);
     TLO_ASSERT(!error);
-    error = tloSLListPushFront(intPtrs, &intPtr);
+    error = tlovListPushFront(&intPtrs->list, &intPtr);
     TLO_ASSERT(!error);
     tloPtrDestruct(&intPtr);
   }
@@ -329,7 +341,7 @@ static void testSLListIntPtrPushFrontManyTimesPopFrontUntilEmpty(void) {
                            &countingAllocator);
     EXPECT_LIST_INTPTR_ELEMENTS(&intPtrs->list, (int)i, 0, i, 0);
 
-    tloSLListPopFront(intPtrs);
+    tlovListPopFront(&intPtrs->list);
   }
 
   EXPECT_LIST_PROPERTIES(&intPtrs->list, 0, true, &intPtrType,
