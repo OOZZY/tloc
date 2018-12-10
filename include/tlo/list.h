@@ -124,13 +124,13 @@ void tlovListPopFront(TloList *list);
 
 /*
  * - assumes tloListHasFunctions(list, TLO_LIST_POP_BACK)
- * - uses array->valueType->destruct if it is not NULL
+ * - uses list->valueType->destruct if it is not NULL
  */
 void tlovListPopBack(TloList *list);
 
 /*
  * - assumes tloListHasFunctions(list, TLO_LIST_UNORDERED_REMOVE)
- * - uses array->valueType->destruct if it is not NULL
+ * - uses list->valueType->destruct if it is not NULL
  */
 void tlovListUnorderedRemove(TloList *list, size_t index);
 
