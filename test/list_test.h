@@ -52,7 +52,16 @@
 
 void testListIntPushOrMoveBackOnce(TloList *ints, bool testPush);
 void testListIntPushOrMoveBackManyTimes(TloList *ints, bool testPush);
+void testListIntPushBackOncePopBackOnce(TloList *ints);
+void testListIntPushBackManyTimesPopBackUntilEmpty(TloList *ints);
+
 void testListIntPtrPushOrMoveBackOnce(TloList *intPtrs, bool testPush);
 void testListIntPtrPushOrMoveBackManyTimes(TloList *intPtrs, bool testPush);
+void testListIntPtrPushBackOncePopBackOnce(TloList *intPtrs);
+void testListIntPtrPushBackManyTimesPopBackUntilEmpty(TloList *intPtrs);
+void testListIntPtrPushBackManyTimesUnorderedRemoveBackUntilEmpty(
+    TloList *intPtrs);
+void testListIntPtrPushBackManyTimesUnorderedRemoveFrontUntilEmpty(
+    TloList *intPtrs);
 
 #endif  // LIST_TEST_H
