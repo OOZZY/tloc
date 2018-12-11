@@ -37,20 +37,20 @@ void tloListDelete(TloList *list) {
     return;
   }
 
-  assert(tlovListIsValid(list));
+  assert(tloListIsValid(list));
 
   tlovListDestruct(list);
   list->allocatorType->free(list);
 }
 
 const TloType *tloListValueType(const TloList *list) {
-  assert(tlovListIsValid(list));
+  assert(tloListIsValid(list));
 
   return list->valueType;
 }
 
 const TloAllocatorType *tloListAllocatorType(const TloList *list) {
-  assert(tlovListIsValid(list));
+  assert(tloListIsValid(list));
 
   return list->allocatorType;
 }
