@@ -54,6 +54,10 @@ void testListIntPushOrMoveBackOnce(TloList *ints, bool testPush);
 void testListIntPushOrMoveBackManyTimes(TloList *ints, bool testPush);
 void testListIntPushBackOncePopBackOnce(TloList *ints);
 void testListIntPushBackManyTimesPopBackUntilEmpty(TloList *ints);
+void testListIntPushOrMoveFrontOnce(TloList *ints, bool testPush);
+void testListIntPushOrMoveFrontManyTimes(TloList *ints, bool testPush);
+void testListIntPushFrontOncePopFrontOnce(TloList *ints);
+void testListIntPushFrontManyTimesPopFrontUntilEmpty(TloList *ints);
 
 void testListIntPtrPushOrMoveBackOnce(TloList *intPtrs, bool testPush);
 void testListIntPtrPushOrMoveBackManyTimes(TloList *intPtrs, bool testPush);
@@ -63,5 +67,9 @@ void testListIntPtrPushBackManyTimesUnorderedRemoveBackUntilEmpty(
     TloList *intPtrs);
 void testListIntPtrPushBackManyTimesUnorderedRemoveFrontUntilEmpty(
     TloList *intPtrs);
+void testListIntPtrPushOrMoveFrontOnce(TloList *intPtrs, bool testPush);
+void testListIntPtrPushOrMoveFrontManyTimes(TloList *intPtrs, bool testPush);
+void testListIntPtrPushFrontOncePopFrontOnce(TloList *intPtrs);
+void testListIntPtrPushFrontManyTimesPopFrontUntilEmpty(TloList *intPtrs);
 
 #endif  // LIST_TEST_H
