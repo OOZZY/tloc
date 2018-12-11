@@ -163,6 +163,8 @@ void testSLList(void) {
   testSLListIntConstructDestruct();
   testSLListIntMakeDelete();
   testSLListDeleteWithNull();
+  testListHasFunctions((TloList *)tloSLListMake(&tloInt, &countingAllocator),
+                       TLO_LIST_PUSH_FRONT | TLO_LIST_POP_FRONT);
   testListIntPushOrMoveBackOnce(
       (TloList *)tloSLListMake(&tloInt, &countingAllocator), true);
   testListIntPushOrMoveBackOnce(

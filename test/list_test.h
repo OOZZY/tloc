@@ -50,6 +50,8 @@
     }                                                                          \
   } while (0)
 
+void testListHasFunctions(TloList *list, unsigned char functions);
+
 void testListIntPushOrMoveBackOnce(TloList *ints, bool testPush);
 void testListIntPushOrMoveBackManyTimes(TloList *ints, bool testPush);
 void testListIntPushBackOncePopBackOnce(TloList *ints);

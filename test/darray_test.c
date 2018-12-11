@@ -184,6 +184,9 @@ void testDArray(void) {
   testDArrayIntMakeDelete();
   testDArrayIntMakeWithCapacityDelete();
   testDArrayDeleteWithNull();
+  testListHasFunctions((TloList *)tloDArrayMake(&tloInt, &countingAllocator, 0),
+                       TLO_LIST_CAPACITY | TLO_LIST_ELEMENT |
+                           TLO_LIST_POP_BACK | TLO_LIST_UNORDERED_REMOVE);
   testListIntPushOrMoveBackOnce(
       (TloList *)tloDArrayMake(&tloInt, &countingAllocator, 0), true);
   testListIntPushOrMoveBackOnce(

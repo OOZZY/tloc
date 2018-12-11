@@ -1,5 +1,11 @@
 #include "list_test.h"
 
+void testListHasFunctions(TloList *list, unsigned char functions) {
+  TLO_ASSERT(tloListHasFunctions(list, functions));
+  tloListDelete(list);
+  list = NULL;
+}
+
 void testListIntPushOrMoveBackOnce(TloList *ints, bool testPush) {
   TLO_ASSERT(ints);
 
