@@ -50,6 +50,7 @@
     }                                                                          \
   } while (0)
 
+void testListDeleteWithNull(void);
 void testListHasFunctions(TloList *list, unsigned char functions);
 
 void testListIntPushOrMoveBackOnce(TloList *ints, bool testPush);

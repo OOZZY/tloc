@@ -3,6 +3,7 @@
 #include <tlo/test.h>
 
 int main(void) {
+  testList();
   testDArray();
   testSLList();
   puts("===============");

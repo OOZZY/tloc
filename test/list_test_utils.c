@@ -1,5 +1,7 @@
 #include "list_test_utils.h"
 
+void testListDeleteWithNull(void) { tloListDelete(NULL); }
+
 void testListHasFunctions(TloList *list, unsigned char functions) {
   TLO_ASSERT(tloListHasFunctions(list, functions));
   tloListDelete(list);

@@ -12,8 +12,8 @@ if (MINGW)
 endif()
 
 set(tloc_test_headers util.h list_test_utils.h tloc_test.h)
-set(tloc_test_sources util.c list_test_utils.c darray_test.c sllist_test.c
-  tloc_test.c)
+set(tloc_test_sources util.c list_test_utils.c list_test.c darray_test.c
+  sllist_test.c tloc_test.c)
 add_executable(tloc_test ${tloc_test_headers} ${tloc_test_sources})
 set_target_properties(tloc_test PROPERTIES C_EXTENSIONS OFF)
 target_compile_options(tloc_test

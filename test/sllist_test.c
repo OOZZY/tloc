@@ -34,8 +34,6 @@ static void testSLListIntMakeDelete(void) {
   ints = NULL;
 }
 
-static void testSLListDeleteWithNull(void) { tloListDelete(NULL); }
-
 static void testSLListIntConstructCopy(void) {
   TloSLList *ints = tloSLListMake(&tloInt, &countingAllocator);
   TLO_ASSERT(ints);
@@ -162,7 +160,6 @@ void testSLList(void) {
   testSLListInitialCounts();
   testSLListIntConstructDestruct();
   testSLListIntMakeDelete();
-  testSLListDeleteWithNull();
   testListHasFunctions((TloList *)tloSLListMake(&tloInt, &countingAllocator),
                        TLO_LIST_PUSH_FRONT | TLO_LIST_POP_FRONT);
   testListIntPushOrMoveBackOnce(

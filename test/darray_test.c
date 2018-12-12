@@ -66,8 +66,6 @@ static void testDArrayIntMakeWithCapacityDelete(void) {
   ints = NULL;
 }
 
-static void testDArrayDeleteWithNull(void) { tloListDelete(NULL); }
-
 static void testDArrayIntConstructCopy(void) {
   TloDArray *ints = tloDArrayMake(&tloInt, &countingAllocator, 0);
   TLO_ASSERT(ints);
@@ -183,7 +181,6 @@ void testDArray(void) {
   testDArrayIntConstructWithCapacityDestruct();
   testDArrayIntMakeDelete();
   testDArrayIntMakeWithCapacityDelete();
-  testDArrayDeleteWithNull();
   testListHasFunctions((TloList *)tloDArrayMake(&tloInt, &countingAllocator, 0),
                        TLO_LIST_CAPACITY | TLO_LIST_ELEMENT |
                            TLO_LIST_POP_BACK | TLO_LIST_UNORDERED_REMOVE);
