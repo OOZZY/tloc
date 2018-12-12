@@ -26,23 +26,23 @@ TloError tloSLListConstruct(TloSLList *llist, const TloType *valueType,
                             const TloAllocatorType *allocatorType);
 
 /*
- * - uses tloSLListPushBack
+ * - uses TloSLList's pushBack
  */
 TloError tloSLListConstructCopy(TloSLList *llist, const TloSLList *other);
 
 /*
- * - allocatorType->malloc then tloSLListConstruct
+ * - uses given allocator's malloc then tloSLListConstruct
  */
 TloSLList *tloSLListMake(const TloType *valueType,
                          const TloAllocatorType *allocatorType);
 
 /*
- * - other->allocatorType->malloc then tloSLListConstructCopy
+ * - uses malloc of other's allocator then tloSLListConstructCopy
  */
 TloSLList *tloSLListMakeCopy(const TloSLList *other);
 
 /*
- * - uses tloSLListConstructCopy and tloSLListDestruct
+ * - uses tloSLListConstructCopy and TloSLList's destruct
  */
 TloError tloSLListCopy(TloSLList *llist, const TloSLList *other);
 

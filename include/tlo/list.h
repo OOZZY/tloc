@@ -56,7 +56,7 @@ void tloListConstruct(TloList *list, const TloListVTable *vTable,
                       const TloAllocatorType *allocatorType);
 
 /*
- * - tlovListDestruct then list->allocatorType->free
+ * - tlovListDestruct then allocator's free
  */
 void tloListDelete(TloList *list);
 
@@ -68,7 +68,7 @@ const char *tlovListType(const TloList *list);
 bool tlovListIsValid(const TloList *list);
 
 /*
- * - uses list->valueType->destruct if it is not NULL
+ * - uses value type's destruct if it is not NULL
  */
 void tlovListDestruct(TloList *list);
 
@@ -80,14 +80,14 @@ const void *tlovListBack(const TloList *list);
 void *tlovListMutableBack(TloList *list);
 
 /*
- * - deep copies data using list->valueType->constructCopy if it is not null
+ * - deep copies data using value type's constructCopy if it is not null
  * - otherwise, uses memcpy
  */
 TloError tlovListPushBack(TloList *list, const void *data);
 
 /*
- * - assumes data points to an object whose memory was allocated by
- *   allocatorType->malloc
+ * - assumes data points to an object whose memory was allocated by allocator's
+ *   malloc
  * - takes ownership of the object
  */
 TloError tlovListMoveBack(TloList *list, void *data);
@@ -103,34 +103,34 @@ void *tlovListMutableElement(TloList *list, size_t index);
 
 /*
  * - assumes tloListHasFunctions(list, TLO_LIST_PUSH_FRONT)
- * - deep copies data using list->valueType->constructCopy if it is not null
+ * - deep copies data using value type's constructCopy if it is not null
  * - otherwise, uses memcpy
  */
 TloError tlovListPushFront(TloList *list, const void *data);
 
 /*
  * - assumes tloListHasFunctions(list, TLO_LIST_PUSH_FRONT)
- * - assumes data points to an object whose memory was allocated by
- *   allocatorType->malloc
+ * - assumes data points to an object whose memory was allocated by allocator's
+ *   malloc
  * - takes ownership of the object
  */
 TloError tlovListMoveFront(TloList *list, void *data);
 
 /*
  * - assumes tloListHasFunctions(list, TLO_LIST_POP_FRONT)
- * - uses list->valueType->destruct if it is not NULL
+ * - uses value type's destruct if it is not NULL
  */
 void tlovListPopFront(TloList *list);
 
 /*
  * - assumes tloListHasFunctions(list, TLO_LIST_POP_BACK)
- * - uses list->valueType->destruct if it is not NULL
+ * - uses value type's destruct if it is not NULL
  */
 void tlovListPopBack(TloList *list);
 
 /*
  * - assumes tloListHasFunctions(list, TLO_LIST_UNORDERED_REMOVE)
- * - uses list->valueType->destruct if it is not NULL
+ * - uses value type's destruct if it is not NULL
  */
 void tlovListUnorderedRemove(TloList *list, size_t index);
 

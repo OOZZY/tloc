@@ -21,24 +21,24 @@ TloError tloDArrayConstruct(TloDArray *array, const TloType *valueType,
                             size_t capacity);
 
 /*
- * - uses tloDArrayPushBack
+ * - uses TloDArray's pushBack
  */
 TloError tloDArrayConstructCopy(TloDArray *array, const TloDArray *other);
 
 /*
- * - allocatorType->malloc then tloDArrayConstruct
+ * - uses given allocator's malloc then tloDArrayConstruct
  */
 TloDArray *tloDArrayMake(const TloType *valueType,
                          const TloAllocatorType *allocatorType,
                          size_t capacity);
 
 /*
- * - other->allocatorType->malloc then tloDArrayConstructCopy
+ * - uses malloc of other's allocator then tloDArrayConstructCopy
  */
 TloDArray *tloDArrayMakeCopy(const TloDArray *other);
 
 /*
- * - uses tloDArrayConstructCopy and tloDArrayDestruct
+ * - uses tloDArrayConstructCopy and TloDArray's destruct
  */
 TloError tloDArrayCopy(TloDArray *array, const TloDArray *other);
 
