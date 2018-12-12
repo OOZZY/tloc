@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <tlo/sllist.h>
 #include <tlo/test.h>
-#include "list_test.h"
+#include "list_test_utils.h"
 #include "tloc_test.h"
 #include "util.h"
 
