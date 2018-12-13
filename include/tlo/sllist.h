@@ -8,7 +8,7 @@
  */
 typedef struct TloSLLNode {
   // private
-  void *bytes;
+  void *data;
   struct TloSLLNode *next;
 } TloSLLNode;
 
