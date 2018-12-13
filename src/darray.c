@@ -8,11 +8,11 @@ static bool darrayIsValid(const TloList *list) {
 }
 
 static const void *constElement(const TloDArray *array, size_t index) {
-  return (const char *)array->bytes + index * array->list.valueType->sizeOf;
+  return (const char *)array->array + index * array->list.valueType->sizeOf;
 }
 
 static void *mutableElement(TloDArray *array, size_t index) {
-  return (char *)array->bytes + index * array->list.valueType->sizeOf;
+  return (char *)array->array + index * array->list.valueType->sizeOf;
 }
 
 static void destructAllElements(TloDArray *array) {
@@ -32,14 +32,14 @@ static void darrayDestruct(TloList *list) {
   assert(darrayIsValid(list));
 
   TloDArray *array = (TloDArray *)list;
-  if (!array->bytes) {
+  if (!array->array) {
     return;
   }
 
   destructAllElements(array);
 
-  array->list.allocatorType->free(array->bytes);
-  array->bytes = NULL;
+  array->list.allocatorType->free(array->array);
+  array->array = NULL;
 }
 
 static size_t darraySize(const TloList *list) {
@@ -90,11 +90,11 @@ static void *darrayMutableBack(TloList *list) {
 
 #define STARTING_CAPACITY 1
 
-static TloError allocateBytesIfNeeded(TloDArray *array) {
-  if (!array->bytes) {
-    array->bytes = array->list.allocatorType->malloc(
+static TloError allocateArrayIfNeeded(TloDArray *array) {
+  if (!array->array) {
+    array->array = array->list.allocatorType->malloc(
         STARTING_CAPACITY * array->list.valueType->sizeOf);
-    if (!array->bytes) {
+    if (!array->array) {
       return TLO_ERROR;
     }
     array->capacity = STARTING_CAPACITY;
@@ -102,19 +102,19 @@ static TloError allocateBytesIfNeeded(TloDArray *array) {
   return TLO_SUCCESS;
 }
 
-static TloError resizeBytesIfNeeded(TloDArray *array) {
+static TloError resizeArrayIfNeeded(TloDArray *array) {
   if (array->size == array->capacity) {
     size_t newCapacity = array->capacity * 2;
-    void *newBytes = array->list.allocatorType->malloc(
+    void *newArray = array->list.allocatorType->malloc(
         newCapacity * array->list.valueType->sizeOf);
-    if (!newBytes) {
+    if (!newArray) {
       return TLO_ERROR;
     }
 
-    memcpy(newBytes, array->bytes, array->size * array->list.valueType->sizeOf);
+    memcpy(newArray, array->array, array->size * array->list.valueType->sizeOf);
 
-    array->list.allocatorType->free(array->bytes);
-    array->bytes = newBytes;
+    array->list.allocatorType->free(array->array);
+    array->array = newArray;
     array->capacity = newCapacity;
   }
   return TLO_SUCCESS;
@@ -141,11 +141,11 @@ static TloError darrayPushBack(TloList *list, const void *data) {
   assert(data);
 
   TloDArray *array = (TloDArray *)list;
-  if (allocateBytesIfNeeded(array) == TLO_ERROR) {
+  if (allocateArrayIfNeeded(array) == TLO_ERROR) {
     return TLO_ERROR;
   }
 
-  if (resizeBytesIfNeeded(array) == TLO_ERROR) {
+  if (resizeArrayIfNeeded(array) == TLO_ERROR) {
     return TLO_ERROR;
   }
 
@@ -172,11 +172,11 @@ static TloError darrayMoveBack(TloList *list, void *data) {
   assert(data);
 
   TloDArray *array = (TloDArray *)list;
-  if (allocateBytesIfNeeded(array) == TLO_ERROR) {
+  if (allocateArrayIfNeeded(array) == TLO_ERROR) {
     return TLO_ERROR;
   }
 
-  if (resizeBytesIfNeeded(array) == TLO_ERROR) {
+  if (resizeArrayIfNeeded(array) == TLO_ERROR) {
     return TLO_ERROR;
   }
 
@@ -268,16 +268,16 @@ TloError tloDArrayConstruct(TloDArray *array, const TloType *valueType,
   assert(tloTypeIsValid(valueType));
   assert(allocatorType == NULL || tloAllocatorTypeIsValid(allocatorType));
 
-  void *newBytes = NULL;
+  void *newArray = NULL;
   if (capacity) {
-    newBytes = allocatorType->malloc(capacity * valueType->sizeOf);
-    if (!newBytes) {
+    newArray = allocatorType->malloc(capacity * valueType->sizeOf);
+    if (!newArray) {
       return TLO_ERROR;
     }
   }
 
   tloListConstruct(&array->list, &vTable, valueType, allocatorType);
-  array->bytes = newBytes;
+  array->array = newArray;
   array->size = 0;
   array->capacity = capacity;
 

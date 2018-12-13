@@ -11,7 +11,7 @@ typedef struct TloDArray {
   TloList list;
 
   // private
-  void *bytes;
+  void *array;
   size_t size;
   size_t capacity;
 } TloDArray;
