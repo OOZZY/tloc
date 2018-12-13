@@ -8,11 +8,11 @@ static bool darrayIsValid(const TloList *list) {
 }
 
 static const void *constElement(const TloDArray *array, size_t index) {
-  return (const char *)array->array + index * array->list.valueType->sizeOf;
+  return array->array + index * array->list.valueType->sizeOf;
 }
 
 static void *mutableElement(TloDArray *array, size_t index) {
-  return (char *)array->array + index * array->list.valueType->sizeOf;
+  return array->array + index * array->list.valueType->sizeOf;
 }
 
 static void destructAllElements(TloDArray *array) {
@@ -105,7 +105,7 @@ static TloError allocateArrayIfNeeded(TloDArray *array) {
 static TloError resizeArrayIfNeeded(TloDArray *array) {
   if (array->size == array->capacity) {
     size_t newCapacity = array->capacity * 2;
-    void *newArray = array->list.allocatorType->malloc(
+    unsigned char *newArray = array->list.allocatorType->malloc(
         newCapacity * array->list.valueType->sizeOf);
     if (!newArray) {
       return TLO_ERROR;
@@ -268,7 +268,7 @@ TloError tloDArrayConstruct(TloDArray *array, const TloType *valueType,
   assert(tloTypeIsValid(valueType));
   assert(allocatorType == NULL || tloAllocatorTypeIsValid(allocatorType));
 
-  void *newArray = NULL;
+  unsigned char *newArray = NULL;
   if (capacity) {
     newArray = allocatorType->malloc(capacity * valueType->sizeOf);
     if (!newArray) {
