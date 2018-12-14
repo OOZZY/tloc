@@ -22,7 +22,7 @@ if (TLOC_USE_MSAN_UBSAN AND NOT TLOC_USE_ASAN_UBSAN)
   endif()
 endif()
 
-set(tloc_headers util.h list.h darray.h sllist.h test.h)
+set(tloc_headers util.h list.h darray.h sllist.h test.h debug.h)
 set(tloc_sources util.c list.c darray.c sllist.c test.c)
 prepend(tloc_headers ${PROJECT_SOURCE_DIR}/include/tlo/ ${tloc_headers})
 add_library(tloc STATIC ${tloc_headers} ${tloc_sources})
