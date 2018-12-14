@@ -6,6 +6,7 @@ int main(void) {
   testList();
   testDArray();
   testSLList();
+  testCDArray();
   puts("===============");
   puts("All tests done.");
   puts("===============");

@@ -4,5 +4,6 @@
 void testList(void);
 void testDArray(void);
 void testSLList(void);
+void testCDArray(void);
 
 #endif  // TLOC_TEST_H
