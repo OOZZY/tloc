@@ -156,55 +156,47 @@ static void testSLListFinalCounts() {
   countingAllocatorPrintCounts();
 }
 
+static TloList *makeListInt(void) {
+  return (TloList *)tloSLListMake(&tloInt, &countingAllocator);
+}
+
+static TloList *makeListIntPtr(void) {
+  return (TloList *)tloSLListMake(&intPtrType, &countingAllocator);
+}
+
 void testSLList(void) {
   testSLListInitialCounts();
+
   testSLListIntConstructDestruct();
   testSLListIntMakeDelete();
-  testListHasFunctions((TloList *)tloSLListMake(&tloInt, &countingAllocator),
-                       TLO_LIST_PUSH_FRONT | TLO_LIST_POP_FRONT);
-  testListIntPushOrMoveBackOnce(
-      (TloList *)tloSLListMake(&tloInt, &countingAllocator), true);
-  testListIntPushOrMoveBackOnce(
-      (TloList *)tloSLListMake(&tloInt, &countingAllocator), false);
-  testListIntPushOrMoveBackManyTimes(
-      (TloList *)tloSLListMake(&tloInt, &countingAllocator), true);
-  testListIntPushOrMoveBackManyTimes(
-      (TloList *)tloSLListMake(&tloInt, &countingAllocator), false);
-  testListIntPushOrMoveFrontOnce(
-      (TloList *)tloSLListMake(&tloInt, &countingAllocator), true);
-  testListIntPushOrMoveFrontOnce(
-      (TloList *)tloSLListMake(&tloInt, &countingAllocator), false);
-  testListIntPushOrMoveFrontManyTimes(
-      (TloList *)tloSLListMake(&tloInt, &countingAllocator), true);
-  testListIntPushOrMoveFrontManyTimes(
-      (TloList *)tloSLListMake(&tloInt, &countingAllocator), false);
-  testListIntPushFrontOncePopFrontOnce(
-      (TloList *)tloSLListMake(&tloInt, &countingAllocator));
-  testListIntPushFrontManyTimesPopFrontUntilEmpty(
-      (TloList *)tloSLListMake(&tloInt, &countingAllocator));
   testSLListIntConstructCopy();
   testSLListIntMakeCopy();
   testSLListIntCopy();
-  testListIntPtrPushOrMoveBackOnce(
-      (TloList *)tloSLListMake(&intPtrType, &countingAllocator), true);
-  testListIntPtrPushOrMoveBackOnce(
-      (TloList *)tloSLListMake(&intPtrType, &countingAllocator), false);
-  testListIntPtrPushOrMoveBackManyTimes(
-      (TloList *)tloSLListMake(&intPtrType, &countingAllocator), true);
-  testListIntPtrPushOrMoveBackManyTimes(
-      (TloList *)tloSLListMake(&intPtrType, &countingAllocator), false);
-  testListIntPtrPushOrMoveFrontOnce(
-      (TloList *)tloSLListMake(&intPtrType, &countingAllocator), true);
-  testListIntPtrPushOrMoveFrontOnce(
-      (TloList *)tloSLListMake(&intPtrType, &countingAllocator), false);
-  testListIntPtrPushOrMoveFrontManyTimes(
-      (TloList *)tloSLListMake(&intPtrType, &countingAllocator), true);
-  testListIntPtrPushOrMoveFrontManyTimes(
-      (TloList *)tloSLListMake(&intPtrType, &countingAllocator), false);
-  testListIntPtrPushFrontOncePopFrontOnce(
-      (TloList *)tloSLListMake(&intPtrType, &countingAllocator));
-  testListIntPtrPushFrontManyTimesPopFrontUntilEmpty(
-      (TloList *)tloSLListMake(&intPtrType, &countingAllocator));
+
+  testListHasFunctions(makeListInt(), TLO_LIST_PUSH_FRONT | TLO_LIST_POP_FRONT);
+
+  testListIntPushOrMoveBackOnce(makeListInt(), true);
+  testListIntPushOrMoveBackOnce(makeListInt(), false);
+  testListIntPushOrMoveBackManyTimes(makeListInt(), true);
+  testListIntPushOrMoveBackManyTimes(makeListInt(), false);
+  testListIntPushOrMoveFrontOnce(makeListInt(), true);
+  testListIntPushOrMoveFrontOnce(makeListInt(), false);
+  testListIntPushOrMoveFrontManyTimes(makeListInt(), true);
+  testListIntPushOrMoveFrontManyTimes(makeListInt(), false);
+  testListIntPushFrontOncePopFrontOnce(makeListInt());
+  testListIntPushFrontManyTimesPopFrontUntilEmpty(makeListInt());
+
+  testListIntPtrPushOrMoveBackOnce(makeListIntPtr(), true);
+  testListIntPtrPushOrMoveBackOnce(makeListIntPtr(), false);
+  testListIntPtrPushOrMoveBackManyTimes(makeListIntPtr(), true);
+  testListIntPtrPushOrMoveBackManyTimes(makeListIntPtr(), false);
+  testListIntPtrPushOrMoveFrontOnce(makeListIntPtr(), true);
+  testListIntPtrPushOrMoveFrontOnce(makeListIntPtr(), false);
+  testListIntPtrPushOrMoveFrontManyTimes(makeListIntPtr(), true);
+  testListIntPtrPushOrMoveFrontManyTimes(makeListIntPtr(), false);
+  testListIntPtrPushFrontOncePopFrontOnce(makeListIntPtr());
+  testListIntPtrPushFrontManyTimesPopFrontUntilEmpty(makeListIntPtr());
+
   testSLListFinalCounts();
   puts("==================");
   puts("SLList tests done.");

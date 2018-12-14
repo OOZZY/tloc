@@ -175,46 +175,47 @@ static void testDArrayFinalCounts() {
   countingAllocatorPrintCounts();
 }
 
+static TloList *makeListInt(void) {
+  return (TloList *)tloDArrayMake(&tloInt, &countingAllocator, 0);
+}
+
+static TloList *makeListIntPtr(void) {
+  return (TloList *)tloDArrayMake(&intPtrType, &countingAllocator, 0);
+}
+
 void testDArray(void) {
   testDArrayInitialCounts();
+
   testDArrayIntConstructDestruct();
   testDArrayIntConstructWithCapacityDestruct();
   testDArrayIntMakeDelete();
   testDArrayIntMakeWithCapacityDelete();
-  testListHasFunctions((TloList *)tloDArrayMake(&tloInt, &countingAllocator, 0),
-                       TLO_LIST_CAPACITY | TLO_LIST_ELEMENT |
-                           TLO_LIST_POP_BACK | TLO_LIST_UNORDERED_REMOVE);
-  testListIntPushOrMoveBackOnce(
-      (TloList *)tloDArrayMake(&tloInt, &countingAllocator, 0), true);
-  testListIntPushOrMoveBackOnce(
-      (TloList *)tloDArrayMake(&tloInt, &countingAllocator, 0), false);
-  testListIntPushOrMoveBackManyTimes(
-      (TloList *)tloDArrayMake(&tloInt, &countingAllocator, 0), true);
-  testListIntPushOrMoveBackManyTimes(
-      (TloList *)tloDArrayMake(&tloInt, &countingAllocator, 0), false);
-  testListIntPushBackOncePopBackOnce(
-      (TloList *)tloDArrayMake(&tloInt, &countingAllocator, 0));
-  testListIntPushBackManyTimesPopBackUntilEmpty(
-      (TloList *)tloDArrayMake(&tloInt, &countingAllocator, 0));
   testDArrayIntConstructCopy();
   testDArrayIntMakeCopy();
   testDArrayIntCopy();
-  testListIntPtrPushOrMoveBackOnce(
-      (TloList *)tloDArrayMake(&intPtrType, &countingAllocator, 0), true);
-  testListIntPtrPushOrMoveBackOnce(
-      (TloList *)tloDArrayMake(&intPtrType, &countingAllocator, 0), false);
-  testListIntPtrPushOrMoveBackManyTimes(
-      (TloList *)tloDArrayMake(&intPtrType, &countingAllocator, 0), true);
-  testListIntPtrPushOrMoveBackManyTimes(
-      (TloList *)tloDArrayMake(&intPtrType, &countingAllocator, 0), false);
-  testListIntPtrPushBackOncePopBackOnce(
-      (TloList *)tloDArrayMake(&intPtrType, &countingAllocator, 0));
-  testListIntPtrPushBackManyTimesPopBackUntilEmpty(
-      (TloList *)tloDArrayMake(&intPtrType, &countingAllocator, 0));
+
+  testListHasFunctions(makeListInt(), TLO_LIST_CAPACITY | TLO_LIST_ELEMENT |
+                                          TLO_LIST_POP_BACK |
+                                          TLO_LIST_UNORDERED_REMOVE);
+
+  testListIntPushOrMoveBackOnce(makeListInt(), true);
+  testListIntPushOrMoveBackOnce(makeListInt(), false);
+  testListIntPushOrMoveBackManyTimes(makeListInt(), true);
+  testListIntPushOrMoveBackManyTimes(makeListInt(), false);
+  testListIntPushBackOncePopBackOnce(makeListInt());
+  testListIntPushBackManyTimesPopBackUntilEmpty(makeListInt());
+
+  testListIntPtrPushOrMoveBackOnce(makeListIntPtr(), true);
+  testListIntPtrPushOrMoveBackOnce(makeListIntPtr(), false);
+  testListIntPtrPushOrMoveBackManyTimes(makeListIntPtr(), true);
+  testListIntPtrPushOrMoveBackManyTimes(makeListIntPtr(), false);
+  testListIntPtrPushBackOncePopBackOnce(makeListIntPtr());
+  testListIntPtrPushBackManyTimesPopBackUntilEmpty(makeListIntPtr());
   testListIntPtrPushBackManyTimesUnorderedRemoveBackUntilEmpty(
-      (TloList *)tloDArrayMake(&intPtrType, &countingAllocator, 0));
+      makeListIntPtr());
   testListIntPtrPushBackManyTimesUnorderedRemoveFrontUntilEmpty(
-      (TloList *)tloDArrayMake(&intPtrType, &countingAllocator, 0));
+      makeListIntPtr());
+
   testDArrayFinalCounts();
   puts("==================");
   puts("DArray tests done.");
