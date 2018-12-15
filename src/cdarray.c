@@ -109,21 +109,21 @@ static TloError allocateArrayIfNeeded(TloCDArray *array) {
 }
 
 static const void *constElement_(unsigned char *array, size_t index,
-                                 size_t sizeOf) {
-  return array + index * sizeOf;
+                                 size_t valueSize) {
+  return array + index * valueSize;
 }
 
 static void *mutableElement_(unsigned char *array, size_t index,
-                             size_t sizeOf) {
-  return array + index * sizeOf;
+                             size_t valueSize) {
+  return array + index * valueSize;
 }
 
 static TloError resizeArrayIfNeeded(TloCDArray *array) {
   if (array->size == array->capacity) {
     size_t newCapacity = array->capacity * 2;
-    size_t sizeOf = array->list.valueType->size;
+    size_t valueSize = array->list.valueType->size;
     unsigned char *newArray =
-        array->list.allocatorType->malloc(newCapacity * sizeOf);
+        array->list.allocatorType->malloc(newCapacity * valueSize);
     if (!newArray) {
       return TLO_ERROR;
     }
@@ -131,11 +131,11 @@ static TloError resizeArrayIfNeeded(TloCDArray *array) {
     size_t newFront = newCapacity / 4;
     size_t oldRightPartSize = array->size - array->front;
     size_t oldLeftPartSize = array->front;
-    memcpy(mutableElement_(newArray, newFront, sizeOf),
-           constElement_(array->array, array->front, sizeOf),
-           oldRightPartSize * sizeOf);
-    memcpy(mutableElement_(newArray, newFront + oldRightPartSize, sizeOf),
-           array->array, oldLeftPartSize * sizeOf);
+    memcpy(mutableElement_(newArray, newFront, valueSize),
+           constElement_(array->array, array->front, valueSize),
+           oldRightPartSize * valueSize);
+    memcpy(mutableElement_(newArray, newFront + oldRightPartSize, valueSize),
+           array->array, oldLeftPartSize * valueSize);
 
     array->list.allocatorType->free(array->array);
     array->array = newArray;
@@ -238,12 +238,12 @@ static void *cdarrayMutableElement(TloList *list, size_t index) {
 }
 
 static TloError pushFrontCopiedData(TloCDArray *array, const void *data) {
-  size_t sizeOf = array->list.valueType->size;
+  size_t valueSize = array->list.valueType->size;
   void *destination;
   if (array->front == 0) {
-    destination = mutableElement_(array->array, array->capacity - 1, sizeOf);
+    destination = mutableElement_(array->array, array->capacity - 1, valueSize);
   } else {
-    destination = mutableElement_(array->array, array->front - 1, sizeOf);
+    destination = mutableElement_(array->array, array->front - 1, valueSize);
   }
 
   if (array->list.valueType->constructCopy) {
@@ -251,7 +251,7 @@ static TloError pushFrontCopiedData(TloCDArray *array, const void *data) {
       return TLO_ERROR;
     }
   } else {
-    memcpy(destination, data, sizeOf);
+    memcpy(destination, data, valueSize);
   }
 
   if (array->front == 0) {
@@ -285,15 +285,15 @@ static TloError cdarrayPushFront(TloList *list, const void *data) {
 }
 
 static TloError pushFrontMovedData(TloCDArray *array, void *data) {
-  size_t sizeOf = array->list.valueType->size;
+  size_t valueSize = array->list.valueType->size;
   void *destination;
   if (array->front == 0) {
-    destination = mutableElement_(array->array, array->capacity - 1, sizeOf);
+    destination = mutableElement_(array->array, array->capacity - 1, valueSize);
   } else {
-    destination = mutableElement_(array->array, array->front - 1, sizeOf);
+    destination = mutableElement_(array->array, array->front - 1, valueSize);
   }
 
-  memcpy(destination, data, sizeOf);
+  memcpy(destination, data, valueSize);
   array->list.allocatorType->free(data);
 
   if (array->front == 0) {
