@@ -39,15 +39,15 @@ extern const TloType tloInt;
 typedef void *(*TloMallocFunction)(size_t size);
 typedef void (*TloFreeFunction)(void *memory);
 
-typedef struct TloAllocatorType {
+typedef struct TloAllocator {
   // public
   TloMallocFunction malloc;
   TloFreeFunction free;
-} TloAllocatorType;
+} TloAllocator;
 
-bool tloAllocatorTypeIsValid(const TloAllocatorType *allocatorType);
+bool tloAllocatorIsValid(const TloAllocator *allocator);
 
-extern const TloAllocatorType tloCStdLibAllocator;
+extern const TloAllocator tloCStdLibAllocator;
 
 void tloPtrDestruct(void *ptr);
 

@@ -25,10 +25,10 @@ static void testCDArrayIntConstructDestruct(void) {
 }
 
 #define EXPECT_DARRAY_ALL_PROPERTIES(_darray, _size, _capacity, _isEmpty, \
-                                     _valueType, _allocatorType)          \
+                                     _valueType, _allocator)              \
   do {                                                                    \
     EXPECT_LIST_PROPERTIES(&(_darray)->list, _size, _isEmpty, _valueType, \
-                           _allocatorType);                               \
+                           _allocator);                                   \
     TLO_EXPECT(tlovListCapacity(&(_darray)->list) == (_capacity));        \
   } while (0)
 
@@ -84,7 +84,7 @@ static void testCDArrayIntConstructCopy(void) {
   EXPECT_DARRAY_ALL_PROPERTIES(
       ints, tlovListSize(&copy->list), tlovListCapacity(&copy->list),
       tlovListIsEmpty(&copy->list), tloListValueType(&copy->list),
-      tloListAllocatorType(&copy->list));
+      tloListAllocator(&copy->list));
 
   for (size_t i = 0; i < tlovListSize(&ints->list); ++i) {
     const int *elem1 = tlovListElement(&ints->list, i);
@@ -116,7 +116,7 @@ static void testCDArrayIntMakeCopy(void) {
   EXPECT_DARRAY_ALL_PROPERTIES(
       ints, tlovListSize(&copy->list), tlovListCapacity(&copy->list),
       tlovListIsEmpty(&copy->list), tloListValueType(&copy->list),
-      tloListAllocatorType(&copy->list));
+      tloListAllocator(&copy->list));
 
   for (size_t i = 0; i < tlovListSize(&ints->list); ++i) {
     const int *elem1 = tlovListElement(&ints->list, i);
@@ -150,7 +150,7 @@ static void testCDArrayIntCopy(void) {
   EXPECT_DARRAY_ALL_PROPERTIES(
       ints, tlovListSize(&copy->list), tlovListCapacity(&copy->list),
       tlovListIsEmpty(&copy->list), tloListValueType(&copy->list),
-      tloListAllocatorType(&copy->list));
+      tloListAllocator(&copy->list));
 
   for (size_t i = 0; i < tlovListSize(&ints->list); ++i) {
     const int *elem1 = tlovListElement(&ints->list, i);

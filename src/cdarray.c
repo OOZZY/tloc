@@ -43,7 +43,7 @@ static void cdarrayDestruct(TloList *list) {
 
   destructAllElements(array);
 
-  array->list.allocatorType->free(array->array);
+  array->list.allocator->free(array->array);
   array->array = NULL;
 }
 
@@ -97,8 +97,8 @@ static void *cdarrayMutableBack(TloList *list) {
 
 static TloError allocateArrayIfNeeded(TloCDArray *array) {
   if (!array->array) {
-    array->array = array->list.allocatorType->malloc(
-        STARTING_CAPACITY * array->list.valueType->size);
+    array->array = array->list.allocator->malloc(STARTING_CAPACITY *
+                                                 array->list.valueType->size);
     if (!array->array) {
       return TLO_ERROR;
     }
@@ -123,7 +123,7 @@ static TloError resizeArrayIfNeeded(TloCDArray *array) {
     size_t newCapacity = array->capacity * 2;
     size_t valueSize = array->list.valueType->size;
     unsigned char *newArray =
-        array->list.allocatorType->malloc(newCapacity * valueSize);
+        array->list.allocator->malloc(newCapacity * valueSize);
     if (!newArray) {
       return TLO_ERROR;
     }
@@ -137,7 +137,7 @@ static TloError resizeArrayIfNeeded(TloCDArray *array) {
     memcpy(mutableElement_(newArray, newFront + oldRightPartSize, valueSize),
            array->array, oldLeftPartSize * valueSize);
 
-    array->list.allocatorType->free(array->array);
+    array->list.allocator->free(array->array);
     array->array = newArray;
     array->front = newFront;
     array->capacity = newCapacity;
@@ -185,7 +185,7 @@ static TloError pushBackMovedData(TloCDArray *array, void *data) {
   void *destination = mutableElement(array, array->size);
 
   memcpy(destination, data, array->list.valueType->size);
-  array->list.allocatorType->free(data);
+  array->list.allocator->free(data);
 
   ++array->size;
 
@@ -294,7 +294,7 @@ static TloError pushFrontMovedData(TloCDArray *array, void *data) {
   }
 
   memcpy(destination, data, valueSize);
-  array->list.allocatorType->free(data);
+  array->list.allocator->free(data);
 
   if (array->front == 0) {
     array->front = array->capacity - 1;
@@ -396,21 +396,20 @@ static const TloListVTable vTable = {.type = "TloCDArray",
                                      .unorderedRemove = cdarrayUnorderedRemove};
 
 TloError tloCDArrayConstruct(TloCDArray *array, const TloType *valueType,
-                             const TloAllocatorType *allocatorType,
-                             size_t capacity) {
+                             const TloAllocator *allocator, size_t capacity) {
   assert(array);
   assert(tloTypeIsValid(valueType));
-  assert(allocatorType == NULL || tloAllocatorTypeIsValid(allocatorType));
+  assert(allocator == NULL || tloAllocatorIsValid(allocator));
 
   unsigned char *newArray = NULL;
   if (capacity) {
-    newArray = allocatorType->malloc(capacity * valueType->size);
+    newArray = allocator->malloc(capacity * valueType->size);
     if (!newArray) {
       return TLO_ERROR;
     }
   }
 
-  tloListConstruct(&array->list, &vTable, valueType, allocatorType);
+  tloListConstruct(&array->list, &vTable, valueType, allocator);
   array->array = newArray;
   array->front = capacity / 4;
   array->size = 0;
@@ -436,8 +435,7 @@ TloError tloCDArrayConstructCopy(TloCDArray *array, const TloCDArray *other) {
   assert(array);
   assert(cdarrayIsValid(&other->list));
 
-  if (tloCDArrayConstruct(array, other->list.valueType,
-                          other->list.allocatorType,
+  if (tloCDArrayConstruct(array, other->list.valueType, other->list.allocator,
                           other->capacity) == TLO_ERROR) {
     return TLO_ERROR;
   }
@@ -450,19 +448,17 @@ TloError tloCDArrayConstructCopy(TloCDArray *array, const TloCDArray *other) {
 }
 
 TloCDArray *tloCDArrayMake(const TloType *valueType,
-                           const TloAllocatorType *allocatorType,
-                           size_t capacity) {
+                           const TloAllocator *allocator, size_t capacity) {
   assert(tloTypeIsValid(valueType));
-  assert(allocatorType == NULL || tloAllocatorTypeIsValid(allocatorType));
+  assert(allocator == NULL || tloAllocatorIsValid(allocator));
 
-  TloCDArray *array = allocatorType->malloc(sizeof(*array));
+  TloCDArray *array = allocator->malloc(sizeof(*array));
   if (!array) {
     return NULL;
   }
 
-  if (tloCDArrayConstruct(array, valueType, allocatorType, capacity) ==
-      TLO_ERROR) {
-    allocatorType->free(array);
+  if (tloCDArrayConstruct(array, valueType, allocator, capacity) == TLO_ERROR) {
+    allocator->free(array);
     return NULL;
   }
 
@@ -472,13 +468,13 @@ TloCDArray *tloCDArrayMake(const TloType *valueType,
 TloCDArray *tloCDArrayMakeCopy(const TloCDArray *other) {
   assert(cdarrayIsValid(&other->list));
 
-  TloCDArray *array = other->list.allocatorType->malloc(sizeof(*array));
+  TloCDArray *array = other->list.allocator->malloc(sizeof(*array));
   if (!array) {
     return NULL;
   }
 
   if (tloCDArrayConstructCopy(array, other) == TLO_ERROR) {
-    other->list.allocatorType->free(array);
+    other->list.allocator->free(array);
     return NULL;
   }
 

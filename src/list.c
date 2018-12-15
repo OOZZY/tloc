@@ -11,25 +11,24 @@ bool tloListVTableIsValid(const TloListVTable *vTable) {
 bool tloListIsValid(const TloList *list) {
   return list && tloListVTableIsValid(list->vTable) &&
          tloTypeIsValid(list->valueType) &&
-         tloAllocatorTypeIsValid(list->allocatorType);
+         tloAllocatorIsValid(list->allocator);
 }
 
 void tloListConstruct(TloList *list, const TloListVTable *vTable,
-                      const TloType *valueType,
-                      const TloAllocatorType *allocatorType) {
+                      const TloType *valueType, const TloAllocator *allocator) {
   assert(list);
   assert(vTable);
   assert(tloTypeIsValid(valueType));
 
-  if (!allocatorType) {
-    allocatorType = &tloCStdLibAllocator;
+  if (!allocator) {
+    allocator = &tloCStdLibAllocator;
   }
 
-  assert(tloAllocatorTypeIsValid(allocatorType));
+  assert(tloAllocatorIsValid(allocator));
 
   list->vTable = vTable;
   list->valueType = valueType;
-  list->allocatorType = allocatorType;
+  list->allocator = allocator;
 }
 
 void tloListDelete(TloList *list) {
@@ -40,7 +39,7 @@ void tloListDelete(TloList *list) {
   assert(tloListIsValid(list));
 
   tlovListDestruct(list);
-  list->allocatorType->free(list);
+  list->allocator->free(list);
 }
 
 const TloType *tloListValueType(const TloList *list) {
@@ -49,10 +48,10 @@ const TloType *tloListValueType(const TloList *list) {
   return list->valueType;
 }
 
-const TloAllocatorType *tloListAllocatorType(const TloList *list) {
+const TloAllocator *tloListAllocator(const TloList *list) {
   assert(tloListIsValid(list));
 
-  return list->allocatorType;
+  return list->allocator;
 }
 
 static unsigned char getFunctions(const TloListVTable *vTable) {

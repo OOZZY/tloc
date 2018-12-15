@@ -47,13 +47,12 @@ struct TloList {
   // private
   const TloListVTable *vTable;
   const TloType *valueType;
-  const TloAllocatorType *allocatorType;
+  const TloAllocator *allocator;
 };
 
 bool tloListIsValid(const TloList *list);
 void tloListConstruct(TloList *list, const TloListVTable *vTable,
-                      const TloType *valueType,
-                      const TloAllocatorType *allocatorType);
+                      const TloType *valueType, const TloAllocator *allocator);
 
 /*
  * - tlovListDestruct then allocator's free
@@ -61,7 +60,7 @@ void tloListConstruct(TloList *list, const TloListVTable *vTable,
 void tloListDelete(TloList *list);
 
 const TloType *tloListValueType(const TloList *list);
-const TloAllocatorType *tloListAllocatorType(const TloList *list);
+const TloAllocator *tloListAllocator(const TloList *list);
 bool tloListHasFunctions(const TloList *list, unsigned char functions);
 
 const char *tlovListType(const TloList *list);

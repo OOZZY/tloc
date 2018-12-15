@@ -3,7 +3,7 @@
 
 #include <tlo/util.h>
 
-extern const TloAllocatorType countingAllocator;
+extern const TloAllocator countingAllocator;
 void countingAllocatorResetCounts(void);
 unsigned long countingAllocatorMallocCount(void);
 unsigned long countingAllocatorFreeCount(void);

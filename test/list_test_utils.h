@@ -7,16 +7,15 @@
 
 #define SOME_NUMBER 42
 
-#define EXPECT_LIST_PROPERTIES(_list, _size, _isEmpty, _valueType, \
-                               _allocatorType)                     \
-  do {                                                             \
-    TLO_EXPECT(tlovListSize(_list) == (_size));                    \
-    TLO_EXPECT(tlovListIsEmpty(_list) == (_isEmpty));              \
-    TLO_EXPECT(tloListValueType(_list) == (_valueType));           \
-    TLO_EXPECT(tloListAllocatorType(_list) == (_allocatorType));   \
-    if (tloListHasFunctions(_list, TLO_LIST_CAPACITY)) {           \
-      TLO_EXPECT(tlovListCapacity(_list) >= tlovListSize(_list));  \
-    }                                                              \
+#define EXPECT_LIST_PROPERTIES(_list, _size, _isEmpty, _valueType, _allocator) \
+  do {                                                                         \
+    TLO_EXPECT(tlovListSize(_list) == (_size));                                \
+    TLO_EXPECT(tlovListIsEmpty(_list) == (_isEmpty));                          \
+    TLO_EXPECT(tloListValueType(_list) == (_valueType));                       \
+    TLO_EXPECT(tloListAllocator(_list) == (_allocator));                       \
+    if (tloListHasFunctions(_list, TLO_LIST_CAPACITY)) {                       \
+      TLO_EXPECT(tlovListCapacity(_list) >= tlovListSize(_list));              \
+    }                                                                          \
   } while (0)
 
 #define EXPECT_LIST_INT_ELEMENTS(_list, _frontValue, _backValue, _index, \

@@ -18,8 +18,7 @@ typedef struct TloCDArray {
 } TloCDArray;
 
 TloError tloCDArrayConstruct(TloCDArray *array, const TloType *valueType,
-                             const TloAllocatorType *allocatorType,
-                             size_t capacity);
+                             const TloAllocator *allocator, size_t capacity);
 
 /*
  * - uses TloCDArray's pushBack
@@ -30,8 +29,7 @@ TloError tloCDArrayConstructCopy(TloCDArray *array, const TloCDArray *other);
  * - uses given allocator's malloc then tloCDArrayConstruct
  */
 TloCDArray *tloCDArrayMake(const TloType *valueType,
-                           const TloAllocatorType *allocatorType,
-                           size_t capacity);
+                           const TloAllocator *allocator, size_t capacity);
 
 /*
  * - uses malloc of other's allocator then tloCDArrayConstructCopy

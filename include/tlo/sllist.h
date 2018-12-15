@@ -23,7 +23,7 @@ typedef struct TloSLList {
 } TloSLList;
 
 TloError tloSLListConstruct(TloSLList *llist, const TloType *valueType,
-                            const TloAllocatorType *allocatorType);
+                            const TloAllocator *allocator);
 
 /*
  * - uses TloSLList's pushBack
@@ -34,7 +34,7 @@ TloError tloSLListConstructCopy(TloSLList *llist, const TloSLList *other);
  * - uses given allocator's malloc then tloSLListConstruct
  */
 TloSLList *tloSLListMake(const TloType *valueType,
-                         const TloAllocatorType *allocatorType);
+                         const TloAllocator *allocator);
 
 /*
  * - uses malloc of other's allocator then tloSLListConstructCopy

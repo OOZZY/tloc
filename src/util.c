@@ -6,11 +6,11 @@ bool tloTypeIsValid(const TloType *type) { return type && type->size; }
 const TloType tloInt = {
     .size = sizeof(int), .constructCopy = NULL, .destruct = NULL};
 
-bool tloAllocatorTypeIsValid(const TloAllocatorType *allocatorType) {
-  return allocatorType && allocatorType->malloc && allocatorType->free;
+bool tloAllocatorIsValid(const TloAllocator *allocator) {
+  return allocator && allocator->malloc && allocator->free;
 }
 
-const TloAllocatorType tloCStdLibAllocator = {.malloc = malloc, .free = free};
+const TloAllocator tloCStdLibAllocator = {.malloc = malloc, .free = free};
 
 void tloPtrDestruct(void *ptr) {
   int **ptrptr = ptr;

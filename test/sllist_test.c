@@ -51,7 +51,7 @@ static void testSLListIntConstructCopy(void) {
 
   EXPECT_LIST_PROPERTIES(
       &ints->list, tlovListSize(&copy->list), tlovListIsEmpty(&copy->list),
-      tloListValueType(&copy->list), tloListAllocatorType(&copy->list));
+      tloListValueType(&copy->list), tloListAllocator(&copy->list));
 
   const TloSLLNode *node1 = tloSLLNodeHead(ints);
   const TloSLLNode *node2 = tloSLLNodeHead(copy);
@@ -87,7 +87,7 @@ static void testSLListIntMakeCopy(void) {
 
   EXPECT_LIST_PROPERTIES(
       &ints->list, tlovListSize(&copy->list), tlovListIsEmpty(&copy->list),
-      tloListValueType(&copy->list), tloListAllocatorType(&copy->list));
+      tloListValueType(&copy->list), tloListAllocator(&copy->list));
 
   const TloSLLNode *node1 = tloSLLNodeHead(ints);
   const TloSLLNode *node2 = tloSLLNodeHead(copy);
@@ -125,7 +125,7 @@ static void testSLListIntCopy(void) {
 
   EXPECT_LIST_PROPERTIES(
       &ints->list, tlovListSize(&copy->list), tlovListIsEmpty(&copy->list),
-      tloListValueType(&copy->list), tloListAllocatorType(&copy->list));
+      tloListValueType(&copy->list), tloListAllocator(&copy->list));
 
   const TloSLLNode *node1 = tloSLLNodeHead(ints);
   const TloSLLNode *node2 = tloSLLNodeHead(copy);

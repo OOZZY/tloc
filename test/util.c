@@ -21,8 +21,8 @@ static void countingAllocatorFree(void *memory) {
   free(memory);
 }
 
-const TloAllocatorType countingAllocator = {.malloc = countingAllocatorMalloc,
-                                            .free = countingAllocatorFree};
+const TloAllocator countingAllocator = {.malloc = countingAllocatorMalloc,
+                                        .free = countingAllocatorFree};
 
 void countingAllocatorResetCounts(void) {
   mallocCount = 0;
