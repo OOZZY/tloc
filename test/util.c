@@ -7,18 +7,18 @@ static unsigned long mallocCount = 0;
 static unsigned long freeCount = 0;
 static unsigned long totalByteCount = 0;
 
-static void *countingAllocatorMalloc(size_t byteCount) {
+static void *countingAllocatorMalloc(size_t size) {
   ++mallocCount;
-  void *bytes = malloc(byteCount);
-  if (bytes) {
-    totalByteCount += byteCount;
+  void *memory = malloc(size);
+  if (memory) {
+    totalByteCount += size;
   }
-  return bytes;
+  return memory;
 }
 
-static void countingAllocatorFree(void *bytes) {
+static void countingAllocatorFree(void *memory) {
   ++freeCount;
-  free(bytes);
+  free(memory);
 }
 
 const TloAllocatorType countingAllocator = {.malloc = countingAllocatorMalloc,
@@ -93,8 +93,8 @@ IntPtr *intPtrMake(int value) {
   return ptr;
 }
 
-static TloError intPtrTypeConstructCopy(void *bytes, const void *data) {
-  return intPtrConstructCopy(bytes, data);
+static TloError intPtrTypeConstructCopy(void *destination, const void *source) {
+  return intPtrConstructCopy(destination, source);
 }
 
 const TloType intPtrType = {.sizeOf = sizeof(IntPtr),
