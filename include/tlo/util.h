@@ -27,7 +27,7 @@ typedef void (*TloDestructFunction)(void *object);
 
 typedef struct TloType {
   // public
-  size_t sizeOf;
+  size_t size;
   TloConstructCopyFunction constructCopy;
   TloDestructFunction destruct;
 } TloType;

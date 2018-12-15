@@ -97,6 +97,6 @@ static TloError intPtrTypeConstructCopy(void *destination, const void *source) {
   return intPtrConstructCopy(destination, source);
 }
 
-const TloType intPtrType = {.sizeOf = sizeof(IntPtr),
+const TloType intPtrType = {.size = sizeof(IntPtr),
                             .constructCopy = intPtrTypeConstructCopy,
                             .destruct = tloPtrDestruct};

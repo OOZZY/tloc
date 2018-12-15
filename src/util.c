@@ -1,10 +1,10 @@
 #include "tlo/util.h"
 #include <stdlib.h>
 
-bool tloTypeIsValid(const TloType *type) { return type && type->sizeOf; }
+bool tloTypeIsValid(const TloType *type) { return type && type->size; }
 
 const TloType tloInt = {
-    .sizeOf = sizeof(int), .constructCopy = NULL, .destruct = NULL};
+    .size = sizeof(int), .constructCopy = NULL, .destruct = NULL};
 
 bool tloAllocatorTypeIsValid(const TloAllocatorType *allocatorType) {
   return allocatorType && allocatorType->malloc && allocatorType->free;
@@ -28,4 +28,4 @@ void tloPtrDestruct(void *ptr) {
 }
 
 const TloType tloPtr = {
-    .sizeOf = sizeof(int *), .constructCopy = NULL, .destruct = tloPtrDestruct};
+    .size = sizeof(int *), .constructCopy = NULL, .destruct = tloPtrDestruct};

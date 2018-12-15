@@ -8,11 +8,11 @@ static bool darrayIsValid(const TloList *list) {
 }
 
 static const void *constElement(const TloDArray *array, size_t index) {
-  return array->array + index * array->list.valueType->sizeOf;
+  return array->array + index * array->list.valueType->size;
 }
 
 static void *mutableElement(TloDArray *array, size_t index) {
-  return array->array + index * array->list.valueType->sizeOf;
+  return array->array + index * array->list.valueType->size;
 }
 
 static void destructAllElements(TloDArray *array) {
@@ -93,7 +93,7 @@ static void *darrayMutableBack(TloList *list) {
 static TloError allocateArrayIfNeeded(TloDArray *array) {
   if (!array->array) {
     array->array = array->list.allocatorType->malloc(
-        STARTING_CAPACITY * array->list.valueType->sizeOf);
+        STARTING_CAPACITY * array->list.valueType->size);
     if (!array->array) {
       return TLO_ERROR;
     }
@@ -106,12 +106,12 @@ static TloError resizeArrayIfNeeded(TloDArray *array) {
   if (array->size == array->capacity) {
     size_t newCapacity = array->capacity * 2;
     unsigned char *newArray = array->list.allocatorType->malloc(
-        newCapacity * array->list.valueType->sizeOf);
+        newCapacity * array->list.valueType->size);
     if (!newArray) {
       return TLO_ERROR;
     }
 
-    memcpy(newArray, array->array, array->size * array->list.valueType->sizeOf);
+    memcpy(newArray, array->array, array->size * array->list.valueType->size);
 
     array->list.allocatorType->free(array->array);
     array->array = newArray;
@@ -128,7 +128,7 @@ static TloError pushBackCopiedData(TloDArray *array, const void *data) {
       return TLO_ERROR;
     }
   } else {
-    memcpy(destination, data, array->list.valueType->sizeOf);
+    memcpy(destination, data, array->list.valueType->size);
   }
 
   ++array->size;
@@ -159,7 +159,7 @@ static TloError darrayPushBack(TloList *list, const void *data) {
 static TloError pushBackMovedData(TloDArray *array, void *data) {
   void *destination = mutableElement(array, array->size);
 
-  memcpy(destination, data, array->list.valueType->sizeOf);
+  memcpy(destination, data, array->list.valueType->size);
   array->list.allocatorType->free(data);
 
   ++array->size;
@@ -240,7 +240,7 @@ static void darrayUnorderedRemove(TloList *list, size_t index) {
     array->list.valueType->destruct(target);
   }
   void *back = mutableElement(array, array->size - 1);
-  memcpy(target, back, array->list.valueType->sizeOf);
+  memcpy(target, back, array->list.valueType->size);
   --array->size;
 }
 
@@ -270,7 +270,7 @@ TloError tloDArrayConstruct(TloDArray *array, const TloType *valueType,
 
   unsigned char *newArray = NULL;
   if (capacity) {
-    newArray = allocatorType->malloc(capacity * valueType->sizeOf);
+    newArray = allocatorType->malloc(capacity * valueType->size);
     if (!newArray) {
       return TLO_ERROR;
     }

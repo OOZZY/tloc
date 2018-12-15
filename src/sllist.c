@@ -99,7 +99,7 @@ static TloSLLNode *makeNodeWithCopiedData(TloSLList *llist, const void *data) {
     return NULL;
   }
 
-  node->data = llist->list.allocatorType->malloc(llist->list.valueType->sizeOf);
+  node->data = llist->list.allocatorType->malloc(llist->list.valueType->size);
   if (!node->data) {
     llist->list.allocatorType->free(node);
     return NULL;
@@ -112,7 +112,7 @@ static TloSLLNode *makeNodeWithCopiedData(TloSLList *llist, const void *data) {
       return NULL;
     }
   } else {
-    memcpy(node->data, data, llist->list.valueType->sizeOf);
+    memcpy(node->data, data, llist->list.valueType->size);
   }
 
   node->next = NULL;
