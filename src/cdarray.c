@@ -347,7 +347,7 @@ static void cdarrayUnorderedRemove(TloList *list, size_t index) {
 
   void *target = mutableElement(array, index);
   tloTypeDestruct(array->list.valueType, target);
-  void *back = mutableElement(array, array->size - 1);
+  const void *back = constElement(array, array->size - 1);
   memcpy(target, back, array->list.valueType->size);
   --array->size;
 }
