@@ -12,7 +12,7 @@ if (MINGW)
 endif()
 
 if (TLOC_COMPILE_FOR_GCOV AND "${CMAKE_C_COMPILER_ID}" STREQUAL "GNU")
-  set(gcov_link_options ${gcov_link_options} -lgcov)
+  set(gcov_link_options -lgcov)
 endif()
 
 set(tloc_test_headers util.h list_test_utils.h tloc_test.h)
