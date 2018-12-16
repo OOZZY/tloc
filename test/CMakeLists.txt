@@ -11,6 +11,10 @@ if (MINGW)
   endif()
 endif()
 
+if (TLOC_COMPILE_FOR_GCOV AND "${CMAKE_C_COMPILER_ID}" STREQUAL "GNU")
+  set(gcov_link_options ${gcov_link_options} -lgcov)
+endif()
+
 set(tloc_test_headers util.h list_test_utils.h tloc_test.h)
 set(tloc_test_sources util.c list_test_utils.c list_test.c darray_test.c
   sllist_test.c cdarray_test.c tloc_test.c)
@@ -20,6 +24,6 @@ target_compile_options(tloc_test
   PRIVATE ${global_compile_options} ${mingw_compile_options})
 target_include_directories(tloc_test PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 target_compile_definitions(tloc_test PRIVATE ${mingw_compile_definitions})
-target_link_libraries(tloc_test PRIVATE tloc)
+target_link_libraries(tloc_test PRIVATE tloc ${gcov_link_options})
 
 add_test(NAME tloc_test COMMAND tloc_test)

@@ -26,5 +26,12 @@ if (TLOC_COLORED_DIAGNOSTICS)
   endif()
 endif()
 
+option(TLOC_COMPILE_FOR_GCOV
+  "Tell the compiler to compile for gcov coverage analysis (GNU only)." OFF)
+if (TLOC_COMPILE_FOR_GCOV AND "${CMAKE_C_COMPILER_ID}" STREQUAL "GNU")
+  set(global_compile_options ${global_compile_options} -fprofile-arcs
+    -ftest-coverage)
+endif()
+
 add_subdirectory(src)
 add_subdirectory(test)
