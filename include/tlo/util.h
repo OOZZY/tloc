@@ -34,6 +34,19 @@ typedef struct TloType {
 
 bool tloTypeIsValid(const TloType *type);
 
+/*
+ * - if type->constructCopy is not NULL, uses it
+ * - otherwise, uses memcpy
+ */
+TloError tloTypeConstructCopy(const TloType *type, void *destination,
+                              const void *source);
+
+/*
+ * - if type->destruct is not NULL, uses it
+ * - otherwise, does nothing
+ */
+void tloTypeDestruct(const TloType *type, void *object);
+
 extern const TloType tloInt;
 
 typedef void *(*TloMallocFunction)(size_t size);

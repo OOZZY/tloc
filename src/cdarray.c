@@ -23,9 +23,7 @@ static void *mutableElement(TloCDArray *array, size_t index) {
 static void destructAllElements(TloCDArray *array) {
   for (size_t i = 0; i < array->size; ++i) {
     void *element = mutableElement(array, i);
-    if (array->list.valueType->destruct) {
-      array->list.valueType->destruct(element);
-    }
+    tloTypeDestruct(array->list.valueType, element);
   }
 }
 
@@ -148,12 +146,9 @@ static TloError resizeArrayIfNeeded(TloCDArray *array) {
 static TloError pushBackCopiedData(TloCDArray *array, const void *data) {
   void *destination = mutableElement(array, array->size);
 
-  if (array->list.valueType->constructCopy) {
-    if (array->list.valueType->constructCopy(destination, data) == TLO_ERROR) {
-      return TLO_ERROR;
-    }
-  } else {
-    memcpy(destination, data, array->list.valueType->size);
+  if (tloTypeConstructCopy(array->list.valueType, destination, data) ==
+      TLO_ERROR) {
+    return TLO_ERROR;
   }
 
   ++array->size;
@@ -246,12 +241,9 @@ static TloError pushFrontCopiedData(TloCDArray *array, const void *data) {
     destination = mutableElement_(array->array, array->front - 1, valueSize);
   }
 
-  if (array->list.valueType->constructCopy) {
-    if (array->list.valueType->constructCopy(destination, data) == TLO_ERROR) {
-      return TLO_ERROR;
-    }
-  } else {
-    memcpy(destination, data, valueSize);
+  if (tloTypeConstructCopy(array->list.valueType, destination, data) ==
+      TLO_ERROR) {
+    return TLO_ERROR;
   }
 
   if (array->front == 0) {
@@ -332,9 +324,7 @@ static void cdarrayPopFront(TloList *list) {
 
   TloCDArray *array = (TloCDArray *)list;
   void *front = mutableElement(array, 0);
-  if (array->list.valueType->destruct) {
-    array->list.valueType->destruct(front);
-  }
+  tloTypeDestruct(array->list.valueType, front);
   if (array->front == array->capacity - 1) {
     array->front = 0;
   } else {
@@ -349,9 +339,7 @@ static void cdarrayPopBack(TloList *list) {
 
   TloCDArray *array = (TloCDArray *)list;
   void *back = mutableElement(array, array->size - 1);
-  if (array->list.valueType->destruct) {
-    array->list.valueType->destruct(back);
-  }
+  tloTypeDestruct(array->list.valueType, back);
   --array->size;
 }
 
@@ -367,9 +355,7 @@ static void cdarrayUnorderedRemove(TloList *list, size_t index) {
   }
 
   void *target = mutableElement(array, index);
-  if (array->list.valueType->destruct) {
-    array->list.valueType->destruct(target);
-  }
+  tloTypeDestruct(array->list.valueType, target);
   void *back = mutableElement(array, array->size - 1);
   memcpy(target, back, array->list.valueType->size);
   --array->size;

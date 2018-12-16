@@ -19,9 +19,7 @@ static void destructAllElementsAndFreeAllNodes(TloSLList *llist) {
   while (current) {
     TloSLLNode *next = current->next;
 
-    if (llist->list.valueType->destruct) {
-      llist->list.valueType->destruct(current->data);
-    }
+    tloTypeDestruct(llist->list.valueType, current->data);
     llist->list.allocator->free(current->data);
     llist->list.allocator->free(current);
 
@@ -105,14 +103,11 @@ static TloSLLNode *makeNodeWithCopiedData(TloSLList *llist, const void *data) {
     return NULL;
   }
 
-  if (llist->list.valueType->constructCopy) {
-    if (llist->list.valueType->constructCopy(node->data, data) == TLO_ERROR) {
-      llist->list.allocator->free(node->data);
-      llist->list.allocator->free(node);
-      return NULL;
-    }
-  } else {
-    memcpy(node->data, data, llist->list.valueType->size);
+  if (tloTypeConstructCopy(llist->list.valueType, node->data, data) ==
+      TLO_ERROR) {
+    llist->list.allocator->free(node->data);
+    llist->list.allocator->free(node);
+    return NULL;
   }
 
   node->next = NULL;
@@ -221,9 +216,7 @@ static void sllistPopFront(TloList *list) {
   TloSLList *llist = (TloSLList *)list;
   TloSLLNode *frontNode = llist->head;
   llist->head = llist->head->next;
-  if (llist->list.valueType->destruct) {
-    llist->list.valueType->destruct(frontNode->data);
-  }
+  tloTypeDestruct(llist->list.valueType, frontNode->data);
   llist->list.allocator->free(frontNode->data);
   llist->list.allocator->free(frontNode);
   --llist->size;
