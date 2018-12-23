@@ -173,7 +173,8 @@ void testDLList(void) {
   testDLListIntMakeCopy();
   testDLListIntCopy();
 
-  testListHasFunctions(makeListInt(), TLO_LIST_PUSH_FRONT | TLO_LIST_POP_FRONT);
+  testListHasFunctions(makeListInt(), TLO_LIST_PUSH_FRONT | TLO_LIST_POP_FRONT |
+                                          TLO_LIST_POP_BACK);
 
   testListIntPushOrMoveBackOnce(makeListInt(), true);
   testListIntPushOrMoveBackOnce(makeListInt(), false);
