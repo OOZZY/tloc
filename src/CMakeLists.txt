@@ -22,9 +22,9 @@ if (TLOC_USE_MSAN_UBSAN AND NOT TLOC_USE_ASAN_UBSAN)
   endif()
 endif()
 
-set(tloc_headers util.h list.h darray.h sllist.h cdarray.h dllist.h test.h
-  debug.h)
-set(tloc_sources util.c list.c darray.c sllist.c cdarray.c dllist.c test.c)
+set(tloc_headers cdarray.h darray.h debug.h dllist.h list.h sllist.h test.h
+  util.h)
+set(tloc_sources cdarray.c darray.c dllist.c list.c sllist.c test.c util.c)
 prepend(tloc_headers ${PROJECT_SOURCE_DIR}/include/tlo/ ${tloc_headers})
 add_library(tloc STATIC ${tloc_headers} ${tloc_sources})
 set_target_properties(tloc PROPERTIES C_EXTENSIONS OFF)
