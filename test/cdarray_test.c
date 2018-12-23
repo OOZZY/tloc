@@ -1,9 +1,9 @@
+#include "cdarray_test.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <tlo/cdarray.h>
 #include <tlo/test.h>
 #include "list_test_utils.h"
-#include "tloc_test.h"
 #include "util.h"
 
 static void testCDArrayInitialCounts(void) {

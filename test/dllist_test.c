@@ -1,9 +1,9 @@
+#include "dllist_test.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <tlo/dllist.h>
 #include <tlo/test.h>
 #include "list_test_utils.h"
-#include "tloc_test.h"
 #include "util.h"
 
 static void testDLListInitialCounts() {
