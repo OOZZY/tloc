@@ -46,9 +46,10 @@ TloSLList *tloSLListMakeCopy(const TloSLList *other);
  */
 TloError tloSLListCopy(TloSLList *llist, const TloSLList *other);
 
+const TloSLLNode *tloSLListHead(const TloSLList *llist);
+TloSLLNode *tloSLListMutableHead(TloSLList *llist);
+
 bool tloSLLNodeIsValid(const TloSLLNode *node);
-const TloSLLNode *tloSLLNodeHead(const TloSLList *llist);
-TloSLLNode *tloSLLNodeMutableHead(TloSLList *llist);
 const void *tloSLLNodeElement(const TloSLLNode *node);
 void *tloSLLNodeMutableElement(TloSLLNode *node);
 const TloSLLNode *tloSLLNodeNext(const TloSLLNode *node);

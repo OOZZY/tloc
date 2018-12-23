@@ -333,19 +333,19 @@ TloError tloSLListCopy(TloSLList *llist, const TloSLList *other) {
   return TLO_SUCCESS;
 }
 
+const TloSLLNode *tloSLListHead(const TloSLList *llist) {
+  assert(sllistIsValid(&llist->list));
+
+  return llist->head;
+}
+
+TloSLLNode *tloSLListMutableHead(TloSLList *llist) {
+  assert(sllistIsValid(&llist->list));
+
+  return llist->head;
+}
+
 bool tloSLLNodeIsValid(const TloSLLNode *node) { return node && node->data; }
-
-const TloSLLNode *tloSLLNodeHead(const TloSLList *llist) {
-  assert(sllistIsValid(&llist->list));
-
-  return llist->head;
-}
-
-TloSLLNode *tloSLLNodeMutableHead(TloSLList *llist) {
-  assert(sllistIsValid(&llist->list));
-
-  return llist->head;
-}
 
 const void *tloSLLNodeElement(const TloSLLNode *node) {
   assert(tloSLLNodeIsValid(node));

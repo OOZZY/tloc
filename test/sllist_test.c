@@ -53,8 +53,8 @@ static void testSLListIntConstructCopy(void) {
       &ints->list, tlovListSize(&copy->list), tlovListIsEmpty(&copy->list),
       tloListValueType(&copy->list), tloListAllocator(&copy->list));
 
-  const TloSLLNode *node1 = tloSLLNodeHead(ints);
-  const TloSLLNode *node2 = tloSLLNodeHead(copy);
+  const TloSLLNode *node1 = tloSLListHead(ints);
+  const TloSLLNode *node2 = tloSLListHead(copy);
   while (node1) {
     TLO_ASSERT(node2);
     const int *elem1 = tloSLLNodeElement(node1);
@@ -89,8 +89,8 @@ static void testSLListIntMakeCopy(void) {
       &ints->list, tlovListSize(&copy->list), tlovListIsEmpty(&copy->list),
       tloListValueType(&copy->list), tloListAllocator(&copy->list));
 
-  const TloSLLNode *node1 = tloSLLNodeHead(ints);
-  const TloSLLNode *node2 = tloSLLNodeHead(copy);
+  const TloSLLNode *node1 = tloSLListHead(ints);
+  const TloSLLNode *node2 = tloSLListHead(copy);
   while (node1) {
     TLO_ASSERT(node2);
     const int *elem1 = tloSLLNodeElement(node1);
@@ -127,8 +127,8 @@ static void testSLListIntCopy(void) {
       &ints->list, tlovListSize(&copy->list), tlovListIsEmpty(&copy->list),
       tloListValueType(&copy->list), tloListAllocator(&copy->list));
 
-  const TloSLLNode *node1 = tloSLLNodeHead(ints);
-  const TloSLLNode *node2 = tloSLLNodeHead(copy);
+  const TloSLLNode *node1 = tloSLListHead(ints);
+  const TloSLLNode *node2 = tloSLListHead(copy);
   while (node1) {
     TLO_ASSERT(node2);
     const int *elem1 = tloSLLNodeElement(node1);
