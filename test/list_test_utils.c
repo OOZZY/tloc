@@ -3,7 +3,8 @@
 void testListDeleteWithNull(void) { tloListDelete(NULL); }
 
 void testListHasFunctions(TloList *list, unsigned char functions) {
-  TLO_ASSERT(tloListHasFunctions(list, functions));
+  TLO_ASSERT(list);
+  TLO_EXPECT(tloListHasFunctions(list, functions));
   tloListDelete(list);
 }
 
