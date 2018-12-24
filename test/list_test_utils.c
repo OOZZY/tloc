@@ -5,7 +5,6 @@ void testListDeleteWithNull(void) { tloListDelete(NULL); }
 void testListHasFunctions(TloList *list, unsigned char functions) {
   TLO_ASSERT(tloListHasFunctions(list, functions));
   tloListDelete(list);
-  list = NULL;
 }
 
 void testListIntPushOrMoveBackOnce(TloList *ints, bool testPush) {
@@ -26,7 +25,6 @@ void testListIntPushOrMoveBackOnce(TloList *ints, bool testPush) {
   EXPECT_LIST_INT_ELEMENTS(ints, SOME_NUMBER, SOME_NUMBER, 0, SOME_NUMBER);
 
   tloListDelete(ints);
-  ints = NULL;
 }
 
 void testListIntPushOrMoveBackManyTimes(TloList *ints, bool testPush) {
@@ -49,7 +47,6 @@ void testListIntPushOrMoveBackManyTimes(TloList *ints, bool testPush) {
   }
 
   tloListDelete(ints);
-  ints = NULL;
 }
 
 void testListIntPushBackOncePopBackOnce(TloList *ints) {
@@ -65,7 +62,6 @@ void testListIntPushBackOncePopBackOnce(TloList *ints) {
   EXPECT_LIST_PROPERTIES(ints, 0, true, &tloInt, &countingAllocator);
 
   tloListDelete(ints);
-  ints = NULL;
 }
 
 void testListIntPushBackManyTimesPopBackUntilEmpty(TloList *ints) {
@@ -88,7 +84,6 @@ void testListIntPushBackManyTimesPopBackUntilEmpty(TloList *ints) {
   EXPECT_LIST_PROPERTIES(ints, 0, true, &tloInt, &countingAllocator);
 
   tloListDelete(ints);
-  ints = NULL;
 }
 
 void testListIntPushOrMoveFrontOnce(TloList *ints, bool testPush) {
@@ -110,7 +105,6 @@ void testListIntPushOrMoveFrontOnce(TloList *ints, bool testPush) {
   EXPECT_LIST_INT_ELEMENTS(ints, SOME_NUMBER, SOME_NUMBER, 0, SOME_NUMBER);
 
   tloListDelete(ints);
-  ints = NULL;
 }
 
 void testListIntPushOrMoveFrontManyTimes(TloList *ints, bool testPush) {
@@ -134,7 +128,6 @@ void testListIntPushOrMoveFrontManyTimes(TloList *ints, bool testPush) {
   }
 
   tloListDelete(ints);
-  ints = NULL;
 }
 
 void testListIntPushFrontOncePopFrontOnce(TloList *ints) {
@@ -151,7 +144,6 @@ void testListIntPushFrontOncePopFrontOnce(TloList *ints) {
   EXPECT_LIST_PROPERTIES(ints, 0, true, &tloInt, &countingAllocator);
 
   tloListDelete(ints);
-  ints = NULL;
 }
 
 void testListIntPushFrontManyTimesPopFrontUntilEmpty(TloList *ints) {
@@ -175,7 +167,6 @@ void testListIntPushFrontManyTimesPopFrontUntilEmpty(TloList *ints) {
   EXPECT_LIST_PROPERTIES(ints, 0, true, &tloInt, &countingAllocator);
 
   tloListDelete(ints);
-  ints = NULL;
 }
 
 void testListIntPtrPushOrMoveBackOnce(TloList *intPtrs, bool testPush) {
@@ -200,7 +191,6 @@ void testListIntPtrPushOrMoveBackOnce(TloList *intPtrs, bool testPush) {
                               SOME_NUMBER);
 
   tloListDelete(intPtrs);
-  intPtrs = NULL;
 }
 
 void testListIntPtrPushOrMoveBackManyTimes(TloList *intPtrs, bool testPush) {
@@ -227,7 +217,6 @@ void testListIntPtrPushOrMoveBackManyTimes(TloList *intPtrs, bool testPush) {
   }
 
   tloListDelete(intPtrs);
-  intPtrs = NULL;
 }
 
 void testListIntPtrPushBackOncePopBackOnce(TloList *intPtrs) {
@@ -246,7 +235,6 @@ void testListIntPtrPushBackOncePopBackOnce(TloList *intPtrs) {
   EXPECT_LIST_PROPERTIES(intPtrs, 0, true, &intPtrType, &countingAllocator);
 
   tloListDelete(intPtrs);
-  intPtrs = NULL;
 }
 
 void testListIntPtrPushBackManyTimesPopBackUntilEmpty(TloList *intPtrs) {
@@ -273,7 +261,6 @@ void testListIntPtrPushBackManyTimesPopBackUntilEmpty(TloList *intPtrs) {
   EXPECT_LIST_PROPERTIES(intPtrs, 0, true, &intPtrType, &countingAllocator);
 
   tloListDelete(intPtrs);
-  intPtrs = NULL;
 }
 
 void testListIntPtrPushBackManyTimesUnorderedRemoveBackUntilEmpty(
@@ -301,7 +288,6 @@ void testListIntPtrPushBackManyTimesUnorderedRemoveBackUntilEmpty(
   EXPECT_LIST_PROPERTIES(intPtrs, 0, true, &intPtrType, &countingAllocator);
 
   tloListDelete(intPtrs);
-  intPtrs = NULL;
 }
 
 void testListIntPtrPushBackManyTimesUnorderedRemoveFrontUntilEmpty(
@@ -337,7 +323,6 @@ void testListIntPtrPushBackManyTimesUnorderedRemoveFrontUntilEmpty(
   EXPECT_LIST_PROPERTIES(intPtrs, 0, true, &intPtrType, &countingAllocator);
 
   tloListDelete(intPtrs);
-  intPtrs = NULL;
 }
 
 void testListIntPtrPushOrMoveFrontOnce(TloList *intPtrs, bool testPush) {
@@ -363,7 +348,6 @@ void testListIntPtrPushOrMoveFrontOnce(TloList *intPtrs, bool testPush) {
                               SOME_NUMBER);
 
   tloListDelete(intPtrs);
-  intPtrs = NULL;
 }
 
 void testListIntPtrPushOrMoveFrontManyTimes(TloList *intPtrs, bool testPush) {
@@ -391,7 +375,6 @@ void testListIntPtrPushOrMoveFrontManyTimes(TloList *intPtrs, bool testPush) {
   }
 
   tloListDelete(intPtrs);
-  intPtrs = NULL;
 }
 
 void testListIntPtrPushFrontOncePopFrontOnce(TloList *intPtrs) {
@@ -411,7 +394,6 @@ void testListIntPtrPushFrontOncePopFrontOnce(TloList *intPtrs) {
   EXPECT_LIST_PROPERTIES(intPtrs, 0, true, &intPtrType, &countingAllocator);
 
   tloListDelete(intPtrs);
-  intPtrs = NULL;
 }
 
 void testListIntPtrPushFrontManyTimesPopFrontUntilEmpty(TloList *intPtrs) {
@@ -439,5 +421,4 @@ void testListIntPtrPushFrontManyTimesPopFrontUntilEmpty(TloList *intPtrs) {
   EXPECT_LIST_PROPERTIES(intPtrs, 0, true, &intPtrType, &countingAllocator);
 
   tloListDelete(intPtrs);
-  intPtrs = NULL;
 }

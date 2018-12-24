@@ -52,7 +52,6 @@ static void testCDArrayIntMakeDelete(void) {
   EXPECT_LIST_PROPERTIES(&ints->list, 0, true, &tloInt, &countingAllocator);
 
   tloListDelete(&ints->list);
-  ints = NULL;
 }
 
 static void testCDArrayIntMakeWithCapacityDelete(void) {
@@ -63,7 +62,6 @@ static void testCDArrayIntMakeWithCapacityDelete(void) {
                                &countingAllocator);
 
   tloListDelete(&ints->list);
-  ints = NULL;
 }
 
 static void testCDArrayIntConstructCopy(void) {
@@ -94,11 +92,8 @@ static void testCDArrayIntConstructCopy(void) {
   }
 
   tloListDelete(&ints->list);
-  ints = NULL;
-
   tlovListDestruct(&copy->list);
   free(copy);
-  copy = NULL;
 }
 
 static void testCDArrayIntMakeCopy(void) {
@@ -126,10 +121,7 @@ static void testCDArrayIntMakeCopy(void) {
   }
 
   tloListDelete(&ints->list);
-  ints = NULL;
-
   tloListDelete(&copy->list);
-  copy = NULL;
 }
 
 static void testCDArrayIntCopy(void) {
@@ -160,10 +152,7 @@ static void testCDArrayIntCopy(void) {
   }
 
   tloListDelete(&ints->list);
-  ints = NULL;
-
   tloListDelete(&copy->list);
-  copy = NULL;
 }
 
 static void testCDArrayFinalCounts() {

@@ -52,7 +52,6 @@ static void testDArrayIntMakeDelete(void) {
   EXPECT_LIST_PROPERTIES(&ints->list, 0, true, &tloInt, &countingAllocator);
 
   tloListDelete(&ints->list);
-  ints = NULL;
 }
 
 static void testDArrayIntMakeWithCapacityDelete(void) {
@@ -63,7 +62,6 @@ static void testDArrayIntMakeWithCapacityDelete(void) {
                                &countingAllocator);
 
   tloListDelete(&ints->list);
-  ints = NULL;
 }
 
 static void testDArrayIntConstructCopy(void) {
@@ -94,11 +92,8 @@ static void testDArrayIntConstructCopy(void) {
   }
 
   tloListDelete(&ints->list);
-  ints = NULL;
-
   tlovListDestruct(&copy->list);
   free(copy);
-  copy = NULL;
 }
 
 static void testDArrayIntMakeCopy(void) {
@@ -126,10 +121,7 @@ static void testDArrayIntMakeCopy(void) {
   }
 
   tloListDelete(&ints->list);
-  ints = NULL;
-
   tloListDelete(&copy->list);
-  copy = NULL;
 }
 
 static void testDArrayIntCopy(void) {
@@ -160,10 +152,7 @@ static void testDArrayIntCopy(void) {
   }
 
   tloListDelete(&ints->list);
-  ints = NULL;
-
   tloListDelete(&copy->list);
-  copy = NULL;
 }
 
 static void testDArrayFinalCounts() {

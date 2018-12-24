@@ -31,7 +31,6 @@ static void testDLListIntMakeDelete(void) {
   EXPECT_LIST_PROPERTIES(&ints->list, 0, true, &tloInt, &countingAllocator);
 
   tloListDelete(&ints->list);
-  ints = NULL;
 }
 
 static void testDLListIntConstructCopy(void) {
@@ -66,11 +65,8 @@ static void testDLListIntConstructCopy(void) {
   }
 
   tloListDelete(&ints->list);
-  ints = NULL;
-
   tlovListDestruct(&copy->list);
   free(copy);
-  copy = NULL;
 }
 
 static void testDLListIntMakeCopy(void) {
@@ -102,10 +98,7 @@ static void testDLListIntMakeCopy(void) {
   }
 
   tloListDelete(&ints->list);
-  ints = NULL;
-
   tloListDelete(&copy->list);
-  copy = NULL;
 }
 
 static void testDLListIntCopy(void) {
@@ -140,10 +133,7 @@ static void testDLListIntCopy(void) {
   }
 
   tloListDelete(&ints->list);
-  ints = NULL;
-
   tloListDelete(&copy->list);
-  copy = NULL;
 }
 
 static void testDLListFinalCounts() {
