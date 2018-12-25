@@ -5,7 +5,7 @@
 #include <tlo/test.h>
 #include "util.h"
 
-#define SOME_NUMBER 42
+enum { SOME_NUMBER = 42 };
 
 #define EXPECT_LIST_PROPERTIES(_list, _size, _isEmpty, _valueType, _allocator) \
   do {                                                                         \

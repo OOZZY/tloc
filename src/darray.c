@@ -86,7 +86,7 @@ static void *darrayMutableBack(TloList *list) {
   return mutableElement(array, array->size - 1);
 }
 
-#define STARTING_CAPACITY 1
+enum { STARTING_CAPACITY = 1 };
 
 static TloError allocateArrayIfNeeded(TloDArray *array) {
   if (!array->array) {
