@@ -22,8 +22,8 @@ typedef struct TloSLList {
   size_t size;
 } TloSLList;
 
-TloError tloSLListConstruct(TloSLList *llist, const TloType *valueType,
-                            const TloAllocator *allocator);
+void tloSLListConstruct(TloSLList *llist, const TloType *valueType,
+                        const TloAllocator *allocator);
 
 /*
  * - uses TloSLList's pushBack

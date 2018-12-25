@@ -151,15 +151,13 @@ static TloError darrayPushBack(TloList *list, const void *data) {
   return TLO_SUCCESS;
 }
 
-static TloError pushBackMovedData(TloDArray *array, void *data) {
+static void pushBackMovedData(TloDArray *array, void *data) {
   void *destination = mutableElement(array, array->size);
 
   memcpy(destination, data, array->list.valueType->size);
   array->list.allocator->free(data);
 
   ++array->size;
-
-  return TLO_SUCCESS;
 }
 
 static TloError darrayMoveBack(TloList *list, void *data) {
@@ -175,9 +173,7 @@ static TloError darrayMoveBack(TloList *list, void *data) {
     return TLO_ERROR;
   }
 
-  if (pushBackMovedData(array, data) == TLO_ERROR) {
-    return TLO_ERROR;
-  }
+  pushBackMovedData(array, data);
 
   return TLO_SUCCESS;
 }

@@ -176,15 +176,13 @@ static TloError cdarrayPushBack(TloList *list, const void *data) {
   return TLO_SUCCESS;
 }
 
-static TloError pushBackMovedData(TloCDArray *array, void *data) {
+static void pushBackMovedData(TloCDArray *array, void *data) {
   void *destination = mutableElement(array, array->size);
 
   memcpy(destination, data, array->list.valueType->size);
   array->list.allocator->free(data);
 
   ++array->size;
-
-  return TLO_SUCCESS;
 }
 
 static TloError cdarrayMoveBack(TloList *list, void *data) {
@@ -200,9 +198,7 @@ static TloError cdarrayMoveBack(TloList *list, void *data) {
     return TLO_ERROR;
   }
 
-  if (pushBackMovedData(array, data) == TLO_ERROR) {
-    return TLO_ERROR;
-  }
+  pushBackMovedData(array, data);
 
   return TLO_SUCCESS;
 }
@@ -275,7 +271,7 @@ static TloError cdarrayPushFront(TloList *list, const void *data) {
   return TLO_SUCCESS;
 }
 
-static TloError pushFrontMovedData(TloCDArray *array, void *data) {
+static void pushFrontMovedData(TloCDArray *array, void *data) {
   size_t newFront = newFrontAfterPushFront(array);
   size_t valueSize = array->list.valueType->size;
   void *destination = mutableElement_(array->array, newFront, valueSize);
@@ -285,8 +281,6 @@ static TloError pushFrontMovedData(TloCDArray *array, void *data) {
 
   array->front = newFront;
   ++array->size;
-
-  return TLO_SUCCESS;
 }
 
 static TloError cdarrayMoveFront(TloList *list, void *data) {
@@ -302,9 +296,7 @@ static TloError cdarrayMoveFront(TloList *list, void *data) {
     return TLO_ERROR;
   }
 
-  if (pushFrontMovedData(array, data) == TLO_ERROR) {
-    return TLO_ERROR;
-  }
+  pushFrontMovedData(array, data);
 
   return TLO_SUCCESS;
 }

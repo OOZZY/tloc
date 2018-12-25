@@ -16,8 +16,7 @@ static void testSLListInitialCounts() {
 static void testSLListIntConstructDestruct(void) {
   TloSLList ints;
 
-  TloError error = tloSLListConstruct(&ints, &tloInt, &countingAllocator);
-  TLO_ASSERT(!error);
+  tloSLListConstruct(&ints, &tloInt, &countingAllocator);
 
   EXPECT_LIST_PROPERTIES(&ints.list, 0, true, &tloInt, &countingAllocator);
 

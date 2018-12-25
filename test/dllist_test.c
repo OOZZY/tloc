@@ -16,8 +16,7 @@ static void testDLListInitialCounts() {
 static void testDLListIntConstructDestruct(void) {
   TloDLList ints;
 
-  TloError error = tloDLListConstruct(&ints, &tloInt, &countingAllocator);
-  TLO_ASSERT(!error);
+  tloDLListConstruct(&ints, &tloInt, &countingAllocator);
 
   EXPECT_LIST_PROPERTIES(&ints.list, 0, true, &tloInt, &countingAllocator);
 

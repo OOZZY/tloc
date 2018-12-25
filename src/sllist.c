@@ -241,8 +241,8 @@ static const TloListVTable vTable = {.type = "TloSLList",
                                      .moveFront = sllistMoveFront,
                                      .popFront = sllistPopFront};
 
-TloError tloSLListConstruct(TloSLList *llist, const TloType *valueType,
-                            const TloAllocator *allocator) {
+void tloSLListConstruct(TloSLList *llist, const TloType *valueType,
+                        const TloAllocator *allocator) {
   assert(llist);
   assert(tloTypeIsValid(valueType));
   assert(allocator == NULL || tloAllocatorIsValid(allocator));
@@ -251,8 +251,6 @@ TloError tloSLListConstruct(TloSLList *llist, const TloType *valueType,
   llist->head = NULL;
   llist->tail = NULL;
   llist->size = 0;
-
-  return TLO_SUCCESS;
 }
 
 static TloError pushBackAllElementsOfOther(TloSLList *llist,
@@ -272,10 +270,7 @@ TloError tloSLListConstructCopy(TloSLList *llist, const TloSLList *other) {
   assert(llist);
   assert(sllistIsValid(&other->list));
 
-  if (tloSLListConstruct(llist, other->list.valueType, other->list.allocator) ==
-      TLO_ERROR) {
-    return TLO_ERROR;
-  }
+  tloSLListConstruct(llist, other->list.valueType, other->list.allocator);
 
   if (pushBackAllElementsOfOther(llist, other) == TLO_ERROR) {
     return TLO_ERROR;
@@ -294,10 +289,7 @@ TloSLList *tloSLListMake(const TloType *valueType,
     return NULL;
   }
 
-  if (tloSLListConstruct(llist, valueType, allocator) == TLO_ERROR) {
-    allocator->free(llist);
-    return NULL;
-  }
+  tloSLListConstruct(llist, valueType, allocator);
 
   return llist;
 }
