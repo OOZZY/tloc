@@ -1,6 +1,6 @@
-#ifndef TLOC_DARRAY_TEST_H
-#define TLOC_DARRAY_TEST_H
+#ifndef TEST_DARRAY_TEST_H
+#define TEST_DARRAY_TEST_H
 
 void testDArray(void);
 
-#endif  // TLOC_DARRAY_TEST_H
+#endif  // TEST_DARRAY_TEST_H

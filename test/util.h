@@ -1,5 +1,5 @@
-#ifndef UTIL_H
-#define UTIL_H
+#ifndef TEST_UTIL_H
+#define TEST_UTIL_H
 
 #include <tlo/util.h>
 
@@ -21,4 +21,4 @@ TloError intPtrConstructCopy(IntPtr *ptr, const IntPtr *other);
 IntPtr *intPtrMake(int value);
 extern const TloType intPtrType;
 
-#endif  // UTIL_H
+#endif  // TEST_UTIL_H
