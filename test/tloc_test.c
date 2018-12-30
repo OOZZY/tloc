@@ -20,7 +20,9 @@ int main(void) {
 
   puts("===============");
   puts("All tests done.");
-  printf("Time taken: %Lg seconds\n", tloStopwatchNumSeconds(&stopwatch));
+  printf("Time taken: %Lg seconds (%Lg ticks)\n",
+         tloStopwatchNumSeconds(&stopwatch),
+         (long double)(tloStopwatchNumTicks(&stopwatch)));
   puts("===============");
 
   tloTestPrintReport();
