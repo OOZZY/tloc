@@ -20,9 +20,9 @@ clock_t tloStopwatchNumTicks(const TloStopwatch *stopwatch) {
   return stopwatch->stopTime - stopwatch->startTime;
 }
 
-double tloStopwatchNumSeconds(const TloStopwatch *stopwatch) {
+long double tloStopwatchNumSeconds(const TloStopwatch *stopwatch) {
   assert(stopwatch);
   assert(stopwatch->startTime <= stopwatch->stopTime);
 
-  return (double)(tloStopwatchNumTicks(stopwatch)) / CLOCKS_PER_SEC;
+  return (long double)(tloStopwatchNumTicks(stopwatch)) / CLOCKS_PER_SEC;
 }

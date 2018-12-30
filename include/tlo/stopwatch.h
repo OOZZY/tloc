@@ -19,6 +19,6 @@ void tloStopwatchStop(TloStopwatch *stopwatch);
 clock_t tloStopwatchNumTicks(const TloStopwatch *stopwatch);
 
 // returns number of seconds between start and stop times
-double tloStopwatchNumSeconds(const TloStopwatch *stopwatch);
+long double tloStopwatchNumSeconds(const TloStopwatch *stopwatch);
 
 #endif  // TLO_STOPWATCH_H
