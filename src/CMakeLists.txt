@@ -22,10 +22,14 @@ if (TLOC_USE_MSAN_UBSAN AND NOT TLOC_USE_ASAN_UBSAN)
   endif()
 endif()
 
-set(tloc_headers cdarray.h darray.h debug.h dllist.h list.h sllist.h stopwatch.h
-  test.h util.h)
-set(tloc_sources cdarray.c darray.c dllist.c list.c sllist.c stopwatch.c test.c
-  util.c)
+if (UNIX)
+    set(math_link_options m)
+endif()
+
+set(tloc_headers cdarray.h darray.h debug.h dllist.h list.h sllist.h
+  statistics.h stopwatch.h test.h util.h)
+set(tloc_sources cdarray.c darray.c dllist.c list.c sllist.c statistics.c
+  stopwatch.c test.c util.c)
 prepend(tloc_headers ${PROJECT_SOURCE_DIR}/include/tlo/ ${tloc_headers})
 add_library(tloc STATIC ${tloc_headers} ${tloc_sources})
 set_target_properties(tloc PROPERTIES C_EXTENSIONS OFF)
@@ -33,4 +37,5 @@ target_compile_features(tloc PUBLIC c_std_11)
 target_compile_options(tloc PRIVATE ${global_compile_options}
   PUBLIC ${sanitizer_compile_options})
 target_include_directories(tloc PUBLIC ${PROJECT_SOURCE_DIR}/include)
-target_link_libraries(tloc PUBLIC ${sanitizer_link_options})
+target_link_libraries(tloc PUBLIC ${sanitizer_link_options}
+  ${math_link_options})

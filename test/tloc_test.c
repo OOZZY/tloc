@@ -6,6 +6,7 @@
 #include "dllist_test.h"
 #include "list_test.h"
 #include "sllist_test.h"
+#include "statistics_test.h"
 
 int main(void) {
   TloStopwatch stopwatch;
@@ -16,6 +17,7 @@ int main(void) {
   testSLList();
   testCDArray();
   testDLList();
+  testStatistics();
   tloStopwatchStop(&stopwatch);
 
   puts("===============");

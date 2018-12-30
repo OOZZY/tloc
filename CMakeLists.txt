@@ -8,7 +8,7 @@ if ("${CMAKE_C_COMPILER_ID}" STREQUAL "GNU" OR
 endif()
 
 if ("${CMAKE_C_COMPILER_ID}" STREQUAL "Clang")
-  set(global_compile_options ${global_compile_options} -Weverything)
+  set(global_compile_options ${global_compile_options} -Weverything -Wno-padded)
 endif()
 
 option(TLOC_USE_ASAN_UBSAN
