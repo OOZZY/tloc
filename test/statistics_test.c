@@ -32,6 +32,16 @@ static void addShouldUpdateStatistics() {
   TLO_EXPECT((int)(tloStatAccMinimum(&accumulator)) == 50);
   TLO_EXPECT((int)(tloStatAccMaximum(&accumulator)) == 100);
   TLO_EXPECT((int)(tloStatAccRange(&accumulator)) == 50);
+
+  tloStatAccAdd(&accumulator, 25);
+  TLO_EXPECT(tloStatAccSize(&accumulator) == 3);
+  TLO_EXPECT((int)(tloStatAccSum(&accumulator)) == 175);
+  TLO_EXPECT((int)(tloStatAccMean(&accumulator)) == 58);
+  TLO_EXPECT((int)(tloStatAccVariance(&accumulator)) == 972);
+  TLO_EXPECT((int)(tloStatAccStandardDeviation(&accumulator)) == 31);
+  TLO_EXPECT((int)(tloStatAccMinimum(&accumulator)) == 25);
+  TLO_EXPECT((int)(tloStatAccMaximum(&accumulator)) == 100);
+  TLO_EXPECT((int)(tloStatAccRange(&accumulator)) == 75);
 }
 
 void testStatistics(void) {
