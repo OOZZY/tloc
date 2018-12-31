@@ -308,7 +308,12 @@ TloError tloDLListConstructCopy(TloDLList *llist, const TloDLList *other) {
 TloDLList *tloDLListMake(const TloType *valueType,
                          const TloAllocator *allocator) {
   assert(tloTypeIsValid(valueType));
-  assert(allocator == NULL || tloAllocatorIsValid(allocator));
+
+  if (!allocator) {
+    allocator = &tloCStdLibAllocator;
+  }
+
+  assert(tloAllocatorIsValid(allocator));
 
   TloDLList *llist = allocator->malloc(sizeof(*llist));
   if (!llist) {

@@ -419,7 +419,12 @@ TloError tloCDArrayConstructCopy(TloCDArray *array, const TloCDArray *other) {
 TloCDArray *tloCDArrayMake(const TloType *valueType,
                            const TloAllocator *allocator, size_t capacity) {
   assert(tloTypeIsValid(valueType));
-  assert(allocator == NULL || tloAllocatorIsValid(allocator));
+
+  if (!allocator) {
+    allocator = &tloCStdLibAllocator;
+  }
+
+  assert(tloAllocatorIsValid(allocator));
 
   TloCDArray *array = allocator->malloc(sizeof(*array));
   if (!array) {
