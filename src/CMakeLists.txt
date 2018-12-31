@@ -26,10 +26,10 @@ if (UNIX)
     set(math_link_options m)
 endif()
 
-set(tloc_headers cdarray.h darray.h debug.h dllist.h list.h sllist.h
+set(tloc_headers benchmark.h cdarray.h darray.h debug.h dllist.h list.h sllist.h
   statistics.h stopwatch.h test.h util.h)
-set(tloc_sources cdarray.c darray.c dllist.c list.c sllist.c statistics.c
-  stopwatch.c test.c util.c)
+set(tloc_sources benchmark.c cdarray.c darray.c dllist.c list.c sllist.c
+  statistics.c stopwatch.c test.c util.c)
 prepend(tloc_headers ${PROJECT_SOURCE_DIR}/include/tlo/ ${tloc_headers})
 add_library(tloc STATIC ${tloc_headers} ${tloc_sources})
 set_target_properties(tloc PROPERTIES C_EXTENSIONS OFF)

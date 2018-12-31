@@ -1,0 +1,150 @@
+#include <assert.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <tlo/benchmark.h>
+#include <tlo/cdarray.h>
+#include <tlo/darray.h>
+#include <tlo/dllist.h>
+#include <tlo/list.h>
+#include <tlo/sllist.h>
+
+static void pushBackThenPopBack(TloList *list, int maxListSize) {
+  for (int i = 0; i < maxListSize; ++i) {
+    tlovListPushBack(list, &i);
+  }
+
+  while (!tlovListIsEmpty(list)) {
+    tlovListPopBack(list);
+  }
+
+  tloListDelete(list);
+}
+
+static void darrayPushBackThenPopBack(const void *parameters) {
+  const int *maxListSize = (const int *)parameters;
+  pushBackThenPopBack((TloList *)tloDArrayMake(&tloInt, NULL, 0), *maxListSize);
+}
+
+static void cdarrayPushBackThenPopBack(const void *parameters) {
+  const int *maxListSize = (const int *)parameters;
+  pushBackThenPopBack((TloList *)tloCDArrayMake(&tloInt, NULL, 0),
+                      *maxListSize);
+}
+
+static void dllistPushBackThenPopBack(const void *parameters) {
+  const int *maxListSize = (const int *)parameters;
+  pushBackThenPopBack((TloList *)tloDLListMake(&tloInt, NULL), *maxListSize);
+}
+
+static void pushFrontThenPopFront(TloList *list, int maxListSize) {
+  for (int i = 0; i < maxListSize; ++i) {
+    tlovListPushFront(list, &i);
+  }
+
+  while (!tlovListIsEmpty(list)) {
+    tlovListPopFront(list);
+  }
+
+  tloListDelete(list);
+}
+
+static void cdarrayPushFrontThenPopFront(const void *parameters) {
+  const int *maxListSize = (const int *)parameters;
+  pushFrontThenPopFront((TloList *)tloCDArrayMake(&tloInt, NULL, 0),
+                        *maxListSize);
+}
+
+static void sllistPushFrontThenPopFront(const void *parameters) {
+  const int *maxListSize = (const int *)parameters;
+  pushFrontThenPopFront((TloList *)tloSLListMake(&tloInt, NULL), *maxListSize);
+}
+
+static void dllistPushFrontThenPopFront(const void *parameters) {
+  const int *maxListSize = (const int *)parameters;
+  pushFrontThenPopFront((TloList *)tloDLListMake(&tloInt, NULL), *maxListSize);
+}
+
+static void pushBackThenPopFront(TloList *list, int maxListSize) {
+  for (int i = 0; i < maxListSize; ++i) {
+    tlovListPushBack(list, &i);
+  }
+
+  while (!tlovListIsEmpty(list)) {
+    tlovListPopFront(list);
+  }
+
+  tloListDelete(list);
+}
+
+static void cdarrayPushBackThenPopFront(const void *parameters) {
+  const int *maxListSize = (const int *)parameters;
+  pushBackThenPopFront((TloList *)tloCDArrayMake(&tloInt, NULL, 0),
+                       *maxListSize);
+}
+
+static void sllistPushBackThenPopFront(const void *parameters) {
+  const int *maxListSize = (const int *)parameters;
+  pushBackThenPopFront((TloList *)tloSLListMake(&tloInt, NULL), *maxListSize);
+}
+
+static void dllistPushBackThenPopFront(const void *parameters) {
+  const int *maxListSize = (const int *)parameters;
+  pushBackThenPopFront((TloList *)tloDLListMake(&tloInt, NULL), *maxListSize);
+}
+
+static void pushFrontThenPopBack(TloList *list, int maxListSize) {
+  for (int i = 0; i < maxListSize; ++i) {
+    tlovListPushFront(list, &i);
+  }
+
+  while (!tlovListIsEmpty(list)) {
+    tlovListPopBack(list);
+  }
+
+  tloListDelete(list);
+}
+
+static void cdarrayPushFrontThenPopBack(const void *parameters) {
+  const int *maxListSize = (const int *)parameters;
+  pushFrontThenPopBack((TloList *)tloCDArrayMake(&tloInt, NULL, 0),
+                       *maxListSize);
+}
+
+static void dllistPushFrontThenPopBack(const void *parameters) {
+  const int *maxListSize = (const int *)parameters;
+  pushFrontThenPopBack((TloList *)tloDLListMake(&tloInt, NULL), *maxListSize);
+}
+
+int main(int argc, char *argv[]) {
+  if (argc < 3) {
+    printf("usage: %s <max-list-size> <num-iterations>\n", argv[0]);
+    return 1;
+  }
+
+  int maxListSize = atoi(argv[1]);
+  if (maxListSize < 1) {
+    puts("error: given size is invalid");
+    return 1;
+  }
+
+  int numIterations = atoi(argv[2]);
+  if (numIterations < 1) {
+    puts("error: given number of iterations is invalid");
+    return 1;
+  }
+
+  TLO_BENCHMARK(darrayPushBackThenPopBack, &maxListSize, numIterations);
+
+  TLO_BENCHMARK(cdarrayPushBackThenPopBack, &maxListSize, numIterations);
+  TLO_BENCHMARK(cdarrayPushFrontThenPopFront, &maxListSize, numIterations);
+  TLO_BENCHMARK(cdarrayPushBackThenPopFront, &maxListSize, numIterations);
+  TLO_BENCHMARK(cdarrayPushFrontThenPopBack, &maxListSize, numIterations);
+
+  TLO_BENCHMARK(sllistPushFrontThenPopFront, &maxListSize, numIterations);
+  TLO_BENCHMARK(sllistPushBackThenPopFront, &maxListSize, numIterations);
+
+  TLO_BENCHMARK(dllistPushBackThenPopBack, &maxListSize, numIterations);
+  TLO_BENCHMARK(dllistPushFrontThenPopFront, &maxListSize, numIterations);
+  TLO_BENCHMARK(dllistPushBackThenPopFront, &maxListSize, numIterations);
+  TLO_BENCHMARK(dllistPushFrontThenPopBack, &maxListSize, numIterations);
+}
