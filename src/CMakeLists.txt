@@ -36,6 +36,7 @@ set_target_properties(tloc PROPERTIES C_EXTENSIONS OFF)
 target_compile_features(tloc PUBLIC c_std_11)
 target_compile_options(tloc PRIVATE ${global_compile_options}
   PUBLIC ${sanitizer_compile_options})
+target_compile_definitions(tloc PRIVATE ${global_compile_definitions})
 target_include_directories(tloc PUBLIC ${PROJECT_SOURCE_DIR}/include)
 target_link_libraries(tloc PUBLIC ${sanitizer_link_options}
   ${math_link_options})

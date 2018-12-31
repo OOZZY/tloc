@@ -11,6 +11,23 @@ if ("${CMAKE_C_COMPILER_ID}" STREQUAL "Clang")
   set(global_compile_options ${global_compile_options} -Weverything -Wno-padded)
 endif()
 
+if (MINGW)
+  if ("${CMAKE_C_COMPILER_ID}" STREQUAL "GNU" OR
+      "${CMAKE_C_COMPILER_ID}" STREQUAL "Clang")
+    # make both gcc and clang of MSYS2 use the MinGW-w64 version of the printf
+    # family which supports %zu
+    set(global_compile_definitions __USE_MINGW_ANSI_STDIO=1)
+  endif()
+
+  if ("${CMAKE_C_COMPILER_ID}" STREQUAL "Clang")
+    # with the above compile definition, printf will be marked unused for some
+    # reason, so if printf is used, the compiler will emit the following
+    # warning: 'printf' was marked unused but was used
+    set(global_compile_options ${global_compile_options}
+      -Wno-used-but-marked-unused)
+  endif()
+endif()
+
 option(TLOC_USE_ASAN_UBSAN
   "Tell the compiler to use ASan and UBSan (GNU/Clang only)." OFF)
 option(TLOC_USE_MSAN_UBSAN
