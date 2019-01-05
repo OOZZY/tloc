@@ -10,7 +10,6 @@ typedef struct TloListVTable {
 
   // all of the following must be implemented
   const char *type;
-  bool (*isValid)(const TloList *list);
   void (*destruct)(TloList *list);
   size_t (*size)(const TloList *list);
   bool (*isEmpty)(const TloList *list);

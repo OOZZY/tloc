@@ -195,10 +195,10 @@ void tlovListUnorderedRemove(TloList *list, size_t index) {
 }
 
 static bool listVTableIsValid(const TloListVTable *vTable) {
-  return vTable && vTable->type && vTable->isValid && vTable->destruct &&
-         vTable->size && vTable->isEmpty && vTable->front &&
-         vTable->mutableFront && vTable->back && vTable->mutableBack &&
-         vTable->pushBack && vTable->moveBack;
+  return vTable && vTable->type && vTable->destruct && vTable->size &&
+         vTable->isEmpty && vTable->front && vTable->mutableFront &&
+         vTable->back && vTable->mutableBack && vTable->pushBack &&
+         vTable->moveBack;
 }
 
 bool listIsValid(const TloList *list) {

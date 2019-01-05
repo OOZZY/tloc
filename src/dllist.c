@@ -253,7 +253,6 @@ static void dllistPopBack(TloList *list) {
 }
 
 static const TloListVTable vTable = {.type = "TloDLList",
-                                     .isValid = dllistIsValid,
                                      .destruct = dllistDestruct,
                                      .size = dllistSize,
                                      .isEmpty = dllistIsEmpty,

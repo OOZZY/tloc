@@ -347,7 +347,6 @@ static void cdarrayUnorderedRemove(TloList *list, size_t index) {
 }
 
 static const TloListVTable vTable = {.type = "TloCDArray",
-                                     .isValid = cdarrayIsValid,
                                      .destruct = cdarrayDestruct,
                                      .size = cdarraySize,
                                      .isEmpty = cdarrayIsEmpty,

@@ -228,7 +228,6 @@ static void sllistPopFront(TloList *list) {
 }
 
 static const TloListVTable vTable = {.type = "TloSLList",
-                                     .isValid = sllistIsValid,
                                      .destruct = sllistDestruct,
                                      .size = sllistSize,
                                      .isEmpty = sllistIsEmpty,
