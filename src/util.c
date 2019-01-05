@@ -1,13 +1,11 @@
-#include "tlo/util.h"
+#include "util.h"
 #include <assert.h>
 #include <stdlib.h>
 #include <string.h>
 
-bool tloTypeIsValid(const TloType *type) { return type && type->size; }
-
 TloError tloTypeConstructCopy(const TloType *type, void *destination,
                               const void *source) {
-  assert(tloTypeIsValid(type));
+  assert(typeIsValid(type));
   assert(destination);
   assert(source);
 
@@ -23,7 +21,7 @@ TloError tloTypeConstructCopy(const TloType *type, void *destination,
 }
 
 void tloTypeDestruct(const TloType *type, void *object) {
-  assert(tloTypeIsValid(type));
+  assert(typeIsValid(type));
 
   if (type->destruct) {
     type->destruct(object);
@@ -32,10 +30,6 @@ void tloTypeDestruct(const TloType *type, void *object) {
 
 const TloType tloInt = {
     .size = sizeof(int), .constructCopy = NULL, .destruct = NULL};
-
-bool tloAllocatorIsValid(const TloAllocator *allocator) {
-  return allocator && allocator->malloc && allocator->free;
-}
 
 const TloAllocator tloCStdLibAllocator = {.malloc = malloc, .free = free};
 
@@ -56,3 +50,9 @@ void tloPtrDestruct(void *ptr) {
 
 const TloType tloPtr = {
     .size = sizeof(int *), .constructCopy = NULL, .destruct = tloPtrDestruct};
+
+bool typeIsValid(const TloType *type) { return type && type->size; }
+
+bool allocatorIsValid(const TloAllocator *allocator) {
+  return allocator && allocator->malloc && allocator->free;
+}

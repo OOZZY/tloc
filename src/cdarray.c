@@ -1,6 +1,7 @@
 #include "tlo/cdarray.h"
 #include <assert.h>
 #include <string.h>
+#include "util.h"
 
 static bool cdarrayIsValid(const TloList *list) {
   const TloCDArray *array = (const TloCDArray *)list;
@@ -367,8 +368,8 @@ static const TloListVTable vTable = {.type = "TloCDArray",
 TloError tloCDArrayConstruct(TloCDArray *array, const TloType *valueType,
                              const TloAllocator *allocator, size_t capacity) {
   assert(array);
-  assert(tloTypeIsValid(valueType));
-  assert(allocator == NULL || tloAllocatorIsValid(allocator));
+  assert(typeIsValid(valueType));
+  assert(allocator == NULL || allocatorIsValid(allocator));
 
   unsigned char *newArray = NULL;
   if (capacity) {
@@ -418,13 +419,13 @@ TloError tloCDArrayConstructCopy(TloCDArray *array, const TloCDArray *other) {
 
 TloCDArray *tloCDArrayMake(const TloType *valueType,
                            const TloAllocator *allocator, size_t capacity) {
-  assert(tloTypeIsValid(valueType));
+  assert(typeIsValid(valueType));
 
   if (!allocator) {
     allocator = &tloCStdLibAllocator;
   }
 
-  assert(tloAllocatorIsValid(allocator));
+  assert(allocatorIsValid(allocator));
 
   TloCDArray *array = allocator->malloc(sizeof(*array));
   if (!array) {

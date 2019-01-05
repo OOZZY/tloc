@@ -1,5 +1,6 @@
 #include "tlo/list.h"
 #include <assert.h>
+#include "util.h"
 
 bool tloListVTableIsValid(const TloListVTable *vTable) {
   return vTable && vTable->type && vTable->isValid && vTable->destruct &&
@@ -10,21 +11,20 @@ bool tloListVTableIsValid(const TloListVTable *vTable) {
 
 bool tloListIsValid(const TloList *list) {
   return list && tloListVTableIsValid(list->vTable) &&
-         tloTypeIsValid(list->valueType) &&
-         tloAllocatorIsValid(list->allocator);
+         typeIsValid(list->valueType) && allocatorIsValid(list->allocator);
 }
 
 void tloListConstruct(TloList *list, const TloListVTable *vTable,
                       const TloType *valueType, const TloAllocator *allocator) {
   assert(list);
   assert(vTable);
-  assert(tloTypeIsValid(valueType));
+  assert(typeIsValid(valueType));
 
   if (!allocator) {
     allocator = &tloCStdLibAllocator;
   }
 
-  assert(tloAllocatorIsValid(allocator));
+  assert(allocatorIsValid(allocator));
 
   list->vTable = vTable;
   list->valueType = valueType;

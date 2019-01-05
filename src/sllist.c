@@ -1,6 +1,7 @@
 #include "tlo/sllist.h"
 #include <assert.h>
 #include <string.h>
+#include "util.h"
 
 static bool sllistIsValid(const TloList *list) {
   const TloSLList *llist = (const TloSLList *)list;
@@ -244,8 +245,8 @@ static const TloListVTable vTable = {.type = "TloSLList",
 void tloSLListConstruct(TloSLList *llist, const TloType *valueType,
                         const TloAllocator *allocator) {
   assert(llist);
-  assert(tloTypeIsValid(valueType));
-  assert(allocator == NULL || tloAllocatorIsValid(allocator));
+  assert(typeIsValid(valueType));
+  assert(allocator == NULL || allocatorIsValid(allocator));
 
   tloListConstruct(&llist->list, &vTable, valueType, allocator);
   llist->head = NULL;
@@ -281,13 +282,13 @@ TloError tloSLListConstructCopy(TloSLList *llist, const TloSLList *other) {
 
 TloSLList *tloSLListMake(const TloType *valueType,
                          const TloAllocator *allocator) {
-  assert(tloTypeIsValid(valueType));
+  assert(typeIsValid(valueType));
 
   if (!allocator) {
     allocator = &tloCStdLibAllocator;
   }
 
-  assert(tloAllocatorIsValid(allocator));
+  assert(allocatorIsValid(allocator));
 
   TloSLList *llist = allocator->malloc(sizeof(*llist));
   if (!llist) {

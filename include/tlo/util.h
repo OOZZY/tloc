@@ -32,8 +32,6 @@ typedef struct TloType {
   TloDestructFunction destruct;
 } TloType;
 
-bool tloTypeIsValid(const TloType *type);
-
 /*
  * - if type->constructCopy is not NULL, uses it
  * - otherwise, uses memcpy
@@ -57,8 +55,6 @@ typedef struct TloAllocator {
   TloMallocFunction malloc;
   TloFreeFunction free;
 } TloAllocator;
-
-bool tloAllocatorIsValid(const TloAllocator *allocator);
 
 extern const TloAllocator tloCStdLibAllocator;
 
