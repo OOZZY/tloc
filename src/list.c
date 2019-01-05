@@ -2,10 +2,17 @@
 #include <assert.h>
 #include "util.h"
 
+static bool listVTableIsValid(const TloListVTable *vTable) {
+  return vTable && vTable->type && vTable->destruct && vTable->size &&
+         vTable->isEmpty && vTable->front && vTable->mutableFront &&
+         vTable->back && vTable->mutableBack && vTable->pushBack &&
+         vTable->moveBack;
+}
+
 void tloListConstruct(TloList *list, const TloListVTable *vTable,
                       const TloType *valueType, const TloAllocator *allocator) {
   assert(list);
-  assert(vTable);
+  assert(listVTableIsValid(vTable));
   assert(typeIsValid(valueType));
 
   if (!allocator) {
@@ -192,13 +199,6 @@ void tlovListUnorderedRemove(TloList *list, size_t index) {
   assert(tloListHasFunctions(list, TLO_LIST_UNORDERED_REMOVE));
 
   list->vTable->unorderedRemove(list, index);
-}
-
-static bool listVTableIsValid(const TloListVTable *vTable) {
-  return vTable && vTable->type && vTable->destruct && vTable->size &&
-         vTable->isEmpty && vTable->front && vTable->mutableFront &&
-         vTable->back && vTable->mutableBack && vTable->pushBack &&
-         vTable->moveBack;
 }
 
 bool listIsValid(const TloList *list) {
