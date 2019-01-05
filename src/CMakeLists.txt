@@ -28,7 +28,7 @@ endif()
 
 set(tloc_public_headers benchmark.h cdarray.h darray.h debug.h dllist.h list.h
   sllist.h statistics.h stopwatch.h test.h util.h)
-set(tloc_private_headers util.h)
+set(tloc_private_headers list.h util.h)
 set(tloc_sources benchmark.c cdarray.c darray.c dllist.c list.c sllist.c
   statistics.c stopwatch.c test.c util.c)
 prepend(tloc_public_headers ${PROJECT_SOURCE_DIR}/include/tlo/

@@ -1,11 +1,12 @@
 #include "tlo/cdarray.h"
 #include <assert.h>
 #include <string.h>
+#include "list.h"
 #include "util.h"
 
 static bool cdarrayIsValid(const TloList *list) {
   const TloCDArray *array = (const TloCDArray *)list;
-  return tloListIsValid(list) &&
+  return listIsValid(list) &&
          (array->capacity == 0 ? array->front == 0
                                : array->front < array->capacity) &&
          (array->size <= array->capacity);

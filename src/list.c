@@ -1,18 +1,6 @@
-#include "tlo/list.h"
+#include "list.h"
 #include <assert.h>
 #include "util.h"
-
-bool tloListVTableIsValid(const TloListVTable *vTable) {
-  return vTable && vTable->type && vTable->isValid && vTable->destruct &&
-         vTable->size && vTable->isEmpty && vTable->front &&
-         vTable->mutableFront && vTable->back && vTable->mutableBack &&
-         vTable->pushBack && vTable->moveBack;
-}
-
-bool tloListIsValid(const TloList *list) {
-  return list && tloListVTableIsValid(list->vTable) &&
-         typeIsValid(list->valueType) && allocatorIsValid(list->allocator);
-}
 
 void tloListConstruct(TloList *list, const TloListVTable *vTable,
                       const TloType *valueType, const TloAllocator *allocator) {
@@ -36,20 +24,20 @@ void tloListDelete(TloList *list) {
     return;
   }
 
-  assert(tloListIsValid(list));
+  assert(listIsValid(list));
 
   tlovListDestruct(list);
   list->allocator->free(list);
 }
 
 const TloType *tloListValueType(const TloList *list) {
-  assert(tloListIsValid(list));
+  assert(listIsValid(list));
 
   return list->valueType;
 }
 
 const TloAllocator *tloListAllocator(const TloList *list) {
-  assert(tloListIsValid(list));
+  assert(listIsValid(list));
 
   return list->allocator;
 }
@@ -85,129 +73,135 @@ static unsigned char getFunctions(const TloListVTable *vTable) {
 }
 
 bool tloListHasFunctions(const TloList *list, unsigned char functions) {
-  assert(tloListIsValid(list));
+  assert(listIsValid(list));
 
   return (getFunctions(list->vTable) & functions) == functions;
 }
 
 const char *tlovListType(const TloList *list) {
-  assert(tloListIsValid(list));
+  assert(listIsValid(list));
 
   return list->vTable->type;
 }
 
-bool tlovListIsValid(const TloList *list) {
-  assert(tloListIsValid(list));
-
-  return list->vTable->isValid(list);
-}
-
 void tlovListDestruct(TloList *list) {
-  assert(tloListIsValid(list));
+  assert(listIsValid(list));
 
   list->vTable->destruct(list);
 }
 
 size_t tlovListSize(const TloList *list) {
-  assert(tloListIsValid(list));
+  assert(listIsValid(list));
 
   return list->vTable->size(list);
 }
 
 bool tlovListIsEmpty(const TloList *list) {
-  assert(tloListIsValid(list));
+  assert(listIsValid(list));
 
   return list->vTable->isEmpty(list);
 }
 
 const void *tlovListFront(const TloList *list) {
-  assert(tloListIsValid(list));
+  assert(listIsValid(list));
 
   return list->vTable->front(list);
 }
 
 void *tlovListMutableFront(TloList *list) {
-  assert(tloListIsValid(list));
+  assert(listIsValid(list));
 
   return list->vTable->mutableFront(list);
 }
 
 const void *tlovListBack(const TloList *list) {
-  assert(tloListIsValid(list));
+  assert(listIsValid(list));
 
   return list->vTable->back(list);
 }
 
 void *tlovListMutableBack(TloList *list) {
-  assert(tloListIsValid(list));
+  assert(listIsValid(list));
 
   return list->vTable->mutableBack(list);
 }
 
 TloError tlovListPushBack(TloList *list, const void *data) {
-  assert(tloListIsValid(list));
+  assert(listIsValid(list));
 
   return list->vTable->pushBack(list, data);
 }
 
 TloError tlovListMoveBack(TloList *list, void *data) {
-  assert(tloListIsValid(list));
+  assert(listIsValid(list));
 
   return list->vTable->moveBack(list, data);
 }
 
 size_t tlovListCapacity(const TloList *list) {
-  assert(tloListIsValid(list));
+  assert(listIsValid(list));
   assert(tloListHasFunctions(list, TLO_LIST_CAPACITY));
 
   return list->vTable->capacity(list);
 }
 
 const void *tlovListElement(const TloList *list, size_t index) {
-  assert(tloListIsValid(list));
+  assert(listIsValid(list));
   assert(tloListHasFunctions(list, TLO_LIST_ELEMENT));
 
   return list->vTable->element(list, index);
 }
 
 void *tlovListMutableElement(TloList *list, size_t index) {
-  assert(tloListIsValid(list));
+  assert(listIsValid(list));
   assert(tloListHasFunctions(list, TLO_LIST_ELEMENT));
 
   return list->vTable->mutableElement(list, index);
 }
 
 TloError tlovListPushFront(TloList *list, const void *data) {
-  assert(tloListIsValid(list));
+  assert(listIsValid(list));
   assert(tloListHasFunctions(list, TLO_LIST_PUSH_FRONT));
 
   return list->vTable->pushFront(list, data);
 }
 
 TloError tlovListMoveFront(TloList *list, void *data) {
-  assert(tloListIsValid(list));
+  assert(listIsValid(list));
   assert(tloListHasFunctions(list, TLO_LIST_PUSH_FRONT));
 
   return list->vTable->moveFront(list, data);
 }
 
 void tlovListPopFront(TloList *list) {
-  assert(tloListIsValid(list));
+  assert(listIsValid(list));
   assert(tloListHasFunctions(list, TLO_LIST_POP_FRONT));
 
   list->vTable->popFront(list);
 }
 
 void tlovListPopBack(TloList *list) {
-  assert(tloListIsValid(list));
+  assert(listIsValid(list));
   assert(tloListHasFunctions(list, TLO_LIST_POP_BACK));
 
   list->vTable->popBack(list);
 }
 
 void tlovListUnorderedRemove(TloList *list, size_t index) {
-  assert(tloListIsValid(list));
+  assert(listIsValid(list));
   assert(tloListHasFunctions(list, TLO_LIST_UNORDERED_REMOVE));
 
   list->vTable->unorderedRemove(list, index);
+}
+
+static bool listVTableIsValid(const TloListVTable *vTable) {
+  return vTable && vTable->type && vTable->isValid && vTable->destruct &&
+         vTable->size && vTable->isEmpty && vTable->front &&
+         vTable->mutableFront && vTable->back && vTable->mutableBack &&
+         vTable->pushBack && vTable->moveBack;
+}
+
+bool listIsValid(const TloList *list) {
+  return list && listVTableIsValid(list->vTable) &&
+         typeIsValid(list->valueType) && allocatorIsValid(list->allocator);
 }

@@ -32,8 +32,6 @@ typedef struct TloListVTable {
   void (*unorderedRemove)(TloList *list, size_t index);
 } TloListVTable;
 
-bool tloListVTableIsValid(const TloListVTable *vTable);
-
 typedef enum TloListOptionalFunction {
   TLO_LIST_CAPACITY = 1U,
   TLO_LIST_ELEMENT = 1U << 1,
@@ -50,7 +48,6 @@ struct TloList {
   const TloAllocator *allocator;
 };
 
-bool tloListIsValid(const TloList *list);
 void tloListConstruct(TloList *list, const TloListVTable *vTable,
                       const TloType *valueType, const TloAllocator *allocator);
 
@@ -64,7 +61,6 @@ const TloAllocator *tloListAllocator(const TloList *list);
 bool tloListHasFunctions(const TloList *list, unsigned char functions);
 
 const char *tlovListType(const TloList *list);
-bool tlovListIsValid(const TloList *list);
 
 /*
  * - uses value type's destruct if it is not NULL

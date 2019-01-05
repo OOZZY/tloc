@@ -1,12 +1,12 @@
 #include "tlo/sllist.h"
 #include <assert.h>
 #include <string.h>
+#include "list.h"
 #include "util.h"
 
 static bool sllistIsValid(const TloList *list) {
   const TloSLList *llist = (const TloSLList *)list;
-  return tloListIsValid(list) &&
-         ((llist->head == NULL) == (llist->size == 0)) &&
+  return listIsValid(list) && ((llist->head == NULL) == (llist->size == 0)) &&
          ((llist->tail == NULL) == (llist->size == 0)) &&
          ((llist->head == NULL) == (llist->tail == NULL)) &&
          ((llist->size == 0 || llist->size == 1)

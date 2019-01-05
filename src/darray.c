@@ -1,11 +1,12 @@
 #include "tlo/darray.h"
 #include <assert.h>
 #include <string.h>
+#include "list.h"
 #include "util.h"
 
 static bool darrayIsValid(const TloList *list) {
   const TloDArray *array = (const TloDArray *)list;
-  return tloListIsValid(list) && (array->size <= array->capacity);
+  return listIsValid(list) && (array->size <= array->capacity);
 }
 
 static const void *constElement(const TloDArray *array, size_t index) {

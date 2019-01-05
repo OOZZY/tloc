@@ -1,12 +1,12 @@
 #include "tlo/dllist.h"
 #include <assert.h>
 #include <string.h>
+#include "list.h"
 #include "util.h"
 
 static bool dllistIsValid(const TloList *list) {
   const TloDLList *llist = (const TloDLList *)list;
-  return tloListIsValid(list) &&
-         ((llist->head == NULL) == (llist->size == 0)) &&
+  return listIsValid(list) && ((llist->head == NULL) == (llist->size == 0)) &&
          ((llist->tail == NULL) == (llist->size == 0)) &&
          ((llist->head == NULL) == (llist->tail == NULL)) &&
          ((llist->size == 0 || llist->size == 1)
