@@ -4,6 +4,7 @@
 #include "list.h"
 #include "util.h"
 
+#ifndef NDEBUG
 static bool cdarrayIsValid(const TloList *list) {
   const TloCDArray *array = (const TloCDArray *)list;
   return listIsValid(list) &&
@@ -11,6 +12,7 @@ static bool cdarrayIsValid(const TloList *list) {
                                : array->front < array->capacity) &&
          (array->size <= array->capacity);
 }
+#endif
 
 static const void *constElement(const TloCDArray *array, size_t index) {
   return array->array + ((array->front + index) % array->capacity) *

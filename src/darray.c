@@ -4,10 +4,12 @@
 #include "list.h"
 #include "util.h"
 
+#ifndef NDEBUG
 static bool darrayIsValid(const TloList *list) {
   const TloDArray *array = (const TloDArray *)list;
   return listIsValid(list) && (array->size <= array->capacity);
 }
+#endif
 
 static const void *constElement(const TloDArray *array, size_t index) {
   return array->array + index * array->list.valueType->size;

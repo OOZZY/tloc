@@ -4,6 +4,7 @@
 #include "list.h"
 #include "util.h"
 
+#ifndef NDEBUG
 static bool dllistIsValid(const TloList *list) {
   const TloDLList *llist = (const TloDLList *)list;
   return listIsValid(list) && ((llist->head == NULL) == (llist->size == 0)) &&
@@ -13,6 +14,7 @@ static bool dllistIsValid(const TloList *list) {
               ? (llist->head == llist->tail)
               : (llist->head != llist->tail));
 }
+#endif
 
 static void destructAllElementsAndFreeAllNodes(TloDLList *llist) {
   TloDLLNode *current = llist->head;
@@ -380,9 +382,11 @@ TloDLLNode *tloDLListMutableTail(TloDLList *llist) {
   return llist->tail;
 }
 
+#ifndef NDEBUG
 static bool dllnodeIsValid(const TloDLLNode *node) {
   return node && node->data;
 }
+#endif
 
 const void *tloDLLNodeElement(const TloDLLNode *node) {
   assert(dllnodeIsValid(node));
