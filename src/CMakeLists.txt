@@ -26,11 +26,11 @@ if (UNIX)
     set(math_link_options m)
 endif()
 
-set(tloc_public_headers benchmark.h cdarray.h darray.h debug.h dllist.h list.h
-  set.h sllist.h statistics.h stopwatch.h test.h util.h)
+set(tloc_public_headers benchmark.h cdarray.h darray.h debug.h dllist.h hash.h
+  list.h set.h sllist.h statistics.h stopwatch.h test.h util.h)
 set(tloc_private_headers list.h set.h util.h)
-set(tloc_sources benchmark.c cdarray.c darray.c dllist.c list.c set.c sllist.c
-  statistics.c stopwatch.c test.c util.c)
+set(tloc_sources benchmark.c cdarray.c darray.c dllist.c hash.c list.c set.c
+  sllist.c statistics.c stopwatch.c test.c util.c)
 prepend(tloc_public_headers ${PROJECT_SOURCE_DIR}/include/tlo/
   ${tloc_public_headers})
 add_library(tloc STATIC ${tloc_public_headers} ${tloc_private_headers}
