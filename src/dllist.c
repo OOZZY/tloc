@@ -380,40 +380,42 @@ TloDLLNode *tloDLListMutableTail(TloDLList *llist) {
   return llist->tail;
 }
 
-bool tloDLLNodeIsValid(const TloDLLNode *node) { return node && node->data; }
+static bool dllnodeIsValid(const TloDLLNode *node) {
+  return node && node->data;
+}
 
 const void *tloDLLNodeElement(const TloDLLNode *node) {
-  assert(tloDLLNodeIsValid(node));
+  assert(dllnodeIsValid(node));
 
   return node->data;
 }
 
 void *tloDLLNodeMutableElement(TloDLLNode *node) {
-  assert(tloDLLNodeIsValid(node));
+  assert(dllnodeIsValid(node));
 
   return node->data;
 }
 
 const TloDLLNode *tloDLLNodeNext(const TloDLLNode *node) {
-  assert(tloDLLNodeIsValid(node));
+  assert(dllnodeIsValid(node));
 
   return node->next;
 }
 
 TloDLLNode *tloDLLNodeMutableNext(TloDLLNode *node) {
-  assert(tloDLLNodeIsValid(node));
+  assert(dllnodeIsValid(node));
 
   return node->next;
 }
 
 const TloDLLNode *tloDLLNodePrev(const TloDLLNode *node) {
-  assert(tloDLLNodeIsValid(node));
+  assert(dllnodeIsValid(node));
 
   return node->prev;
 }
 
 TloDLLNode *tloDLLNodeMutablePrev(TloDLLNode *node) {
-  assert(tloDLLNodeIsValid(node));
+  assert(dllnodeIsValid(node));
 
   return node->prev;
 }

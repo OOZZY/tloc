@@ -52,7 +52,6 @@ TloDLLNode *tloDLListMutableHead(TloDLList *llist);
 const TloDLLNode *tloDLListTail(const TloDLList *llist);
 TloDLLNode *tloDLListMutableTail(TloDLList *llist);
 
-bool tloDLLNodeIsValid(const TloDLLNode *node);
 const void *tloDLLNodeElement(const TloDLLNode *node);
 void *tloDLLNodeMutableElement(TloDLLNode *node);
 const TloDLLNode *tloDLLNodeNext(const TloDLLNode *node);

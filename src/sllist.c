@@ -342,28 +342,30 @@ TloSLLNode *tloSLListMutableHead(TloSLList *llist) {
   return llist->head;
 }
 
-bool tloSLLNodeIsValid(const TloSLLNode *node) { return node && node->data; }
+static bool sllnodeIsValid(const TloSLLNode *node) {
+  return node && node->data;
+}
 
 const void *tloSLLNodeElement(const TloSLLNode *node) {
-  assert(tloSLLNodeIsValid(node));
+  assert(sllnodeIsValid(node));
 
   return node->data;
 }
 
 void *tloSLLNodeMutableElement(TloSLLNode *node) {
-  assert(tloSLLNodeIsValid(node));
+  assert(sllnodeIsValid(node));
 
   return node->data;
 }
 
 const TloSLLNode *tloSLLNodeNext(const TloSLLNode *node) {
-  assert(tloSLLNodeIsValid(node));
+  assert(sllnodeIsValid(node));
 
   return node->next;
 }
 
 TloSLLNode *tloSLLNodeMutableNext(TloSLLNode *node) {
-  assert(tloSLLNodeIsValid(node));
+  assert(sllnodeIsValid(node));
 
   return node->next;
 }
