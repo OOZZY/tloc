@@ -8,7 +8,7 @@ static void printReport(const char *description,
                         const TloStatAccumulator *accumulator) {
   puts("====================");
   puts(description);
-  printf("Number of iterations: %lld\n", tloStatAccSize(accumulator));
+  printf("Number of iterations: %zu\n", tloStatAccSize(accumulator));
   printf("Total time          : %Lg seconds\n", tloStatAccSum(accumulator));
   printf("Average time        : %Lg seconds\n", tloStatAccMean(accumulator));
   printf("Fastest time        : %Lg seconds\n", tloStatAccMinimum(accumulator));

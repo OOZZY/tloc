@@ -32,7 +32,7 @@ void tloStatAccAdd(TloStatAccumulator *accumulator, long double value) {
   }
 }
 
-long long tloStatAccSize(const TloStatAccumulator *accumulator) {
+size_t tloStatAccSize(const TloStatAccumulator *accumulator) {
   assert(accumulator);
 
   return accumulator->size;

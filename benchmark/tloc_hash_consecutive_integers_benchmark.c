@@ -9,7 +9,7 @@ static void printReport(const char *description,
                         size_t numCollisions) {
   puts("====================");
   puts(description);
-  printf("Number of buckets   : %lld\n", tloStatAccSize(accumulator));
+  printf("Number of buckets   : %zu\n", tloStatAccSize(accumulator));
   printf("Number of elements  : %Lg\n", tloStatAccSum(accumulator));
   printf("Average bucket size : %Lg\n", tloStatAccMean(accumulator));
   printf("Smallest bucket size: %Lg\n", tloStatAccMinimum(accumulator));

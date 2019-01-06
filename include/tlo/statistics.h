@@ -1,9 +1,11 @@
 #ifndef TLO_STATISTICS_H
 #define TLO_STATISTICS_H
 
+#include <stddef.h>
+
 typedef struct TloStatAccumulator {
   // private
-  long long size;
+  size_t size;
   long double sum;
   long double sumOfSquares;
   long double minimum;
@@ -12,7 +14,7 @@ typedef struct TloStatAccumulator {
 
 void tloStatAccConstruct(TloStatAccumulator *accumulator);
 void tloStatAccAdd(TloStatAccumulator *accumulator, long double value);
-long long tloStatAccSize(const TloStatAccumulator *accumulator);
+size_t tloStatAccSize(const TloStatAccumulator *accumulator);
 
 // assumes tloStatAccSize(accumulator) > 0
 long double tloStatAccSum(const TloStatAccumulator *accumulator);
