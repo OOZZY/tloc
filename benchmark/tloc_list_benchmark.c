@@ -133,18 +133,18 @@ int main(int argc, char *argv[]) {
     return 1;
   }
 
-  TLO_BENCHMARK(darrayPushBackThenPopBack, &maxListSize, numIterations);
+  TLO_TIME_TASK(darrayPushBackThenPopBack, &maxListSize, numIterations);
 
-  TLO_BENCHMARK(cdarrayPushBackThenPopBack, &maxListSize, numIterations);
-  TLO_BENCHMARK(cdarrayPushFrontThenPopFront, &maxListSize, numIterations);
-  TLO_BENCHMARK(cdarrayPushBackThenPopFront, &maxListSize, numIterations);
-  TLO_BENCHMARK(cdarrayPushFrontThenPopBack, &maxListSize, numIterations);
+  TLO_TIME_TASK(cdarrayPushBackThenPopBack, &maxListSize, numIterations);
+  TLO_TIME_TASK(cdarrayPushFrontThenPopFront, &maxListSize, numIterations);
+  TLO_TIME_TASK(cdarrayPushBackThenPopFront, &maxListSize, numIterations);
+  TLO_TIME_TASK(cdarrayPushFrontThenPopBack, &maxListSize, numIterations);
 
-  TLO_BENCHMARK(sllistPushFrontThenPopFront, &maxListSize, numIterations);
-  TLO_BENCHMARK(sllistPushBackThenPopFront, &maxListSize, numIterations);
+  TLO_TIME_TASK(sllistPushFrontThenPopFront, &maxListSize, numIterations);
+  TLO_TIME_TASK(sllistPushBackThenPopFront, &maxListSize, numIterations);
 
-  TLO_BENCHMARK(dllistPushBackThenPopBack, &maxListSize, numIterations);
-  TLO_BENCHMARK(dllistPushFrontThenPopFront, &maxListSize, numIterations);
-  TLO_BENCHMARK(dllistPushBackThenPopFront, &maxListSize, numIterations);
-  TLO_BENCHMARK(dllistPushFrontThenPopBack, &maxListSize, numIterations);
+  TLO_TIME_TASK(dllistPushBackThenPopBack, &maxListSize, numIterations);
+  TLO_TIME_TASK(dllistPushFrontThenPopFront, &maxListSize, numIterations);
+  TLO_TIME_TASK(dllistPushBackThenPopFront, &maxListSize, numIterations);
+  TLO_TIME_TASK(dllistPushFrontThenPopBack, &maxListSize, numIterations);
 }

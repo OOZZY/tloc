@@ -20,8 +20,8 @@ static void printReport(const char *description,
   puts("====================");
 }
 
-void tloBenchmark(TloBenchmarkTask task, const void *parameters,
-                  int numIterations, const char *description) {
+void tloTimeTask(TloBenchmarkTask task, const void *parameters,
+                 int numIterations, const char *description) {
   assert(task);
   assert(numIterations > 0);
   assert(description);
