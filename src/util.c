@@ -51,6 +51,27 @@ void tloPtrDestruct(void *ptr) {
 const TloType tloPtr = {
     .size = sizeof(int *), .constructCopy = NULL, .destruct = tloPtrDestruct};
 
+static TloError cstringConstructCopy(void *destination, const void *source) {
+  assert(destination);
+  assert(source);
+
+  TloCString *destinationCString = destination;
+  const TloCString *sourceCString = source;
+
+  size_t length = strlen(*sourceCString);
+  *destinationCString = malloc(length + 1);
+  if (!*destinationCString) {
+    return TLO_ERROR;
+  }
+
+  strcpy(*destinationCString, *sourceCString);
+  return TLO_SUCCESS;
+}
+
+const TloType tloCString = {.size = sizeof(char *),
+                            .constructCopy = cstringConstructCopy,
+                            .destruct = tloPtrDestruct};
+
 bool typeIsValid(const TloType *type) { return type && type->size; }
 
 bool allocatorIsValid(const TloAllocator *allocator) {

@@ -68,4 +68,7 @@ void tloPtrDestruct(void *ptr);
  */
 extern const TloType tloPtr;
 
+typedef char *TloCString;
+extern const TloType tloCString;
+
 #endif  // TLO_UTIL_H
