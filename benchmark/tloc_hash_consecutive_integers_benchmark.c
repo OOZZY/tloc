@@ -81,7 +81,7 @@ int main(int argc, char *argv[]) {
   CHECK_COLLISIONS(tloDJBHash, numBuckets, numElements);
   CHECK_COLLISIONS(tloMDJBHash, numBuckets, numElements);
   CHECK_COLLISIONS(tloSAXHash, numBuckets, numElements);
-  CHECK_COLLISIONS(tloFNVHash, numBuckets, numElements);
+  CHECK_COLLISIONS(tloFNV1Hash, numBuckets, numElements);
   CHECK_COLLISIONS(tloOAATHash, numBuckets, numElements);
   CHECK_COLLISIONS(tloELFHash, numBuckets, numElements);
 }

@@ -58,7 +58,7 @@ size_t tloSAXHash(const void *data, size_t length) {
   return hash;
 }
 
-size_t tloFNVHash(const void *data, size_t length) {
+size_t tloFNV1Hash(const void *data, size_t length) {
   assert(data);
 
   const unsigned char *bytes = data;

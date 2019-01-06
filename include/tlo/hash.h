@@ -21,8 +21,8 @@ size_t tloMDJBHash(const void *data, size_t length);
 // Shift-Add-XOR hash
 size_t tloSAXHash(const void *data, size_t length);
 
-// Fowler-Noll/Vo hash
-size_t tloFNVHash(const void *data, size_t length);
+// Fowler-Noll/Vo (FNV-1) hash
+size_t tloFNV1Hash(const void *data, size_t length);
 
 // One-at-a-Time hash
 size_t tloOAATHash(const void *data, size_t length);
