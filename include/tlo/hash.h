@@ -3,6 +3,8 @@
 
 #include <stddef.h>
 
+typedef size_t (*TloHashFunction)(const void *data, size_t length);
+
 /*
  * Hashing algorithms from
  * http://www.eternallyconfuzzled.com/tuts/algorithms/jsw_tut_hashing.aspx
