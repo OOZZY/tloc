@@ -94,11 +94,11 @@ size_t tloELFHash(const void *data, size_t length) {
   assert(data);
 
   const unsigned char *bytes = data;
-  size_t hash = 0, highBits;
+  size_t hash = 0;
 
   for (size_t i = 0; i < length; i++) {
     hash = (hash << 4) + bytes[i];
-    highBits = hash & 0xF0000000;
+    size_t highBits = hash & 0xF0000000;
 
     if (highBits != 0) {
       hash ^= highBits >> 24;
