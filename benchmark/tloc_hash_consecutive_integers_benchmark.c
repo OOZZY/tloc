@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h>
 #include <tlo/hash.h>
 #include <tlo/statistics.h>
 
