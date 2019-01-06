@@ -6,7 +6,7 @@
 
 static void printReport(const char *description,
                         const TloStatAccumulator *accumulator,
-                        int numCollisions) {
+                        size_t numCollisions) {
   puts("====================");
   puts(description);
   printf("Number of buckets   : %lld\n", tloStatAccSize(accumulator));
@@ -18,34 +18,34 @@ static void printReport(const char *description,
   printf("Variance            : %Lg\n", tloStatAccVariance(accumulator));
   printf("Standard deviation  : %Lg\n",
          tloStatAccStandardDeviation(accumulator));
-  printf("Number of collisions: %d\n", numCollisions);
+  printf("Number of collisions: %zu\n", numCollisions);
   puts("====================");
 }
 
-static void checkCollisions(TloHashFunction hashFunction, int numBuckets,
-                            int numElements, const char *description) {
-  int *bucketSizes = malloc((size_t)numBuckets * sizeof(*bucketSizes));
+static void checkCollisions(TloHashFunction hashFunction, size_t numBuckets,
+                            size_t numElements, const char *description) {
+  size_t *bucketSizes = malloc(numBuckets * sizeof(*bucketSizes));
   if (!bucketSizes) {
-    puts("error: failed to allocate buckets");
+    puts("error: failed to allocate array for bucket sizes");
     return;
   }
 
-  for (int i = 0; i < numBuckets; ++i) {
+  for (size_t i = 0; i < numBuckets; ++i) {
     bucketSizes[i] = 0;
   }
 
-  for (int i = 0; i < numElements; ++i) {
+  for (size_t i = 0; i < numElements; ++i) {
     size_t hash = hashFunction(&i, sizeof(i));
-    size_t index = hash % (size_t)numBuckets;
+    size_t index = hash % numBuckets;
     bucketSizes[index]++;
   }
 
   TloStatAccumulator accumulator;
   tloStatAccConstruct(&accumulator);
 
-  int numCollisions = 0;
+  size_t numCollisions = 0;
 
-  for (int i = 0; i < numBuckets; ++i) {
+  for (size_t i = 0; i < numBuckets; ++i) {
     tloStatAccAdd(&accumulator, bucketSizes[i]);
 
     if (bucketSizes[i] > 1) {
@@ -66,13 +66,13 @@ int main(int argc, char *argv[]) {
     return 1;
   }
 
-  int numBuckets = atoi(argv[1]);
+  size_t numBuckets = strtoull(argv[1], NULL, 10);
   if (numBuckets < 1) {
     puts("error: given number of buckets is invalid");
     return 1;
   }
 
-  int numElements = atoi(argv[2]);
+  size_t numElements = strtoull(argv[2], NULL, 10);
   if (numElements < 1) {
     puts("error: given number of elements is invalid");
     return 1;

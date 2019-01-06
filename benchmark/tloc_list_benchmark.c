@@ -7,8 +7,8 @@
 #include <tlo/list.h>
 #include <tlo/sllist.h>
 
-static void pushBackThenPopBack(TloList *list, int maxListSize) {
-  for (int i = 0; i < maxListSize; ++i) {
+static void pushBackThenPopBack(TloList *list, size_t maxListSize) {
+  for (size_t i = 0; i < maxListSize; ++i) {
     tlovListPushBack(list, &i);
   }
 
@@ -20,23 +20,23 @@ static void pushBackThenPopBack(TloList *list, int maxListSize) {
 }
 
 static void darrayPushBackThenPopBack(const void *parameters) {
-  const int *maxListSize = (const int *)parameters;
+  const size_t *maxListSize = parameters;
   pushBackThenPopBack((TloList *)tloDArrayMake(&tloInt, NULL, 0), *maxListSize);
 }
 
 static void cdarrayPushBackThenPopBack(const void *parameters) {
-  const int *maxListSize = (const int *)parameters;
+  const size_t *maxListSize = parameters;
   pushBackThenPopBack((TloList *)tloCDArrayMake(&tloInt, NULL, 0),
                       *maxListSize);
 }
 
 static void dllistPushBackThenPopBack(const void *parameters) {
-  const int *maxListSize = (const int *)parameters;
+  const size_t *maxListSize = parameters;
   pushBackThenPopBack((TloList *)tloDLListMake(&tloInt, NULL), *maxListSize);
 }
 
-static void pushFrontThenPopFront(TloList *list, int maxListSize) {
-  for (int i = 0; i < maxListSize; ++i) {
+static void pushFrontThenPopFront(TloList *list, size_t maxListSize) {
+  for (size_t i = 0; i < maxListSize; ++i) {
     tlovListPushFront(list, &i);
   }
 
@@ -48,23 +48,23 @@ static void pushFrontThenPopFront(TloList *list, int maxListSize) {
 }
 
 static void cdarrayPushFrontThenPopFront(const void *parameters) {
-  const int *maxListSize = (const int *)parameters;
+  const size_t *maxListSize = parameters;
   pushFrontThenPopFront((TloList *)tloCDArrayMake(&tloInt, NULL, 0),
                         *maxListSize);
 }
 
 static void sllistPushFrontThenPopFront(const void *parameters) {
-  const int *maxListSize = (const int *)parameters;
+  const size_t *maxListSize = parameters;
   pushFrontThenPopFront((TloList *)tloSLListMake(&tloInt, NULL), *maxListSize);
 }
 
 static void dllistPushFrontThenPopFront(const void *parameters) {
-  const int *maxListSize = (const int *)parameters;
+  const size_t *maxListSize = parameters;
   pushFrontThenPopFront((TloList *)tloDLListMake(&tloInt, NULL), *maxListSize);
 }
 
-static void pushBackThenPopFront(TloList *list, int maxListSize) {
-  for (int i = 0; i < maxListSize; ++i) {
+static void pushBackThenPopFront(TloList *list, size_t maxListSize) {
+  for (size_t i = 0; i < maxListSize; ++i) {
     tlovListPushBack(list, &i);
   }
 
@@ -76,23 +76,23 @@ static void pushBackThenPopFront(TloList *list, int maxListSize) {
 }
 
 static void cdarrayPushBackThenPopFront(const void *parameters) {
-  const int *maxListSize = (const int *)parameters;
+  const size_t *maxListSize = parameters;
   pushBackThenPopFront((TloList *)tloCDArrayMake(&tloInt, NULL, 0),
                        *maxListSize);
 }
 
 static void sllistPushBackThenPopFront(const void *parameters) {
-  const int *maxListSize = (const int *)parameters;
+  const size_t *maxListSize = parameters;
   pushBackThenPopFront((TloList *)tloSLListMake(&tloInt, NULL), *maxListSize);
 }
 
 static void dllistPushBackThenPopFront(const void *parameters) {
-  const int *maxListSize = (const int *)parameters;
+  const size_t *maxListSize = parameters;
   pushBackThenPopFront((TloList *)tloDLListMake(&tloInt, NULL), *maxListSize);
 }
 
-static void pushFrontThenPopBack(TloList *list, int maxListSize) {
-  for (int i = 0; i < maxListSize; ++i) {
+static void pushFrontThenPopBack(TloList *list, size_t maxListSize) {
+  for (size_t i = 0; i < maxListSize; ++i) {
     tlovListPushFront(list, &i);
   }
 
@@ -104,13 +104,13 @@ static void pushFrontThenPopBack(TloList *list, int maxListSize) {
 }
 
 static void cdarrayPushFrontThenPopBack(const void *parameters) {
-  const int *maxListSize = (const int *)parameters;
+  const size_t *maxListSize = parameters;
   pushFrontThenPopBack((TloList *)tloCDArrayMake(&tloInt, NULL, 0),
                        *maxListSize);
 }
 
 static void dllistPushFrontThenPopBack(const void *parameters) {
-  const int *maxListSize = (const int *)parameters;
+  const size_t *maxListSize = parameters;
   pushFrontThenPopBack((TloList *)tloDLListMake(&tloInt, NULL), *maxListSize);
 }
 
@@ -120,7 +120,7 @@ int main(int argc, char *argv[]) {
     return 1;
   }
 
-  int maxListSize = atoi(argv[1]);
+  size_t maxListSize = strtoull(argv[1], NULL, 10);
   if (maxListSize < 1) {
     puts("error: given size is invalid");
     return 1;
