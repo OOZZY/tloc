@@ -111,9 +111,9 @@ size_t tloOAATHash(const void *data, size_t length) {
 }
 
 #define SIZE_T_BITS (sizeof(size_t) * CHAR_BIT)
-#define ONE_EIGHT (SIZE_T_BITS / 8)
+#define ONE_EIGHTH (SIZE_T_BITS / 8)
 #define THREE_QUARTERS (SIZE_T_BITS * 3 / 4)
-#define HIGH_BITS_MASK (~(SIZE_MAX >> ONE_EIGHT))
+#define HIGH_BITS_MASK (~(SIZE_MAX >> ONE_EIGHTH))
 
 size_t tloELFHash(const void *data, size_t length) {
   assert(data);
@@ -122,7 +122,7 @@ size_t tloELFHash(const void *data, size_t length) {
   size_t hash = 0;
 
   for (size_t i = 0; i < length; i++) {
-    hash = (hash << ONE_EIGHT) + bytes[i];
+    hash = (hash << ONE_EIGHTH) + bytes[i];
     size_t highBits = hash & HIGH_BITS_MASK;
 
     if (highBits != 0) {
@@ -142,7 +142,7 @@ size_t tloPJWHash(const void *data, size_t length) {
   size_t hash = 0;
 
   for (size_t i = 0; i < length; i++) {
-    hash = (hash << ONE_EIGHT) + bytes[i];
+    hash = (hash << ONE_EIGHTH) + bytes[i];
     size_t highBits = hash & HIGH_BITS_MASK;
 
     if (highBits != 0) {
