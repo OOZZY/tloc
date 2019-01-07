@@ -4,26 +4,9 @@
 #include <tlo/darray.h>
 #include <tlo/hash.h>
 #include <tlo/statistics.h>
+#include "hash_benchmark_utils.h"
 
 enum { BUFFER_SIZE = 128 };
-
-static void printReport(const char *description,
-                        const TloStatAccumulator *accumulator,
-                        size_t numCollisions) {
-  puts("====================");
-  puts(description);
-  printf("Number of buckets   : %zu\n", tloStatAccSize(accumulator));
-  printf("Number of elements  : %Lg\n", tloStatAccSum(accumulator));
-  printf("Average bucket size : %Lg\n", tloStatAccMean(accumulator));
-  printf("Smallest bucket size: %Lg\n", tloStatAccMinimum(accumulator));
-  printf("Largest bucket size : %Lg\n", tloStatAccMaximum(accumulator));
-  printf("Range               : %Lg\n", tloStatAccRange(accumulator));
-  printf("Variance            : %Lg\n", tloStatAccVariance(accumulator));
-  printf("Standard deviation  : %Lg\n",
-         tloStatAccStandardDeviation(accumulator));
-  printf("Number of collisions: %zu\n", numCollisions);
-  puts("====================");
-}
 
 static void checkCollisions(TloHashFunction hashFunction, size_t numBuckets,
                             TloList *lines, const char *description) {
@@ -57,7 +40,7 @@ static void checkCollisions(TloHashFunction hashFunction, size_t numBuckets,
     }
   }
 
-  printReport(description, &accumulator, numCollisions);
+  printCollisionsReport(description, &accumulator, numCollisions);
   free(bucketSizes);
 }
 
