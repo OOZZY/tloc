@@ -1,5 +1,6 @@
 #include "tlo/hash.h"
 #include <assert.h>
+#include <stdint.h>
 
 /*
  * Hashing algorithms from
@@ -58,14 +59,24 @@ size_t tloSAXHash(const void *data, size_t length) {
   return hash;
 }
 
+#if SIZE_MAX == 0xFFFFFFFF
+#define OFFSET_BASIS 2166136261UL
+#define FNV_PRIME 16777619UL
+#elif SIZE_MAX == 0xFFFFFFFFFFFFFFFF
+#define OFFSET_BASIS 14695981039346656037ULL
+#define FNV_PRIME 1099511628211ULL
+#else
+#error "tlo/hash: FNV algorithms implemented for only 32-bit and 64-bit size_t"
+#endif
+
 size_t tloFNV1Hash(const void *data, size_t length) {
   assert(data);
 
   const unsigned char *bytes = data;
-  size_t hash = 2166136261;
+  size_t hash = OFFSET_BASIS;
 
   for (size_t i = 0; i < length; i++) {
-    hash = (hash * 16777619) ^ bytes[i];
+    hash = (hash * FNV_PRIME) ^ bytes[i];
   }
 
   return hash;
