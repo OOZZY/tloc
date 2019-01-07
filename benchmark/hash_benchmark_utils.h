@@ -3,8 +3,12 @@
 
 #include <tlo/statistics.h>
 
-void printCollisionsReport(const char *description,
-                           const TloStatAccumulator *accumulator,
-                           size_t numCollisions);
+typedef struct CollisionsData {
+  const char *description;
+  TloStatAccumulator accumulator;
+  size_t numCollisions;
+} CollisionsData;
+
+void printCollisionsReport(const CollisionsData *data);
 
 #endif  // BENCHMARK_HASH_BENCHMARK_UTILS_H

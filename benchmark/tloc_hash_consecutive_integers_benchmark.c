@@ -22,20 +22,21 @@ static void checkCollisions(TloHashFunction hashFunction, size_t numBuckets,
     bucketSizes[index]++;
   }
 
-  TloStatAccumulator accumulator;
-  tloStatAccConstruct(&accumulator);
+  CollisionsData data;
 
-  size_t numCollisions = 0;
+  data.description = description;
+  tloStatAccConstruct(&data.accumulator);
+  data.numCollisions = 0;
 
   for (size_t i = 0; i < numBuckets; ++i) {
-    tloStatAccAdd(&accumulator, bucketSizes[i]);
+    tloStatAccAdd(&data.accumulator, bucketSizes[i]);
 
     if (bucketSizes[i] > 1) {
-      numCollisions += bucketSizes[i] - 1;
+      data.numCollisions += bucketSizes[i] - 1;
     }
   }
 
-  printCollisionsReport(description, &accumulator, numCollisions);
+  printCollisionsReport(&data);
   free(bucketSizes);
 }
 
