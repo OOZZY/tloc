@@ -10,6 +10,9 @@ typedef struct CollisionsData {
   size_t numBuckets;
   TloStatAccumulator bucketSizeAcc;
   size_t numCollisions;
+  size_t numHashes;
+  size_t smallestHash;
+  size_t largestHash;
 } CollisionsData;
 
 TloError collisionsDataConstruct(CollisionsData *data, const char *description,

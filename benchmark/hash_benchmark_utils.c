@@ -6,6 +6,7 @@ TloError collisionsDataConstruct(CollisionsData *data, const char *description,
                                  size_t numBuckets) {
   data->description = description;
   data->numBuckets = numBuckets;
+  data->numHashes = 0;
 
   data->bucketSizes = malloc(numBuckets * sizeof(*data->bucketSizes));
   if (!data->bucketSizes) {
@@ -23,6 +24,21 @@ TloError collisionsDataConstruct(CollisionsData *data, const char *description,
 void collisionsDataAddHash(CollisionsData *data, size_t hash) {
   size_t index = hash % data->numBuckets;
   data->bucketSizes[index]++;
+
+  data->numHashes++;
+
+  if (data->numHashes == 1) {
+    data->smallestHash = hash;
+    data->largestHash = hash;
+  } else {
+    if (data->smallestHash > hash) {
+      data->smallestHash = hash;
+    }
+
+    if (data->largestHash < hash) {
+      data->largestHash = hash;
+    }
+  }
 }
 
 void collisionsDataComputeFinalStats(CollisionsData *data) {
@@ -54,6 +70,8 @@ void collisionsDataPrintReport(const CollisionsData *data) {
   printf("Standard deviation  : %Lg\n",
          tloStatAccStandardDeviation(&data->bucketSizeAcc));
   printf("Number of collisions: %zu\n", data->numCollisions);
+  printf("Smallest hash       : %zu\n", data->smallestHash);
+  printf("Largest hash        : %zu\n", data->largestHash);
   puts("====================");
 }
 
