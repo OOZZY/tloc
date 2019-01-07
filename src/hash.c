@@ -5,6 +5,7 @@
 /*
  * Hashing algorithms from
  * http://www.eternallyconfuzzled.com/tuts/algorithms/jsw_tut_hashing.aspx
+ * http://www.isthe.com/chongo/tech/comp/fnv/
  */
 
 size_t tloRotatingHash(const void *data, size_t length) {
