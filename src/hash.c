@@ -1,12 +1,7 @@
 #include "tlo/hash.h"
 #include <assert.h>
+#include <limits.h>
 #include <stdint.h>
-
-/*
- * Hashing algorithms from
- * http://www.eternallyconfuzzled.com/tuts/algorithms/jsw_tut_hashing.aspx
- * http://www.isthe.com/chongo/tech/comp/fnv/
- */
 
 size_t tloRotatingHash(const void *data, size_t length) {
   assert(data);
@@ -115,6 +110,11 @@ size_t tloOAATHash(const void *data, size_t length) {
   return hash;
 }
 
+#define SIZE_T_BITS (sizeof(size_t) * CHAR_BIT)
+#define ONE_EIGHT (SIZE_T_BITS / 8)
+#define THREE_QUARTERS (SIZE_T_BITS * 3 / 4)
+#define HIGH_BITS_MASK (~(SIZE_MAX >> ONE_EIGHT))
+
 size_t tloELFHash(const void *data, size_t length) {
   assert(data);
 
@@ -122,11 +122,11 @@ size_t tloELFHash(const void *data, size_t length) {
   size_t hash = 0;
 
   for (size_t i = 0; i < length; i++) {
-    hash = (hash << 4) + bytes[i];
-    size_t highBits = hash & 0xF0000000;
+    hash = (hash << ONE_EIGHT) + bytes[i];
+    size_t highBits = hash & HIGH_BITS_MASK;
 
     if (highBits != 0) {
-      hash ^= highBits >> 24;
+      hash ^= highBits >> THREE_QUARTERS;
     }
 
     hash &= ~highBits;
