@@ -24,6 +24,9 @@ size_t tloSAXHash(const void *data, size_t length);
 // Fowler-Noll/Vo (FNV-1) hash
 size_t tloFNV1Hash(const void *data, size_t length);
 
+// Fowler-Noll/Vo (FNV-1a) hash
+size_t tloFNV1aHash(const void *data, size_t length);
+
 // One-at-a-Time hash
 size_t tloOAATHash(const void *data, size_t length);
 

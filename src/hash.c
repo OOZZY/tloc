@@ -82,6 +82,19 @@ size_t tloFNV1Hash(const void *data, size_t length) {
   return hash;
 }
 
+size_t tloFNV1aHash(const void *data, size_t length) {
+  assert(data);
+
+  const unsigned char *bytes = data;
+  size_t hash = OFFSET_BASIS;
+
+  for (size_t i = 0; i < length; i++) {
+    hash = (hash ^ bytes[i]) * FNV_PRIME;
+  }
+
+  return hash;
+}
+
 size_t tloOAATHash(const void *data, size_t length) {
   assert(data);
 

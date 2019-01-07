@@ -110,6 +110,7 @@ int main(int argc, char *argv[]) {
   CHECK_COLLISIONS(tloMDJBHash, numBuckets, lines);
   CHECK_COLLISIONS(tloSAXHash, numBuckets, lines);
   CHECK_COLLISIONS(tloFNV1Hash, numBuckets, lines);
+  CHECK_COLLISIONS(tloFNV1aHash, numBuckets, lines);
   CHECK_COLLISIONS(tloOAATHash, numBuckets, lines);
   CHECK_COLLISIONS(tloELFHash, numBuckets, lines);
 
