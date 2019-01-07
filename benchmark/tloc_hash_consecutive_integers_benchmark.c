@@ -25,11 +25,11 @@ static void checkCollisions(TloHashFunction hashFunction, size_t numBuckets,
   CollisionsData data;
 
   data.description = description;
-  tloStatAccConstruct(&data.accumulator);
+  tloStatAccConstruct(&data.bucketSizeAcc);
   data.numCollisions = 0;
 
   for (size_t i = 0; i < numBuckets; ++i) {
-    tloStatAccAdd(&data.accumulator, bucketSizes[i]);
+    tloStatAccAdd(&data.bucketSizeAcc, bucketSizes[i]);
 
     if (bucketSizes[i] > 1) {
       data.numCollisions += bucketSizes[i] - 1;

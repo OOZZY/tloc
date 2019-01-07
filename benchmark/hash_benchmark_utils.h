@@ -5,7 +5,7 @@
 
 typedef struct CollisionsData {
   const char *description;
-  TloStatAccumulator accumulator;
+  TloStatAccumulator bucketSizeAcc;
   size_t numCollisions;
 } CollisionsData;
 
