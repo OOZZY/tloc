@@ -1,22 +1,44 @@
 #include "hash_benchmark_utils.h"
 #include <stdio.h>
+#include <stdlib.h>
 
-void collisionsDataConstruct(CollisionsData *data, const char *description,
-                             size_t *bucketSizes, size_t numBuckets) {
+TloError collisionsDataConstruct(CollisionsData *data, const char *description,
+                                 size_t numBuckets) {
   data->description = description;
+  data->numBuckets = numBuckets;
+
+  data->bucketSizes = malloc(numBuckets * sizeof(*data->bucketSizes));
+  if (!data->bucketSizes) {
+    puts("error: failed to allocate array for bucket sizes");
+    return TLO_ERROR;
+  }
+
+  for (size_t i = 0; i < numBuckets; ++i) {
+    data->bucketSizes[i] = 0;
+  }
+
+  return TLO_SUCCESS;
+}
+
+void collisionsDataAddHash(CollisionsData *data, size_t hash) {
+  size_t index = hash % data->numBuckets;
+  data->bucketSizes[index]++;
+}
+
+void collisionsDataComputeFinalStats(CollisionsData *data) {
   tloStatAccConstruct(&data->bucketSizeAcc);
   data->numCollisions = 0;
 
-  for (size_t i = 0; i < numBuckets; ++i) {
-    tloStatAccAdd(&data->bucketSizeAcc, bucketSizes[i]);
+  for (size_t i = 0; i < data->numBuckets; ++i) {
+    tloStatAccAdd(&data->bucketSizeAcc, data->bucketSizes[i]);
 
-    if (bucketSizes[i] > 1) {
-      data->numCollisions += bucketSizes[i] - 1;
+    if (data->bucketSizes[i] > 1) {
+      data->numCollisions += data->bucketSizes[i] - 1;
     }
   }
 }
 
-void printCollisionsReport(const CollisionsData *data) {
+void collisionsDataPrintReport(const CollisionsData *data) {
   puts("====================");
   puts(data->description);
   printf("Number of buckets   : %zu\n", tloStatAccSize(&data->bucketSizeAcc));
@@ -34,3 +56,5 @@ void printCollisionsReport(const CollisionsData *data) {
   printf("Number of collisions: %zu\n", data->numCollisions);
   puts("====================");
 }
+
+void collisionsDataDestruct(CollisionsData *data) { free(data->bucketSizes); }

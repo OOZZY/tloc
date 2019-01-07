@@ -2,15 +2,21 @@
 #define BENCHMARK_HASH_BENCHMARK_UTILS_H
 
 #include <tlo/statistics.h>
+#include <tlo/util.h>
 
 typedef struct CollisionsData {
   const char *description;
+  size_t *bucketSizes;
+  size_t numBuckets;
   TloStatAccumulator bucketSizeAcc;
   size_t numCollisions;
 } CollisionsData;
 
-void collisionsDataConstruct(CollisionsData *data, const char *description,
-                             size_t *bucketSizes, size_t numBuckets);
-void printCollisionsReport(const CollisionsData *data);
+TloError collisionsDataConstruct(CollisionsData *data, const char *description,
+                                 size_t numBuckets);
+void collisionsDataAddHash(CollisionsData *data, size_t hash);
+void collisionsDataComputeFinalStats(CollisionsData *data);
+void collisionsDataPrintReport(const CollisionsData *data);
+void collisionsDataDestruct(CollisionsData *data);
 
 #endif  // BENCHMARK_HASH_BENCHMARK_UTILS_H

@@ -10,27 +10,21 @@ enum { BUFFER_SIZE = 128 };
 
 static void checkCollisions(TloHashFunction hashFunction, size_t numBuckets,
                             TloList *lines, const char *description) {
-  size_t *bucketSizes = malloc(numBuckets * sizeof(*bucketSizes));
-  if (!bucketSizes) {
-    puts("error: failed to allocate array for bucket sizes");
-    return;
-  }
+  CollisionsData data;
 
-  for (size_t i = 0; i < numBuckets; ++i) {
-    bucketSizes[i] = 0;
+  if (collisionsDataConstruct(&data, description, numBuckets) == TLO_ERROR) {
+    return;
   }
 
   for (size_t i = 0; i < tlovListSize(lines); ++i) {
     const TloCString *cstring = tlovListElement(lines, i);
     size_t hash = hashFunction(*cstring, strlen(*cstring));
-    size_t index = hash % numBuckets;
-    bucketSizes[index]++;
+    collisionsDataAddHash(&data, hash);
   }
 
-  CollisionsData data;
-  collisionsDataConstruct(&data, description, bucketSizes, numBuckets);
-  printCollisionsReport(&data);
-  free(bucketSizes);
+  collisionsDataComputeFinalStats(&data);
+  collisionsDataPrintReport(&data);
+  collisionsDataDestruct(&data);
 }
 
 #define CHECK_COLLISIONS(_hashFunction, _numBuckets, _lines) \
