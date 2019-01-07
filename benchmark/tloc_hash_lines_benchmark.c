@@ -79,6 +79,7 @@ int main(int argc, char *argv[]) {
   CHECK_COLLISIONS(tloFNV1aHash, numBuckets, lines);
   CHECK_COLLISIONS(tloOAATHash, numBuckets, lines);
   CHECK_COLLISIONS(tloELFHash, numBuckets, lines);
+  CHECK_COLLISIONS(tloPJWHash, numBuckets, lines);
 
   tloListDelete(lines);
 }

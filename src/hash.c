@@ -134,3 +134,22 @@ size_t tloELFHash(const void *data, size_t length) {
 
   return hash;
 }
+
+size_t tloPJWHash(const void *data, size_t length) {
+  assert(data);
+
+  const unsigned char *bytes = data;
+  size_t hash = 0;
+
+  for (size_t i = 0; i < length; i++) {
+    hash = (hash << ONE_EIGHT) + bytes[i];
+    size_t highBits = hash & HIGH_BITS_MASK;
+
+    if (highBits != 0) {
+      hash ^= highBits >> THREE_QUARTERS;
+      hash &= ~highBits;
+    }
+  }
+
+  return hash;
+}

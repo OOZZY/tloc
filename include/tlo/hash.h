@@ -42,4 +42,7 @@ size_t tloOAATHash(const void *data, size_t length);
  */
 size_t tloELFHash(const void *data, size_t length);
 
+// Peter J. Weinberger hash
+size_t tloPJWHash(const void *data, size_t length);
+
 #endif  // TLO_HASH_H
