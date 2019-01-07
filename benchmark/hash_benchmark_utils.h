@@ -9,6 +9,8 @@ typedef struct CollisionsData {
   size_t numCollisions;
 } CollisionsData;
 
+void collisionsDataConstruct(CollisionsData *data, const char *description,
+                             size_t *bucketSizes, size_t numBuckets);
 void printCollisionsReport(const CollisionsData *data);
 
 #endif  // BENCHMARK_HASH_BENCHMARK_UTILS_H

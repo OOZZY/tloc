@@ -28,19 +28,7 @@ static void checkCollisions(TloHashFunction hashFunction, size_t numBuckets,
   }
 
   CollisionsData data;
-
-  data.description = description;
-  tloStatAccConstruct(&data.bucketSizeAcc);
-  data.numCollisions = 0;
-
-  for (size_t i = 0; i < numBuckets; ++i) {
-    tloStatAccAdd(&data.bucketSizeAcc, bucketSizes[i]);
-
-    if (bucketSizes[i] > 1) {
-      data.numCollisions += bucketSizes[i] - 1;
-    }
-  }
-
+  collisionsDataConstruct(&data, description, bucketSizes, numBuckets);
   printCollisionsReport(&data);
   free(bucketSizes);
 }
