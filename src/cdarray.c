@@ -131,7 +131,7 @@ static TloError expandArrayIfNeeded(TloCDArray *array) {
     }
 
     size_t newFront = newCapacity / 4;
-    size_t oldRightPartSize = array->size - array->front;
+    size_t oldRightPartSize = array->capacity - array->front;
     size_t oldLeftPartSize = array->front;
     memcpy(mutableElement_(newArray, newFront, valueSize),
            constElement_(array->array, array->front, valueSize),
