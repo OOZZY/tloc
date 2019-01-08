@@ -207,6 +207,26 @@ static void *darrayMutableElement(TloList *list, size_t index) {
   return mutableElement(array, index);
 }
 
+// if allocation of smaller array fails, just returns without reporting any
+// error
+static void shrinkArrayIfNeeded(TloDArray *array) {
+  size_t newCapacity = array->capacity / 4;
+
+  if (array->size <= newCapacity && array->size && newCapacity) {
+    unsigned char *newArray = array->list.allocator->malloc(
+        newCapacity * array->list.valueType->size);
+    if (!newArray) {
+      return;
+    }
+
+    memcpy(newArray, array->array, array->size * array->list.valueType->size);
+
+    array->list.allocator->free(array->array);
+    array->array = newArray;
+    array->capacity = newCapacity;
+  }
+}
+
 static void darrayPopBack(TloList *list) {
   assert(darrayIsValid(list));
   assert(!darrayIsEmpty(list));
@@ -215,6 +235,7 @@ static void darrayPopBack(TloList *list) {
   void *back = mutableElement(array, array->size - 1);
   tloTypeDestruct(array->list.valueType, back);
   --array->size;
+  shrinkArrayIfNeeded(array);
 }
 
 static void darrayUnorderedRemove(TloList *list, size_t index) {
@@ -233,6 +254,7 @@ static void darrayUnorderedRemove(TloList *list, size_t index) {
   const void *back = constElement(array, array->size - 1);
   memcpy(target, back, array->list.valueType->size);
   --array->size;
+  shrinkArrayIfNeeded(array);
 }
 
 static const TloListVTable vTable = {.type = "TloDArray",

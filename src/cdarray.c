@@ -305,6 +305,40 @@ static TloError cdarrayMoveFront(TloList *list, void *data) {
   return TLO_SUCCESS;
 }
 
+// if allocation of smaller array fails, just returns without reporting any
+// error
+static void shrinkArrayIfNeeded(TloCDArray *array) {
+  size_t newCapacity = array->capacity / 4;
+
+  if (array->size <= newCapacity && array->size && newCapacity) {
+    size_t valueSize = array->list.valueType->size;
+    unsigned char *newArray =
+        array->list.allocator->malloc(newCapacity * valueSize);
+    if (!newArray) {
+      return;
+    }
+
+    size_t newFront = 0;
+    size_t oldRightPartSize = array->capacity - array->front;
+
+    if (oldRightPartSize >= array->size) {
+      memcpy(newArray, constElement_(array->array, array->front, valueSize),
+             array->size * valueSize);
+    } else {
+      size_t oldLeftPartSize = array->size - oldRightPartSize;
+      memcpy(newArray, constElement_(array->array, array->front, valueSize),
+             oldRightPartSize * valueSize);
+      memcpy(mutableElement_(newArray, oldRightPartSize, valueSize),
+             array->array, oldLeftPartSize * valueSize);
+    }
+
+    array->list.allocator->free(array->array);
+    array->array = newArray;
+    array->front = newFront;
+    array->capacity = newCapacity;
+  }
+}
+
 static void cdarrayPopFront(TloList *list) {
   assert(cdarrayIsValid(list));
   assert(!cdarrayIsEmpty(list));
@@ -318,6 +352,7 @@ static void cdarrayPopFront(TloList *list) {
     ++array->front;
   }
   --array->size;
+  shrinkArrayIfNeeded(array);
 }
 
 static void cdarrayPopBack(TloList *list) {
@@ -328,6 +363,7 @@ static void cdarrayPopBack(TloList *list) {
   void *back = mutableElement(array, array->size - 1);
   tloTypeDestruct(array->list.valueType, back);
   --array->size;
+  shrinkArrayIfNeeded(array);
 }
 
 static void cdarrayUnorderedRemove(TloList *list, size_t index) {
@@ -346,6 +382,7 @@ static void cdarrayUnorderedRemove(TloList *list, size_t index) {
   const void *back = constElement(array, array->size - 1);
   memcpy(target, back, array->list.valueType->size);
   --array->size;
+  shrinkArrayIfNeeded(array);
 }
 
 static const TloListVTable vTable = {.type = "TloCDArray",
