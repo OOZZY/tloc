@@ -104,7 +104,7 @@ static TloError allocateArrayIfNeeded(TloDArray *array) {
   return TLO_SUCCESS;
 }
 
-static TloError resizeArrayIfNeeded(TloDArray *array) {
+static TloError expandArrayIfNeeded(TloDArray *array) {
   if (array->size == array->capacity) {
     size_t newCapacity = array->capacity * 2;
     unsigned char *newArray = array->list.allocator->malloc(
@@ -144,7 +144,7 @@ static TloError darrayPushBack(TloList *list, const void *data) {
     return TLO_ERROR;
   }
 
-  if (resizeArrayIfNeeded(array) == TLO_ERROR) {
+  if (expandArrayIfNeeded(array) == TLO_ERROR) {
     return TLO_ERROR;
   }
 
@@ -173,7 +173,7 @@ static TloError darrayMoveBack(TloList *list, void *data) {
     return TLO_ERROR;
   }
 
-  if (resizeArrayIfNeeded(array) == TLO_ERROR) {
+  if (expandArrayIfNeeded(array) == TLO_ERROR) {
     return TLO_ERROR;
   }
 

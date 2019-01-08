@@ -120,7 +120,7 @@ static void *mutableElement_(unsigned char *array, size_t index,
   return array + index * valueSize;
 }
 
-static TloError resizeArrayIfNeeded(TloCDArray *array) {
+static TloError expandArrayIfNeeded(TloCDArray *array) {
   if (array->size == array->capacity) {
     size_t newCapacity = array->capacity * 2;
     size_t valueSize = array->list.valueType->size;
@@ -169,7 +169,7 @@ static TloError cdarrayPushBack(TloList *list, const void *data) {
     return TLO_ERROR;
   }
 
-  if (resizeArrayIfNeeded(array) == TLO_ERROR) {
+  if (expandArrayIfNeeded(array) == TLO_ERROR) {
     return TLO_ERROR;
   }
 
@@ -198,7 +198,7 @@ static TloError cdarrayMoveBack(TloList *list, void *data) {
     return TLO_ERROR;
   }
 
-  if (resizeArrayIfNeeded(array) == TLO_ERROR) {
+  if (expandArrayIfNeeded(array) == TLO_ERROR) {
     return TLO_ERROR;
   }
 
@@ -264,7 +264,7 @@ static TloError cdarrayPushFront(TloList *list, const void *data) {
     return TLO_ERROR;
   }
 
-  if (resizeArrayIfNeeded(array) == TLO_ERROR) {
+  if (expandArrayIfNeeded(array) == TLO_ERROR) {
     return TLO_ERROR;
   }
 
@@ -296,7 +296,7 @@ static TloError cdarrayMoveFront(TloList *list, void *data) {
     return TLO_ERROR;
   }
 
-  if (resizeArrayIfNeeded(array) == TLO_ERROR) {
+  if (expandArrayIfNeeded(array) == TLO_ERROR) {
     return TLO_ERROR;
   }
 
