@@ -210,9 +210,8 @@ static void *darrayMutableElement(TloList *list, size_t index) {
 // if allocation of smaller array fails, just returns without reporting any
 // error
 static void shrinkArrayIfNeeded(TloDArray *array) {
-  size_t newCapacity = array->capacity / 4;
-
-  if (array->size <= newCapacity && array->size && newCapacity) {
+  if (array->size <= array->capacity / 4 && array->size) {
+    size_t newCapacity = array->capacity / 2;
     unsigned char *newArray = array->list.allocator->malloc(
         newCapacity * array->list.valueType->size);
     if (!newArray) {

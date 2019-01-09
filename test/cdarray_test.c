@@ -189,11 +189,11 @@ static void testCDArrayIntShrinkWhenElementsWrapAround(void) {
   tlovListPopBack(&ints->list);
 
   /*
-   Front
-   |
-  [5 6]
+     Front
+     |
+  [- 5 6 -]
   */
-  EXPECT_DARRAY_ALL_PROPERTIES(ints, 2, 2, false, &tloInt, &countingAllocator);
+  EXPECT_DARRAY_ALL_PROPERTIES(ints, 2, 4, false, &tloInt, &countingAllocator);
   EXPECT_LIST_INT_ELEMENTS(&ints->list, 5, 6, 1, 6);
 
   int value = 7;

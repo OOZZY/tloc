@@ -308,9 +308,8 @@ static TloError cdarrayMoveFront(TloList *list, void *data) {
 // if allocation of smaller array fails, just returns without reporting any
 // error
 static void shrinkArrayIfNeeded(TloCDArray *array) {
-  size_t newCapacity = array->capacity / 4;
-
-  if (array->size <= newCapacity && array->size && newCapacity) {
+  if (array->size <= array->capacity / 4 && array->size) {
+    size_t newCapacity = array->capacity / 2;
     size_t valueSize = array->list.valueType->size;
     unsigned char *newArray =
         array->list.allocator->malloc(newCapacity * valueSize);
@@ -318,17 +317,19 @@ static void shrinkArrayIfNeeded(TloCDArray *array) {
       return;
     }
 
-    size_t newFront = 0;
+    size_t newFront = newCapacity / 4;
     size_t oldRightPartSize = array->capacity - array->front;
 
     if (oldRightPartSize >= array->size) {
-      memcpy(newArray, constElement_(array->array, array->front, valueSize),
+      memcpy(mutableElement_(newArray, newFront, valueSize),
+             constElement_(array->array, array->front, valueSize),
              array->size * valueSize);
     } else {
       size_t oldLeftPartSize = array->size - oldRightPartSize;
-      memcpy(newArray, constElement_(array->array, array->front, valueSize),
+      memcpy(mutableElement_(newArray, newFront, valueSize),
+             constElement_(array->array, array->front, valueSize),
              oldRightPartSize * valueSize);
-      memcpy(mutableElement_(newArray, oldRightPartSize, valueSize),
+      memcpy(mutableElement_(newArray, newFront + oldRightPartSize, valueSize),
              array->array, oldLeftPartSize * valueSize);
     }
 
