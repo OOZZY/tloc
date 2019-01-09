@@ -155,6 +155,72 @@ static void testCDArrayIntCopy(void) {
   tloListDelete(&copy->list);
 }
 
+static void testCDArrayIntShrinkWhenElementsWrapAround(void) {
+  TloCDArray *ints = tloCDArrayMake(&tloInt, &countingAllocator, 0);
+  TLO_ASSERT(ints);
+
+  TloError error;
+
+  for (int i = 0; i < 8; ++i) {
+    error = tlovListPushBack(&ints->list, &i);
+    TLO_ASSERT(!error);
+  }
+
+  /*
+       Front
+       |
+  [6 7 0 1 2 3 4 5]
+  */
+  EXPECT_DARRAY_ALL_PROPERTIES(ints, 8, 8, false, &tloInt, &countingAllocator);
+  EXPECT_LIST_INT_ELEMENTS(&ints->list, 0, 7, 4, 4);
+
+  for (int i = 0; i < 5; ++i) {
+    tlovListPopFront(&ints->list);
+  }
+
+  /*
+                 Front
+                 |
+  [6 7 - - - - - 5]
+  */
+  EXPECT_DARRAY_ALL_PROPERTIES(ints, 3, 8, false, &tloInt, &countingAllocator);
+  EXPECT_LIST_INT_ELEMENTS(&ints->list, 5, 7, 1, 6);
+
+  tlovListPopBack(&ints->list);
+
+  /*
+   Front
+   |
+  [5 6]
+  */
+  EXPECT_DARRAY_ALL_PROPERTIES(ints, 2, 2, false, &tloInt, &countingAllocator);
+  EXPECT_LIST_INT_ELEMENTS(&ints->list, 5, 6, 1, 6);
+
+  int value = 7;
+  error = tlovListPushBack(&ints->list, &value);
+  TLO_ASSERT(!error);
+
+  /*
+     Front
+     |
+  [- 5 6 7]
+  */
+  EXPECT_DARRAY_ALL_PROPERTIES(ints, 3, 4, false, &tloInt, &countingAllocator);
+  EXPECT_LIST_INT_ELEMENTS(&ints->list, 5, 7, 1, 6);
+
+  tlovListPopBack(&ints->list);
+
+  /*
+     Front
+     |
+  [- 5 6 -]
+  */
+  EXPECT_DARRAY_ALL_PROPERTIES(ints, 2, 4, false, &tloInt, &countingAllocator);
+  EXPECT_LIST_INT_ELEMENTS(&ints->list, 5, 6, 0, 5);
+
+  tloListDelete(&ints->list);
+}
+
 static void testCDArrayFinalCounts() {
   TLO_EXPECT(countingAllocatorMallocCount() > 0);
   TLO_EXPECT(countingAllocatorMallocCount() == countingAllocatorFreeCount());
@@ -218,6 +284,7 @@ void testCDArray(void) {
   testListIntPtrPushFrontOncePopFrontOnce(makeListIntPtr());
   testListIntPtrPushFrontManyTimesPopFrontUntilEmpty(makeListIntPtr());
 
+  testCDArrayIntShrinkWhenElementsWrapAround();
   testCDArrayFinalCounts();
   puts("===================");
   puts("CDArray tests done.");
