@@ -14,6 +14,7 @@ typedef struct TloMapVTable {
   size_t (*size)(const TloMap *map);
   bool (*isEmpty)(const TloMap *map);
   const void *(*find)(const TloMap *map, const void *key);
+  void *(*findMutable)(TloMap *map, const void *key);
   TloError (*insert)(TloMap *map, const void *key, const void *value);
   TloError (*moveInsert)(TloMap *map, void *key, void *value);
   void (*remove)(TloMap *map, const void *key);
@@ -50,6 +51,7 @@ void tlovMapDestruct(TloMap *map);
 size_t tlovMapSize(const TloMap *map);
 bool tlovMapIsEmpty(const TloMap *map);
 const void *tlovMapFind(const TloMap *map, const void *key);
+void *tlovMapFindMutable(TloMap *map, const void *key);
 
 /*
  * - deep copies data using value type's constructCopy if it is not null

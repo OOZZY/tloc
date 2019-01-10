@@ -87,6 +87,12 @@ const void *tlovMapFind(const TloMap *map, const void *key) {
   return map->vTable->find(map, key);
 }
 
+void *tlovMapFindMutable(TloMap *map, const void *key) {
+  assert(mapIsValid(map));
+
+  return map->vTable->findMutable(map, key);
+}
+
 TloError tlovMapInsert(TloMap *map, const void *key, const void *value) {
   assert(mapIsValid(map));
 
