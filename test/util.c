@@ -93,10 +93,34 @@ IntPtr *intPtrMake(int value) {
   return ptr;
 }
 
+bool intPtrEquals(const IntPtr *ptr1, const IntPtr *ptr2) {
+  assert(ptr1 && ptr1->ptr);
+  assert(ptr2 && ptr2->ptr);
+
+  return *ptr1->ptr == *ptr2->ptr;
+}
+
+size_t intPtrHash(const IntPtr *ptr) {
+  assert(ptr && ptr->ptr);
+
+  return tloFNV1aHash(ptr->ptr, sizeof(int));
+}
+
 static TloError intPtrTypeConstructCopy(void *destination, const void *source) {
   return intPtrConstructCopy(destination, source);
 }
 
+static bool intPtrTypeEquals(const void *object1, const void *object2) {
+  return intPtrEquals(object1, object2);
+}
+
+static size_t intPtrTypeHash(const void *object, size_t size) {
+  (void)size;
+  return intPtrHash(object);
+}
+
 const TloType intPtrType = {.size = sizeof(IntPtr),
                             .constructCopy = intPtrTypeConstructCopy,
-                            .destruct = tloPtrDestruct};
+                            .destruct = tloPtrDestruct,
+                            .equals = intPtrTypeEquals,
+                            .hash = intPtrTypeHash};

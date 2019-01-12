@@ -3,6 +3,10 @@
 
 #include <stddef.h>
 
+/*
+ * - returns a hash of the data pointed to by data
+ * - size should be the size in bytes of the data pointed to by data
+ */
 typedef size_t (*TloHashFunction)(const void *data, size_t size);
 
 /*
