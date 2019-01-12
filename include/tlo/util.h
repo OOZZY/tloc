@@ -11,25 +11,22 @@
  */
 typedef enum TloError { TLO_ERROR = -1, TLO_SUCCESS = 0 } TloError;
 
-/*
- * - both destination and source should not be NULL. they should point to some
- *   valid stack space or heap space allocated by some malloc implementation
- * - should do a deep copy
- */
-typedef TloError (*TloConstructCopyFunction)(void *destination,
-                                             const void *source);
-
-/*
- * - should do nothing if object is NULL
- * - should not fail
- */
-typedef void (*TloDestructFunction)(void *object);
-
 typedef struct TloType {
   // public
   size_t size;
-  TloConstructCopyFunction constructCopy;
-  TloDestructFunction destruct;
+
+  /*
+   * - both destination and source should not be NULL. they should point to some
+   *   valid stack space or heap space allocated by some malloc implementation
+   * - should do a deep copy
+   */
+  TloError (*constructCopy)(void *destination, const void *source);
+
+  /*
+   * - should do nothing if object is NULL
+   * - should not fail
+   */
+  void (*destruct)(void *object);
 } TloType;
 
 /*
@@ -47,13 +44,10 @@ void tloTypeDestruct(const TloType *type, void *object);
 
 extern const TloType tloInt;
 
-typedef void *(*TloMallocFunction)(size_t size);
-typedef void (*TloFreeFunction)(void *memory);
-
 typedef struct TloAllocator {
   // public
-  TloMallocFunction malloc;
-  TloFreeFunction free;
+  void *(*malloc)(size_t size);
+  void (*free)(void *memory);
 } TloAllocator;
 
 extern const TloAllocator tloCStdLibAllocator;
