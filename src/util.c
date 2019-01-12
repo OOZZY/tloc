@@ -58,8 +58,8 @@ static TloError cstringConstructCopy(void *destination, const void *source) {
   TloCString *destinationCString = destination;
   const TloCString *sourceCString = source;
 
-  size_t length = strlen(*sourceCString);
-  *destinationCString = malloc(length + 1);
+  size_t size = strlen(*sourceCString);
+  *destinationCString = malloc(size + 1);
   if (!*destinationCString) {
     return TLO_ERROR;
   }

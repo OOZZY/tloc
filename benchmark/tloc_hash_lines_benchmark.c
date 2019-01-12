@@ -58,9 +58,9 @@ int main(int argc, char *argv[]) {
       break;
     }
 
-    size_t length = strlen(line);
+    size_t size = strlen(line);
 
-    for (size_t i = length - 1; i < length; --i) {
+    for (size_t i = size - 1; i < size; --i) {
       if (line[i] != '\n' && line[i] != '\r') {
         break;
       }

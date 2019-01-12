@@ -3,52 +3,52 @@
 #include <limits.h>
 #include <stdint.h>
 
-size_t tloRotatingHash(const void *data, size_t length) {
+size_t tloRotatingHash(const void *data, size_t size) {
   assert(data);
 
   const unsigned char *bytes = data;
   size_t hash = 0;
 
-  for (size_t i = 0; i < length; i++) {
+  for (size_t i = 0; i < size; i++) {
     hash = (hash << 4) ^ (hash >> 28) ^ bytes[i];
   }
 
   return hash;
 }
 
-size_t tloDJBHash(const void *data, size_t length) {
+size_t tloDJBHash(const void *data, size_t size) {
   assert(data);
 
   const unsigned char *bytes = data;
   size_t hash = 0;
 
-  for (size_t i = 0; i < length; i++) {
+  for (size_t i = 0; i < size; i++) {
     hash = 33 * hash + bytes[i];
   }
 
   return hash;
 }
 
-size_t tloMDJBHash(const void *data, size_t length) {
+size_t tloMDJBHash(const void *data, size_t size) {
   assert(data);
 
   const unsigned char *bytes = data;
   size_t hash = 0;
 
-  for (size_t i = 0; i < length; i++) {
+  for (size_t i = 0; i < size; i++) {
     hash = 33 * hash ^ bytes[i];
   }
 
   return hash;
 }
 
-size_t tloSAXHash(const void *data, size_t length) {
+size_t tloSAXHash(const void *data, size_t size) {
   assert(data);
 
   const unsigned char *bytes = data;
   size_t hash = 0;
 
-  for (size_t i = 0; i < length; i++) {
+  for (size_t i = 0; i < size; i++) {
     hash ^= (hash << 5) + (hash >> 2) + bytes[i];
   }
 
@@ -65,39 +65,39 @@ size_t tloSAXHash(const void *data, size_t length) {
 #error "tlo/hash: FNV algorithms implemented for only 32-bit and 64-bit size_t"
 #endif
 
-size_t tloFNV1Hash(const void *data, size_t length) {
+size_t tloFNV1Hash(const void *data, size_t size) {
   assert(data);
 
   const unsigned char *bytes = data;
   size_t hash = OFFSET_BASIS;
 
-  for (size_t i = 0; i < length; i++) {
+  for (size_t i = 0; i < size; i++) {
     hash = (hash * FNV_PRIME) ^ bytes[i];
   }
 
   return hash;
 }
 
-size_t tloFNV1aHash(const void *data, size_t length) {
+size_t tloFNV1aHash(const void *data, size_t size) {
   assert(data);
 
   const unsigned char *bytes = data;
   size_t hash = OFFSET_BASIS;
 
-  for (size_t i = 0; i < length; i++) {
+  for (size_t i = 0; i < size; i++) {
     hash = (hash ^ bytes[i]) * FNV_PRIME;
   }
 
   return hash;
 }
 
-size_t tloOAATHash(const void *data, size_t length) {
+size_t tloOAATHash(const void *data, size_t size) {
   assert(data);
 
   const unsigned char *bytes = data;
   size_t hash = 0;
 
-  for (size_t i = 0; i < length; i++) {
+  for (size_t i = 0; i < size; i++) {
     hash += bytes[i];
     hash += (hash << 10);
     hash ^= (hash >> 6);
@@ -115,13 +115,13 @@ size_t tloOAATHash(const void *data, size_t length) {
 #define THREE_QUARTERS (SIZE_T_BITS * 3 / 4)
 #define HIGH_BITS_MASK (~(SIZE_MAX >> ONE_EIGHTH))
 
-size_t tloELFHash(const void *data, size_t length) {
+size_t tloELFHash(const void *data, size_t size) {
   assert(data);
 
   const unsigned char *bytes = data;
   size_t hash = 0;
 
-  for (size_t i = 0; i < length; i++) {
+  for (size_t i = 0; i < size; i++) {
     hash = (hash << ONE_EIGHTH) + bytes[i];
     size_t highBits = hash & HIGH_BITS_MASK;
 
@@ -135,13 +135,13 @@ size_t tloELFHash(const void *data, size_t length) {
   return hash;
 }
 
-size_t tloPJWHash(const void *data, size_t length) {
+size_t tloPJWHash(const void *data, size_t size) {
   assert(data);
 
   const unsigned char *bytes = data;
   size_t hash = 0;
 
-  for (size_t i = 0; i < length; i++) {
+  for (size_t i = 0; i < size; i++) {
     hash = (hash << ONE_EIGHTH) + bytes[i];
     size_t highBits = hash & HIGH_BITS_MASK;
 
