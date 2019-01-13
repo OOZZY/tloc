@@ -70,7 +70,7 @@ TloError intPtrConstructCopy(IntPtr *ptr, const IntPtr *other) {
   assert(ptr);
   assert(other && other->ptr);
 
-  if (intPtrConstruct(ptr, 0) == TLO_ERROR) {
+  if (intPtrConstruct(ptr, 0) != TLO_SUCCESS) {
     return TLO_ERROR;
   }
 
@@ -85,7 +85,7 @@ IntPtr *intPtrMake(int value) {
     return NULL;
   }
 
-  if (intPtrConstruct(ptr, value) == TLO_ERROR) {
+  if (intPtrConstruct(ptr, value) != TLO_SUCCESS) {
     countingAllocatorFree(ptr);
     return NULL;
   }

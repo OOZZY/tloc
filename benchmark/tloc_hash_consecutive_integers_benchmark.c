@@ -8,7 +8,7 @@ static void checkCollisions(TloHashFunction hashFunction, size_t numBuckets,
                             size_t numElements, const char *description) {
   CollisionsData data;
 
-  if (collisionsDataConstruct(&data, description, numBuckets) == TLO_ERROR) {
+  if (collisionsDataConstruct(&data, description, numBuckets) != TLO_SUCCESS) {
     return;
   }
 

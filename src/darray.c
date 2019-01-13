@@ -125,8 +125,8 @@ static TloError expandArrayIfNeeded(TloDArray *array) {
 static TloError pushBackCopiedData(TloDArray *array, const void *data) {
   void *destination = mutableElement(array, array->size);
 
-  if (tloTypeConstructCopy(array->list.valueType, destination, data) ==
-      TLO_ERROR) {
+  if (tloTypeConstructCopy(array->list.valueType, destination, data) !=
+      TLO_SUCCESS) {
     return TLO_ERROR;
   }
 
@@ -140,15 +140,15 @@ static TloError darrayPushBack(TloList *list, const void *data) {
   assert(data);
 
   TloDArray *array = (TloDArray *)list;
-  if (allocateArrayIfNeeded(array) == TLO_ERROR) {
+  if (allocateArrayIfNeeded(array) != TLO_SUCCESS) {
     return TLO_ERROR;
   }
 
-  if (expandArrayIfNeeded(array) == TLO_ERROR) {
+  if (expandArrayIfNeeded(array) != TLO_SUCCESS) {
     return TLO_ERROR;
   }
 
-  if (pushBackCopiedData(array, data) == TLO_ERROR) {
+  if (pushBackCopiedData(array, data) != TLO_SUCCESS) {
     return TLO_ERROR;
   }
 
@@ -169,11 +169,11 @@ static TloError darrayMoveBack(TloList *list, void *data) {
   assert(data);
 
   TloDArray *array = (TloDArray *)list;
-  if (allocateArrayIfNeeded(array) == TLO_ERROR) {
+  if (allocateArrayIfNeeded(array) != TLO_SUCCESS) {
     return TLO_ERROR;
   }
 
-  if (expandArrayIfNeeded(array) == TLO_ERROR) {
+  if (expandArrayIfNeeded(array) != TLO_SUCCESS) {
     return TLO_ERROR;
   }
 
@@ -298,7 +298,7 @@ static TloError pushBackAllElementsOfOther(TloDArray *array,
                                            const TloDArray *other) {
   for (size_t i = 0; i < other->size; ++i) {
     const void *element = constElement(other, i);
-    if (darrayPushBack(&array->list, element) == TLO_ERROR) {
+    if (darrayPushBack(&array->list, element) != TLO_SUCCESS) {
       darrayDestruct(&array->list);
       return TLO_ERROR;
     }
@@ -312,11 +312,11 @@ TloError tloDArrayConstructCopy(TloDArray *array, const TloDArray *other) {
   assert(darrayIsValid(&other->list));
 
   if (tloDArrayConstruct(array, other->list.valueType, other->list.allocator,
-                         other->capacity) == TLO_ERROR) {
+                         other->capacity) != TLO_SUCCESS) {
     return TLO_ERROR;
   }
 
-  if (pushBackAllElementsOfOther(array, other) == TLO_ERROR) {
+  if (pushBackAllElementsOfOther(array, other) != TLO_SUCCESS) {
     return TLO_ERROR;
   }
 
@@ -338,7 +338,8 @@ TloDArray *tloDArrayMake(const TloType *valueType,
     return NULL;
   }
 
-  if (tloDArrayConstruct(array, valueType, allocator, capacity) == TLO_ERROR) {
+  if (tloDArrayConstruct(array, valueType, allocator, capacity) !=
+      TLO_SUCCESS) {
     allocator->free(array);
     return NULL;
   }
@@ -354,7 +355,7 @@ TloDArray *tloDArrayMakeCopy(const TloDArray *other) {
     return NULL;
   }
 
-  if (tloDArrayConstructCopy(array, other) == TLO_ERROR) {
+  if (tloDArrayConstructCopy(array, other) != TLO_SUCCESS) {
     other->list.allocator->free(array);
     return NULL;
   }
@@ -367,7 +368,7 @@ TloError tloDArrayCopy(TloDArray *array, const TloDArray *other) {
   assert(darrayIsValid(&other->list));
 
   TloDArray copy;
-  if (tloDArrayConstructCopy(&copy, other) == TLO_ERROR) {
+  if (tloDArrayConstructCopy(&copy, other) != TLO_SUCCESS) {
     return TLO_ERROR;
   }
 

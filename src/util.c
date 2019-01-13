@@ -10,7 +10,7 @@ TloError tloTypeConstructCopy(const TloType *type, void *destination,
   assert(source);
 
   if (type->constructCopy) {
-    if (type->constructCopy(destination, source) == TLO_ERROR) {
+    if (type->constructCopy(destination, source) != TLO_SUCCESS) {
       return TLO_ERROR;
     }
   } else {

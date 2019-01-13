@@ -106,8 +106,8 @@ static TloSLLNode *makeNodeWithCopiedData(TloSLList *llist, const void *data) {
     return NULL;
   }
 
-  if (tloTypeConstructCopy(llist->list.valueType, node->data, data) ==
-      TLO_ERROR) {
+  if (tloTypeConstructCopy(llist->list.valueType, node->data, data) !=
+      TLO_SUCCESS) {
     llist->list.allocator->free(node->data);
     llist->list.allocator->free(node);
     return NULL;
@@ -259,7 +259,7 @@ static TloError pushBackAllElementsOfOther(TloSLList *llist,
                                            const TloSLList *other) {
   for (TloSLLNode *node = other->head; node; node = node->next) {
     const void *element = node->data;
-    if (sllistPushBack(&llist->list, element) == TLO_ERROR) {
+    if (sllistPushBack(&llist->list, element) != TLO_SUCCESS) {
       sllistDestruct(&llist->list);
       return TLO_ERROR;
     }
@@ -274,7 +274,7 @@ TloError tloSLListConstructCopy(TloSLList *llist, const TloSLList *other) {
 
   tloSLListConstruct(llist, other->list.valueType, other->list.allocator);
 
-  if (pushBackAllElementsOfOther(llist, other) == TLO_ERROR) {
+  if (pushBackAllElementsOfOther(llist, other) != TLO_SUCCESS) {
     return TLO_ERROR;
   }
 
@@ -309,7 +309,7 @@ TloSLList *tloSLListMakeCopy(const TloSLList *other) {
     return NULL;
   }
 
-  if (tloSLListConstructCopy(llist, other) == TLO_ERROR) {
+  if (tloSLListConstructCopy(llist, other) != TLO_SUCCESS) {
     other->list.allocator->free(llist);
     return NULL;
   }
@@ -322,7 +322,7 @@ TloError tloSLListCopy(TloSLList *llist, const TloSLList *other) {
   assert(sllistIsValid(&other->list));
 
   TloSLList copy;
-  if (tloSLListConstructCopy(&copy, other) == TLO_ERROR) {
+  if (tloSLListConstructCopy(&copy, other) != TLO_SUCCESS) {
     return TLO_ERROR;
   }
 
