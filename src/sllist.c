@@ -16,16 +16,18 @@ static bool sllistIsValid(const TloList *list) {
 }
 #endif
 
+static void deleteNode(TloSLList *llist, TloSLLNode *node) {
+  tloTypeDestruct(llist->list.valueType, node->data);
+  llist->list.allocator->free(node->data);
+  llist->list.allocator->free(node);
+}
+
 static void destructAllElementsAndFreeAllNodes(TloSLList *llist) {
   TloSLLNode *current = llist->head;
 
   while (current) {
     TloSLLNode *next = current->next;
-
-    tloTypeDestruct(llist->list.valueType, current->data);
-    llist->list.allocator->free(current->data);
-    llist->list.allocator->free(current);
-
+    deleteNode(llist, current);
     current = next;
   }
 }
@@ -219,9 +221,7 @@ static void sllistPopFront(TloList *list) {
   TloSLList *llist = (TloSLList *)list;
   TloSLLNode *frontNode = llist->head;
   llist->head = llist->head->next;
-  tloTypeDestruct(llist->list.valueType, frontNode->data);
-  llist->list.allocator->free(frontNode->data);
-  llist->list.allocator->free(frontNode);
+  deleteNode(llist, frontNode);
   --llist->size;
 
   if (!llist->head) {

@@ -16,16 +16,18 @@ static bool dllistIsValid(const TloList *list) {
 }
 #endif
 
+static void deleteNode(TloDLList *llist, TloDLLNode *node) {
+  tloTypeDestruct(llist->list.valueType, node->data);
+  llist->list.allocator->free(node->data);
+  llist->list.allocator->free(node);
+}
+
 static void destructAllElementsAndFreeAllNodes(TloDLList *llist) {
   TloDLLNode *current = llist->head;
 
   while (current) {
     TloDLLNode *next = current->next;
-
-    tloTypeDestruct(llist->list.valueType, current->data);
-    llist->list.allocator->free(current->data);
-    llist->list.allocator->free(current);
-
+    deleteNode(llist, current);
     current = next;
   }
 }
@@ -223,9 +225,7 @@ static void dllistPopFront(TloList *list) {
   TloDLList *llist = (TloDLList *)list;
   TloDLLNode *frontNode = llist->head;
   llist->head = llist->head->next;
-  tloTypeDestruct(llist->list.valueType, frontNode->data);
-  llist->list.allocator->free(frontNode->data);
-  llist->list.allocator->free(frontNode);
+  deleteNode(llist, frontNode);
   --llist->size;
 
   if (!llist->head) {
@@ -242,9 +242,7 @@ static void dllistPopBack(TloList *list) {
   TloDLList *llist = (TloDLList *)list;
   TloDLLNode *backNode = llist->tail;
   llist->tail = llist->tail->prev;
-  tloTypeDestruct(llist->list.valueType, backNode->data);
-  llist->list.allocator->free(backNode->data);
-  llist->list.allocator->free(backNode);
+  deleteNode(llist, backNode);
   --llist->size;
 
   if (!llist->tail) {
