@@ -21,6 +21,7 @@ TloError intPtrConstructCopy(IntPtr *ptr, const IntPtr *other);
 IntPtr *intPtrMake(int value);
 bool intPtrEquals(const IntPtr *ptr1, const IntPtr *ptr2);
 size_t intPtrHash(const IntPtr *ptr);
+int intPtrCompare(const IntPtr *ptr1, const IntPtr *ptr2);
 extern const TloType intPtrType;
 
 #endif  // TEST_UTIL_H

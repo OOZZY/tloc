@@ -35,6 +35,14 @@ typedef struct TloType {
   bool (*equals)(const void *object1, const void *object2);
 
   TloHashFunction hash;
+
+  /*
+   * - compares the pointees of object1 and object2 for order
+   * - returns <0 if pointee of object1 is less than pointee of object2
+   * - returns 0 if pointee of object1 is equal to pointee of object2
+   * - returns >0 if pointee of object1 is greater than pointee of object2
+   */
+  int (*compare)(const void *object1, const void *object2);
 } TloType;
 
 /*
@@ -82,6 +90,7 @@ void tloPtrDestruct(void *ptr);
  * - don't need to be deep copied (constructCopy won't be used)
  * - need to be destructed by calling just free on each of them
  * - won't be compared for equality or hashed
+ * - won't be compared for order
  */
 extern const TloType tloPtr;
 

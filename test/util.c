@@ -106,6 +106,19 @@ size_t intPtrHash(const IntPtr *ptr) {
   return tloFNV1aHash(ptr->ptr, sizeof(int));
 }
 
+int intPtrCompare(const IntPtr *ptr1, const IntPtr *ptr2) {
+  assert(ptr1 && ptr1->ptr);
+  assert(ptr2 && ptr2->ptr);
+
+  if (*ptr1->ptr < *ptr2->ptr) {
+    return -1;
+  } else if (*ptr1->ptr > *ptr2->ptr) {
+    return 1;
+  } else {
+    return 0;
+  }
+}
+
 static TloError intPtrTypeConstructCopy(void *destination, const void *source) {
   return intPtrConstructCopy(destination, source);
 }
@@ -119,8 +132,13 @@ static size_t intPtrTypeHash(const void *object, size_t size) {
   return intPtrHash(object);
 }
 
+static int intPtrTypeCompare(const void *object1, const void *object2) {
+  return intPtrCompare(object1, object2);
+}
+
 const TloType intPtrType = {.size = sizeof(IntPtr),
                             .constructCopy = intPtrTypeConstructCopy,
                             .destruct = tloPtrDestruct,
                             .equals = intPtrTypeEquals,
-                            .hash = intPtrTypeHash};
+                            .hash = intPtrTypeHash,
+                            .compare = intPtrTypeCompare};

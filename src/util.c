@@ -52,7 +52,23 @@ size_t tloTypeHash(const TloType *type, const void *object) {
   return tloFNV1aHash(object, type->size);
 }
 
-const TloType tloInt = {.size = sizeof(int)};
+static int intCompare(const void *object1, const void *object2) {
+  assert(object1);
+  assert(object2);
+
+  const int *int1 = object1;
+  const int *int2 = object2;
+
+  if (*int1 < *int2) {
+    return -1;
+  } else if (*int1 > *int2) {
+    return 1;
+  } else {
+    return 0;
+  }
+}
+
+const TloType tloInt = {.size = sizeof(int), .compare = intCompare};
 
 const TloAllocator tloCStdLibAllocator = {.malloc = malloc, .free = free};
 
@@ -107,11 +123,21 @@ static size_t cstringHash(const void *data, size_t size) {
   return tloFNV1aHash(*cstring, size);
 }
 
+static int cstringCompare(const void *object1, const void *object2) {
+  assert(object1);
+  assert(object2);
+
+  const TloCString *cstring1 = object1;
+  const TloCString *cstring2 = object2;
+  return strcmp(*cstring1, *cstring2);
+}
+
 const TloType tloCString = {.size = sizeof(char *),
                             .constructCopy = cstringConstructCopy,
                             .destruct = tloPtrDestruct,
                             .equals = cstringEquals,
-                            .hash = cstringHash};
+                            .hash = cstringHash,
+                            .compare = cstringCompare};
 
 bool typeIsValid(const TloType *type) { return type && type->size; }
 
