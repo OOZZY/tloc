@@ -27,10 +27,10 @@ if (UNIX)
 endif()
 
 set(tloc_public_headers benchmark.h cdarray.h darray.h debug.h dllist.h hash.h
-  list.h map.h set.h sllist.h statistics.h stopwatch.h test.h util.h)
+  list.h map.h schtable.h set.h sllist.h statistics.h stopwatch.h test.h util.h)
 set(tloc_private_headers list.h map.h set.h util.h)
 set(tloc_sources benchmark.c cdarray.c darray.c dllist.c hash.c list.c map.c
-  set.c sllist.c statistics.c stopwatch.c test.c util.c)
+  schtable.c set.c sllist.c statistics.c stopwatch.c test.c util.c)
 prepend(tloc_public_headers ${PROJECT_SOURCE_DIR}/include/tlo/
   ${tloc_public_headers})
 add_library(tloc STATIC ${tloc_public_headers} ${tloc_private_headers}

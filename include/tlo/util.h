@@ -9,8 +9,15 @@
  * - used as return type of functions that could fail
  * - return value TLO_SUCCESS means function succeeded (no error occurred)
  * - return value TLO_ERROR means function failed (error occurred)
+ * - TLO_DUPLICATE is returned by only the TloSet and TloMap insertion functions
+ *   when they fail because the value or key being inserted already exists in
+ *   the set or map
  */
-typedef enum TloError { TLO_ERROR = -1, TLO_SUCCESS = 0 } TloError;
+typedef enum TloError {
+  TLO_SUCCESS = 0,
+  TLO_ERROR = -1,
+  TLO_DUPLICATE = -2
+} TloError;
 
 typedef struct TloType {
   // public
