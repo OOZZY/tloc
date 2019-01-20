@@ -105,10 +105,10 @@ TloError tlovMapMoveInsert(TloMap *map, void *key, void *value) {
   return map->vTable->moveInsert(map, key, value);
 }
 
-void tlovMapRemove(TloMap *map, const void *key) {
+bool tlovMapRemove(TloMap *map, const void *key) {
   assert(mapIsValid(map));
 
-  map->vTable->remove(map, key);
+  return map->vTable->remove(map, key);
 }
 
 bool mapIsValid(const TloMap *map) {

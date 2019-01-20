@@ -9,10 +9,10 @@ static bool setVTableIsValid(const TloSetVTable *vTable) {
 }
 
 void tloSetConstruct(TloSet *set, const TloSetVTable *vTable,
-                     const TloType *valueType, const TloAllocator *allocator) {
+                     const TloType *keyType, const TloAllocator *allocator) {
   assert(set);
   assert(setVTableIsValid(vTable));
-  assert(typeIsValid(valueType));
+  assert(typeIsValid(keyType));
 
   if (!allocator) {
     allocator = &tloCStdLibAllocator;
@@ -21,7 +21,7 @@ void tloSetConstruct(TloSet *set, const TloSetVTable *vTable,
   assert(allocatorIsValid(allocator));
 
   set->vTable = vTable;
-  set->valueType = valueType;
+  set->keyType = keyType;
   set->allocator = allocator;
 }
 
@@ -39,7 +39,7 @@ void tloSetDelete(TloSet *set) {
 const TloType *tloSetValueType(const TloSet *set) {
   assert(setIsValid(set));
 
-  return set->valueType;
+  return set->keyType;
 }
 
 const TloAllocator *tloSetAllocator(const TloSet *set) {
@@ -72,31 +72,31 @@ bool tlovSetIsEmpty(const TloSet *set) {
   return set->vTable->isEmpty(set);
 }
 
-const void *tlovSetFind(const TloSet *set, const void *data) {
+const void *tlovSetFind(const TloSet *set, const void *key) {
   assert(setIsValid(set));
 
-  return set->vTable->find(set, data);
+  return set->vTable->find(set, key);
 }
 
-TloError tlovSetInsert(TloSet *set, const void *data) {
+TloError tlovSetInsert(TloSet *set, const void *key) {
   assert(setIsValid(set));
 
-  return set->vTable->insert(set, data);
+  return set->vTable->insert(set, key);
 }
 
-TloError tlovSetMoveInsert(TloSet *set, void *data) {
+TloError tlovSetMoveInsert(TloSet *set, void *key) {
   assert(setIsValid(set));
 
-  return set->vTable->moveInsert(set, data);
+  return set->vTable->moveInsert(set, key);
 }
 
-void tlovSetRemove(TloSet *set, const void *data) {
+bool tlovSetRemove(TloSet *set, const void *key) {
   assert(setIsValid(set));
 
-  set->vTable->remove(set, data);
+  return set->vTable->remove(set, key);
 }
 
 bool setIsValid(const TloSet *set) {
-  return set && setVTableIsValid(set->vTable) && typeIsValid(set->valueType) &&
+  return set && setVTableIsValid(set->vTable) && typeIsValid(set->keyType) &&
          allocatorIsValid(set->allocator);
 }

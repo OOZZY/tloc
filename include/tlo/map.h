@@ -17,7 +17,7 @@ typedef struct TloMapVTable {
   void *(*findMutable)(TloMap *map, const void *key);
   TloError (*insert)(TloMap *map, const void *key, const void *value);
   TloError (*moveInsert)(TloMap *map, void *key, void *value);
-  void (*remove)(TloMap *map, const void *key);
+  bool (*remove)(TloMap *map, const void *key);
 } TloMapVTable;
 
 struct TloMap {
@@ -44,6 +44,7 @@ const TloAllocator *tloMapAllocator(const TloMap *map);
 const char *tlovMapType(const TloMap *map);
 
 /*
+ * - uses key type's destruct if it is not NULL
  * - uses value type's destruct if it is not NULL
  */
 void tlovMapDestruct(TloMap *map);
@@ -54,21 +55,23 @@ const void *tlovMapFind(const TloMap *map, const void *key);
 void *tlovMapFindMutable(TloMap *map, const void *key);
 
 /*
- * - deep copies data using value type's constructCopy if it is not null
- * - otherwise, uses memcpy
+ * - deep copies key using key type's constructCopy if it is not null
+ * - deep copies value using value type's constructCopy if it is not null
+ * - uses memcpy if type's constructCopy is null
  */
 TloError tlovMapInsert(TloMap *map, const void *key, const void *value);
 
 /*
- * - assumes data points to an object whose memory was allocated by allocator's
- *   malloc
- * - takes ownership of the object
+ * - assumes key and value point to objects whose memory was allocated by
+ *   allocator's malloc
+ * - takes ownership of the objects
  */
 TloError tlovMapMoveInsert(TloMap *map, void *key, void *value);
 
 /*
+ * - uses key type's destruct if it is not NULL
  * - uses value type's destruct if it is not NULL
  */
-void tlovMapRemove(TloMap *map, const void *key);
+bool tlovMapRemove(TloMap *map, const void *key);
 
 #endif  // TLO_MAP_H
