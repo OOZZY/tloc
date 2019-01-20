@@ -17,17 +17,39 @@ static bool schtableMapIsValid(const TloMap *map) {
 }
 #endif
 
-static void deleteSetNode(const TloSet *set, TloSCHTNode *node) {
+typedef void (*DeleteNodeFunction)(const void *setOrMap, TloSCHTNode *node);
+
+static void deleteSetNode(const void *setOrMap, TloSCHTNode *node) {
+  const TloSet *set = (const TloSet *)setOrMap;
   tloTypeDestruct(set->keyType, node->data);
   set->allocator->free(node->data);
   set->allocator->free(node);
 }
 
-static void deleteMapNode(const TloMap *map, TloSCHTNode *node) {
+static void deleteMapNode(const void *setOrMap, TloSCHTNode *node) {
+  const TloMap *map = (const TloMap *)setOrMap;
   tloTypeDestruct(map->valueType, node->data + map->keyType->size);
   tloTypeDestruct(map->keyType, node->data);
   map->allocator->free(node->data);
   map->allocator->free(node);
+}
+
+static void deleteAllNodesAndFreeArray(TloSCHTable *table,
+                                       const TloAllocator *allocator,
+                                       DeleteNodeFunction deleteNode,
+                                       const void *setOrMap) {
+  for (size_t i = 0; i < table->capacity; ++i) {
+    TloSCHTNode *node = table->array[i];
+
+    while (node) {
+      TloSCHTNode *next = node->next;
+      deleteNode(setOrMap, node);
+      node = next;
+    }
+  }
+
+  allocator->free(table->array);
+  table->array = NULL;
 }
 
 static void schtableSetDestruct(TloSet *set) {
@@ -42,18 +64,7 @@ static void schtableSetDestruct(TloSet *set) {
     return;
   }
 
-  for (size_t i = 0; i < htset->table.capacity; ++i) {
-    TloSCHTNode *node = htset->table.array[i];
-
-    while (node) {
-      TloSCHTNode *next = node->next;
-      deleteSetNode(set, node);
-      node = next;
-    }
-  }
-
-  htset->set.allocator->free(htset->table.array);
-  htset->table.array = NULL;
+  deleteAllNodesAndFreeArray(&htset->table, set->allocator, deleteSetNode, set);
 }
 
 static void schtableMapDestruct(TloMap *map) {
@@ -68,18 +79,7 @@ static void schtableMapDestruct(TloMap *map) {
     return;
   }
 
-  for (size_t i = 0; i < htmap->table.capacity; ++i) {
-    TloSCHTNode *node = htmap->table.array[i];
-
-    while (node) {
-      TloSCHTNode *next = node->next;
-      deleteMapNode(map, node);
-      node = next;
-    }
-  }
-
-  htmap->map.allocator->free(htmap->table.array);
-  htmap->table.array = NULL;
+  deleteAllNodesAndFreeArray(&htmap->table, map->allocator, deleteMapNode, map);
 }
 
 static size_t schtableSetSize(const TloSet *set) {
@@ -495,6 +495,20 @@ static void shrinkArrayIfNeeded(TloSCHTable *table, const TloType *keyType,
   }
 }
 
+static void remove(TloSCHTable *table, const TloType *keyType,
+                   const TloAllocator *allocator, DeleteNodeFunction deleteNode,
+                   const void *setOrMap, FindResult *result) {
+  if (result->prev) {
+    result->prev->next = result->node->next;
+  } else {
+    table->array[result->index] = NULL;
+  }
+
+  deleteNode(setOrMap, result->node);
+  table->size--;
+  shrinkArrayIfNeeded(table, keyType, allocator);
+}
+
 static bool schtableSetRemove(TloSet *set, const void *key) {
   assert(schtableSetIsValid(set));
   assert(key);
@@ -507,15 +521,8 @@ static bool schtableSetRemove(TloSet *set, const void *key) {
     return false;
   }
 
-  if (result.prev) {
-    result.prev->next = result.node->next;
-  } else {
-    htset->table.array[result.index] = NULL;
-  }
-
-  deleteSetNode(set, result.node);
-  htset->table.size--;
-  shrinkArrayIfNeeded(&htset->table, set->keyType, set->allocator);
+  remove(&htset->table, set->keyType, set->allocator, deleteSetNode, set,
+         &result);
   return true;
 }
 
@@ -531,15 +538,8 @@ static bool schtableMapRemove(TloMap *map, const void *key) {
     return false;
   }
 
-  if (result.prev) {
-    result.prev->next = result.node->next;
-  } else {
-    htmap->table.array[result.index] = NULL;
-  }
-
-  deleteMapNode(map, result.node);
-  htmap->table.size--;
-  shrinkArrayIfNeeded(&htmap->table, map->keyType, map->allocator);
+  remove(&htmap->table, map->keyType, map->allocator, deleteMapNode, map,
+         &result);
   return true;
 }
 
