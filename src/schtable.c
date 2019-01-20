@@ -117,8 +117,8 @@ typedef struct FindResult {
   TloSCHTNode *node;
 } FindResult;
 
-static void find(FindResult *result, const TloSCHTable *table,
-                 const TloType *keyType, const void *key) {
+static void find(const TloSCHTable *table, const TloType *keyType,
+                 const void *key, FindResult *result) {
   result->hash = tloTypeHash(keyType, key);
   result->index = result->hash % table->capacity;
   result->prev = NULL;
@@ -144,7 +144,7 @@ static const void *schtableSetFind(const TloSet *set, const void *key) {
   FindResult result;
   const TloSCHTableSet *htset = (const TloSCHTableSet *)set;
 
-  find(&result, &htset->table, set->keyType, key);
+  find(&htset->table, set->keyType, key, &result);
   if (!result.node) {
     return NULL;
   }
@@ -159,7 +159,7 @@ static const void *schtableMapFind(const TloMap *map, const void *key) {
   FindResult result;
   const TloSCHTableMap *htmap = (const TloSCHTableMap *)map;
 
-  find(&result, &htmap->table, map->keyType, key);
+  find(&htmap->table, map->keyType, key, &result);
   if (!result.node) {
     return NULL;
   }
@@ -174,7 +174,7 @@ static void *schtableMapFindMutable(TloMap *map, const void *key) {
   FindResult result;
   TloSCHTableMap *htmap = (TloSCHTableMap *)map;
 
-  find(&result, &htmap->table, map->keyType, key);
+  find(&htmap->table, map->keyType, key, &result);
   if (!result.node) {
     return NULL;
   }
@@ -375,7 +375,7 @@ static TloError schtableSetInsert(TloSet *set, const void *key) {
   FindResult result;
   TloSCHTableSet *htset = (TloSCHTableSet *)set;
 
-  find(&result, &htset->table, set->keyType, key);
+  find(&htset->table, set->keyType, key, &result);
   if (result.node) {
     return TLO_DUPLICATE;
   }
@@ -403,7 +403,7 @@ static TloError schtableMapInsert(TloMap *map, const void *key,
   FindResult result;
   TloSCHTableMap *htmap = (TloSCHTableMap *)map;
 
-  find(&result, &htmap->table, map->keyType, key);
+  find(&htmap->table, map->keyType, key, &result);
   if (result.node) {
     return TLO_DUPLICATE;
   }
@@ -429,7 +429,7 @@ static TloError schtableSetMoveInsert(TloSet *set, void *key) {
   FindResult result;
   TloSCHTableSet *htset = (TloSCHTableSet *)set;
 
-  find(&result, &htset->table, set->keyType, key);
+  find(&htset->table, set->keyType, key, &result);
   if (result.node) {
     return TLO_DUPLICATE;
   }
@@ -456,7 +456,7 @@ static TloError schtableMapMoveInsert(TloMap *map, void *key, void *value) {
   FindResult result;
   TloSCHTableMap *htmap = (TloSCHTableMap *)map;
 
-  find(&result, &htmap->table, map->keyType, key);
+  find(&htmap->table, map->keyType, key, &result);
   if (result.node) {
     return TLO_DUPLICATE;
   }
@@ -516,7 +516,7 @@ static bool schtableSetRemove(TloSet *set, const void *key) {
   FindResult result;
   TloSCHTableSet *htset = (TloSCHTableSet *)set;
 
-  find(&result, &htset->table, set->keyType, key);
+  find(&htset->table, set->keyType, key, &result);
   if (!result.node) {
     return false;
   }
@@ -533,7 +533,7 @@ static bool schtableMapRemove(TloMap *map, const void *key) {
   FindResult result;
   TloSCHTableMap *htmap = (TloSCHTableMap *)map;
 
-  find(&result, &htmap->table, map->keyType, key);
+  find(&htmap->table, map->keyType, key, &result);
   if (!result.node) {
     return false;
   }
