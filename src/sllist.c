@@ -22,7 +22,7 @@ static void deleteNode(TloSLList *llist, TloSLLNode *node) {
   llist->list.allocator->free(node);
 }
 
-static void destructAllElementsAndFreeAllNodes(TloSLList *llist) {
+static void deleteAllNodes(TloSLList *llist) {
   TloSLLNode *current = llist->head;
 
   while (current) {
@@ -44,7 +44,7 @@ static void sllistDestruct(TloList *list) {
     return;
   }
 
-  destructAllElementsAndFreeAllNodes(llist);
+  deleteAllNodes(llist);
 
   llist->head = NULL;
   llist->tail = NULL;

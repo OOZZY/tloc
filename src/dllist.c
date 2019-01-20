@@ -22,7 +22,7 @@ static void deleteNode(TloDLList *llist, TloDLLNode *node) {
   llist->list.allocator->free(node);
 }
 
-static void destructAllElementsAndFreeAllNodes(TloDLList *llist) {
+static void deleteAllNodes(TloDLList *llist) {
   TloDLLNode *current = llist->head;
 
   while (current) {
@@ -44,7 +44,7 @@ static void dllistDestruct(TloList *list) {
     return;
   }
 
-  destructAllElementsAndFreeAllNodes(llist);
+  deleteAllNodes(llist);
 
   llist->head = NULL;
   llist->tail = NULL;
