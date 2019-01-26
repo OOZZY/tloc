@@ -36,7 +36,7 @@ static void testSLListIntConstructCopy(void) {
   TloSLList *ints = tloSLListMake(&tloInt, &countingAllocator);
   TLO_ASSERT(ints);
 
-  for (int i = 0; i < SOME_NUMBER; ++i) {
+  for (int i = 0; i < MAX_LIST_SIZE; ++i) {
     TloError error = tlovListPushBack(&ints->list, &i);
     TLO_ASSERT(!error);
   }
@@ -72,7 +72,7 @@ static void testSLListIntMakeCopy(void) {
   TloSLList *ints = tloSLListMake(&tloInt, &countingAllocator);
   TLO_ASSERT(ints);
 
-  for (int i = 0; i < SOME_NUMBER; ++i) {
+  for (int i = 0; i < MAX_LIST_SIZE; ++i) {
     TloError error = tlovListPushBack(&ints->list, &i);
     TLO_ASSERT(!error);
   }
@@ -104,7 +104,7 @@ static void testSLListIntCopy(void) {
   TloSLList *ints = tloSLListMake(&tloInt, &countingAllocator);
   TLO_ASSERT(ints);
 
-  for (int i = 0; i < SOME_NUMBER; ++i) {
+  for (int i = 0; i < MAX_LIST_SIZE; ++i) {
     TloError error = tlovListPushBack(&ints->list, &i);
     TLO_ASSERT(!error);
   }

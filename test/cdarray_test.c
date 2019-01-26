@@ -36,10 +36,10 @@ static void testCDArrayIntConstructWithCapacityDestruct(void) {
   TloCDArray ints;
 
   TloError error =
-      tloCDArrayConstruct(&ints, &tloInt, &countingAllocator, SOME_NUMBER);
+      tloCDArrayConstruct(&ints, &tloInt, &countingAllocator, MAX_LIST_SIZE);
   TLO_ASSERT(!error);
 
-  EXPECT_DARRAY_ALL_PROPERTIES(&ints, 0, SOME_NUMBER, true, &tloInt,
+  EXPECT_DARRAY_ALL_PROPERTIES(&ints, 0, MAX_LIST_SIZE, true, &tloInt,
                                &countingAllocator);
 
   tlovListDestruct(&ints.list);
@@ -55,10 +55,10 @@ static void testCDArrayIntMakeDelete(void) {
 }
 
 static void testCDArrayIntMakeWithCapacityDelete(void) {
-  TloCDArray *ints = tloCDArrayMake(&tloInt, &countingAllocator, SOME_NUMBER);
+  TloCDArray *ints = tloCDArrayMake(&tloInt, &countingAllocator, MAX_LIST_SIZE);
   TLO_ASSERT(ints);
 
-  EXPECT_DARRAY_ALL_PROPERTIES(ints, 0, SOME_NUMBER, true, &tloInt,
+  EXPECT_DARRAY_ALL_PROPERTIES(ints, 0, MAX_LIST_SIZE, true, &tloInt,
                                &countingAllocator);
 
   tloListDelete(&ints->list);
@@ -68,7 +68,7 @@ static void testCDArrayIntConstructCopy(void) {
   TloCDArray *ints = tloCDArrayMake(&tloInt, &countingAllocator, 0);
   TLO_ASSERT(ints);
 
-  for (int i = 0; i < SOME_NUMBER; ++i) {
+  for (int i = 0; i < MAX_LIST_SIZE; ++i) {
     TloError error = tlovListPushBack(&ints->list, &i);
     TLO_ASSERT(!error);
   }
@@ -100,7 +100,7 @@ static void testCDArrayIntMakeCopy(void) {
   TloCDArray *ints = tloCDArrayMake(&tloInt, &countingAllocator, 0);
   TLO_ASSERT(ints);
 
-  for (int i = 0; i < SOME_NUMBER; ++i) {
+  for (int i = 0; i < MAX_LIST_SIZE; ++i) {
     TloError error = tlovListPushBack(&ints->list, &i);
     TLO_ASSERT(!error);
   }
@@ -128,7 +128,7 @@ static void testCDArrayIntCopy(void) {
   TloCDArray *ints = tloCDArrayMake(&tloInt, &countingAllocator, 0);
   TLO_ASSERT(ints);
 
-  for (int i = 0; i < SOME_NUMBER; ++i) {
+  for (int i = 0; i < MAX_LIST_SIZE; ++i) {
     TloError error = tlovListPushBack(&ints->list, &i);
     TLO_ASSERT(!error);
   }

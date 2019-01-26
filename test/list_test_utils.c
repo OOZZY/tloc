@@ -13,17 +13,18 @@ void testListIntPushOrMoveBackOnce(TloList *ints, bool testCopy) {
 
   TloError error;
   if (testCopy) {
-    int value = SOME_NUMBER;
+    int value = MAX_LIST_SIZE;
     error = tlovListPushBack(ints, &value);
   } else {
-    int *value = makeInt(SOME_NUMBER);
+    int *value = makeInt(MAX_LIST_SIZE);
     TLO_ASSERT(value);
     error = tlovListMoveBack(ints, value);
   }
   TLO_ASSERT(!error);
 
   EXPECT_LIST_PROPERTIES(ints, 1, false, &tloInt, &countingAllocator);
-  EXPECT_LIST_INT_ELEMENTS(ints, SOME_NUMBER, SOME_NUMBER, 0, SOME_NUMBER);
+  EXPECT_LIST_INT_ELEMENTS(ints, MAX_LIST_SIZE, MAX_LIST_SIZE, 0,
+                           MAX_LIST_SIZE);
 
   tloListDelete(ints);
 }
@@ -31,7 +32,7 @@ void testListIntPushOrMoveBackOnce(TloList *ints, bool testCopy) {
 void testListIntPushOrMoveBackManyTimes(TloList *ints, bool testCopy) {
   TLO_ASSERT(ints);
 
-  for (size_t i = 0; i < SOME_NUMBER; ++i) {
+  for (size_t i = 0; i < MAX_LIST_SIZE; ++i) {
     TloError error;
     if (testCopy) {
       int value = (int)i;
@@ -54,7 +55,7 @@ void testListIntPushBackOncePopBackOnce(TloList *ints) {
   TLO_ASSERT(ints);
   TLO_ASSERT(tloListHasFunctions(ints, TLO_LIST_POP_BACK));
 
-  int value = SOME_NUMBER;
+  int value = MAX_LIST_SIZE;
   TloError error = tlovListPushBack(ints, &value);
   TLO_ASSERT(!error);
 
@@ -69,13 +70,13 @@ void testListIntPushBackManyTimesPopBackUntilEmpty(TloList *ints) {
   TLO_ASSERT(ints);
   TLO_ASSERT(tloListHasFunctions(ints, TLO_LIST_POP_BACK));
 
-  for (size_t i = 0; i < SOME_NUMBER; ++i) {
+  for (size_t i = 0; i < MAX_LIST_SIZE; ++i) {
     int value = (int)i;
     TloError error = tlovListPushBack(ints, &value);
     TLO_ASSERT(!error);
   }
 
-  for (size_t i = SOME_NUMBER - 1; i <= SOME_NUMBER - 1; --i) {
+  for (size_t i = MAX_LIST_SIZE - 1; i <= MAX_LIST_SIZE - 1; --i) {
     EXPECT_LIST_PROPERTIES(ints, i + 1, false, &tloInt, &countingAllocator);
     EXPECT_LIST_INT_ELEMENTS(ints, 0, (int)i, i, (int)i);
 
@@ -93,17 +94,18 @@ void testListIntPushOrMoveFrontOnce(TloList *ints, bool testCopy) {
 
   TloError error;
   if (testCopy) {
-    int value = SOME_NUMBER;
+    int value = MAX_LIST_SIZE;
     error = tlovListPushFront(ints, &value);
   } else {
-    int *value = makeInt(SOME_NUMBER);
+    int *value = makeInt(MAX_LIST_SIZE);
     TLO_ASSERT(value);
     error = tlovListMoveFront(ints, value);
   }
   TLO_ASSERT(!error);
 
   EXPECT_LIST_PROPERTIES(ints, 1, false, &tloInt, &countingAllocator);
-  EXPECT_LIST_INT_ELEMENTS(ints, SOME_NUMBER, SOME_NUMBER, 0, SOME_NUMBER);
+  EXPECT_LIST_INT_ELEMENTS(ints, MAX_LIST_SIZE, MAX_LIST_SIZE, 0,
+                           MAX_LIST_SIZE);
 
   tloListDelete(ints);
 }
@@ -112,7 +114,7 @@ void testListIntPushOrMoveFrontManyTimes(TloList *ints, bool testCopy) {
   TLO_ASSERT(ints);
   TLO_ASSERT(tloListHasFunctions(ints, TLO_LIST_PUSH_FRONT));
 
-  for (size_t i = 0; i < SOME_NUMBER; ++i) {
+  for (size_t i = 0; i < MAX_LIST_SIZE; ++i) {
     TloError error;
     if (testCopy) {
       int value = (int)i;
@@ -136,7 +138,7 @@ void testListIntPushFrontOncePopFrontOnce(TloList *ints) {
   TLO_ASSERT(
       tloListHasFunctions(ints, TLO_LIST_PUSH_FRONT | TLO_LIST_POP_FRONT));
 
-  int value = SOME_NUMBER;
+  int value = MAX_LIST_SIZE;
   TloError error = tlovListPushFront(ints, &value);
   TLO_ASSERT(!error);
 
@@ -152,13 +154,13 @@ void testListIntPushFrontManyTimesPopFrontUntilEmpty(TloList *ints) {
   TLO_ASSERT(
       tloListHasFunctions(ints, TLO_LIST_PUSH_FRONT | TLO_LIST_POP_FRONT));
 
-  for (size_t i = 0; i < SOME_NUMBER; ++i) {
+  for (size_t i = 0; i < MAX_LIST_SIZE; ++i) {
     int value = (int)i;
     TloError error = tlovListPushFront(ints, &value);
     TLO_ASSERT(!error);
   }
 
-  for (size_t i = SOME_NUMBER - 1; i <= SOME_NUMBER - 1; --i) {
+  for (size_t i = MAX_LIST_SIZE - 1; i <= MAX_LIST_SIZE - 1; --i) {
     EXPECT_LIST_PROPERTIES(ints, i + 1, false, &tloInt, &countingAllocator);
     EXPECT_LIST_INT_ELEMENTS(ints, (int)i, 0, i, 0);
 
@@ -176,20 +178,20 @@ void testListIntPtrPushOrMoveBackOnce(TloList *intPtrs, bool testCopy) {
   TloError error;
   if (testCopy) {
     IntPtr intPtr;
-    error = intPtrConstruct(&intPtr, SOME_NUMBER);
+    error = intPtrConstruct(&intPtr, MAX_LIST_SIZE);
     TLO_ASSERT(!error);
     error = tlovListPushBack(intPtrs, &intPtr);
     tloPtrDestruct(&intPtr);
   } else {
-    IntPtr *intPtr = intPtrMake(SOME_NUMBER);
+    IntPtr *intPtr = intPtrMake(MAX_LIST_SIZE);
     TLO_ASSERT(intPtr);
     error = tlovListMoveBack(intPtrs, intPtr);
   }
   TLO_ASSERT(!error);
 
   EXPECT_LIST_PROPERTIES(intPtrs, 1, false, &intPtrType, &countingAllocator);
-  EXPECT_LIST_INTPTR_ELEMENTS(intPtrs, SOME_NUMBER, SOME_NUMBER, 0,
-                              SOME_NUMBER);
+  EXPECT_LIST_INTPTR_ELEMENTS(intPtrs, MAX_LIST_SIZE, MAX_LIST_SIZE, 0,
+                              MAX_LIST_SIZE);
 
   tloListDelete(intPtrs);
 }
@@ -197,7 +199,7 @@ void testListIntPtrPushOrMoveBackOnce(TloList *intPtrs, bool testCopy) {
 void testListIntPtrPushOrMoveBackManyTimes(TloList *intPtrs, bool testCopy) {
   TLO_ASSERT(intPtrs);
 
-  for (size_t i = 0; i < SOME_NUMBER; ++i) {
+  for (size_t i = 0; i < MAX_LIST_SIZE; ++i) {
     TloError error;
     if (testCopy) {
       IntPtr intPtr;
@@ -225,7 +227,7 @@ void testListIntPtrPushBackOncePopBackOnce(TloList *intPtrs) {
   TLO_ASSERT(tloListHasFunctions(intPtrs, TLO_LIST_POP_BACK));
 
   IntPtr intPtr;
-  TloError error = intPtrConstruct(&intPtr, SOME_NUMBER);
+  TloError error = intPtrConstruct(&intPtr, MAX_LIST_SIZE);
   TLO_ASSERT(!error);
   error = tlovListPushBack(intPtrs, &intPtr);
   TLO_ASSERT(!error);
@@ -242,7 +244,7 @@ void testListIntPtrPushBackManyTimesPopBackUntilEmpty(TloList *intPtrs) {
   TLO_ASSERT(intPtrs);
   TLO_ASSERT(tloListHasFunctions(intPtrs, TLO_LIST_POP_BACK));
 
-  for (size_t i = 0; i < SOME_NUMBER; ++i) {
+  for (size_t i = 0; i < MAX_LIST_SIZE; ++i) {
     IntPtr intPtr;
     TloError error = intPtrConstruct(&intPtr, (int)i);
     TLO_ASSERT(!error);
@@ -251,7 +253,7 @@ void testListIntPtrPushBackManyTimesPopBackUntilEmpty(TloList *intPtrs) {
     tloPtrDestruct(&intPtr);
   }
 
-  for (size_t i = SOME_NUMBER - 1; i <= SOME_NUMBER - 1; --i) {
+  for (size_t i = MAX_LIST_SIZE - 1; i <= MAX_LIST_SIZE - 1; --i) {
     EXPECT_LIST_PROPERTIES(intPtrs, i + 1, false, &intPtrType,
                            &countingAllocator);
     EXPECT_LIST_INTPTR_ELEMENTS(intPtrs, 0, (int)i, i, (int)i);
@@ -269,7 +271,7 @@ void testListIntPtrPushBackManyTimesUnorderedRemoveBackUntilEmpty(
   TLO_ASSERT(intPtrs);
   TLO_ASSERT(tloListHasFunctions(intPtrs, TLO_LIST_UNORDERED_REMOVE));
 
-  for (size_t i = 0; i < SOME_NUMBER; ++i) {
+  for (size_t i = 0; i < MAX_LIST_SIZE; ++i) {
     IntPtr intPtr;
     TloError error = intPtrConstruct(&intPtr, (int)i);
     TLO_ASSERT(!error);
@@ -278,7 +280,7 @@ void testListIntPtrPushBackManyTimesUnorderedRemoveBackUntilEmpty(
     tloPtrDestruct(&intPtr);
   }
 
-  for (size_t i = SOME_NUMBER - 1; i <= SOME_NUMBER - 1; --i) {
+  for (size_t i = MAX_LIST_SIZE - 1; i <= MAX_LIST_SIZE - 1; --i) {
     EXPECT_LIST_PROPERTIES(intPtrs, i + 1, false, &intPtrType,
                            &countingAllocator);
     EXPECT_LIST_INTPTR_ELEMENTS(intPtrs, 0, (int)i, i, (int)i);
@@ -296,7 +298,7 @@ void testListIntPtrPushBackManyTimesUnorderedRemoveFrontUntilEmpty(
   TLO_ASSERT(intPtrs);
   TLO_ASSERT(tloListHasFunctions(intPtrs, TLO_LIST_UNORDERED_REMOVE));
 
-  for (size_t i = 0; i < SOME_NUMBER; ++i) {
+  for (size_t i = 0; i < MAX_LIST_SIZE; ++i) {
     IntPtr intPtr;
     TloError error = intPtrConstruct(&intPtr, (int)i);
     TLO_ASSERT(!error);
@@ -305,13 +307,13 @@ void testListIntPtrPushBackManyTimesUnorderedRemoveFrontUntilEmpty(
     tloPtrDestruct(&intPtr);
   }
 
-  for (size_t i = SOME_NUMBER - 1; i <= SOME_NUMBER - 1; --i) {
+  for (size_t i = MAX_LIST_SIZE - 1; i <= MAX_LIST_SIZE - 1; --i) {
     EXPECT_LIST_PROPERTIES(intPtrs, i + 1, false, &intPtrType,
                            &countingAllocator);
 
-    if (i == SOME_NUMBER - 1) {
-      EXPECT_LIST_INTPTR_ELEMENTS(intPtrs, 0, SOME_NUMBER - 1, i,
-                                  SOME_NUMBER - 1);
+    if (i == MAX_LIST_SIZE - 1) {
+      EXPECT_LIST_INTPTR_ELEMENTS(intPtrs, 0, MAX_LIST_SIZE - 1, i,
+                                  MAX_LIST_SIZE - 1);
     } else if (i == 0) {
       EXPECT_LIST_INTPTR_ELEMENTS(intPtrs, 1, 1, i, 1);
     } else {
@@ -333,20 +335,20 @@ void testListIntPtrPushOrMoveFrontOnce(TloList *intPtrs, bool testCopy) {
   TloError error;
   if (testCopy) {
     IntPtr intPtr;
-    error = intPtrConstruct(&intPtr, SOME_NUMBER);
+    error = intPtrConstruct(&intPtr, MAX_LIST_SIZE);
     TLO_ASSERT(!error);
     error = tlovListPushFront(intPtrs, &intPtr);
     tloPtrDestruct(&intPtr);
   } else {
-    IntPtr *intPtr = intPtrMake(SOME_NUMBER);
+    IntPtr *intPtr = intPtrMake(MAX_LIST_SIZE);
     TLO_ASSERT(intPtr);
     error = tlovListMoveFront(intPtrs, intPtr);
   }
   TLO_ASSERT(!error);
 
   EXPECT_LIST_PROPERTIES(intPtrs, 1, false, &intPtrType, &countingAllocator);
-  EXPECT_LIST_INTPTR_ELEMENTS(intPtrs, SOME_NUMBER, SOME_NUMBER, 0,
-                              SOME_NUMBER);
+  EXPECT_LIST_INTPTR_ELEMENTS(intPtrs, MAX_LIST_SIZE, MAX_LIST_SIZE, 0,
+                              MAX_LIST_SIZE);
 
   tloListDelete(intPtrs);
 }
@@ -355,7 +357,7 @@ void testListIntPtrPushOrMoveFrontManyTimes(TloList *intPtrs, bool testCopy) {
   TLO_ASSERT(intPtrs);
   TLO_ASSERT(tloListHasFunctions(intPtrs, TLO_LIST_PUSH_FRONT));
 
-  for (size_t i = 0; i < SOME_NUMBER; ++i) {
+  for (size_t i = 0; i < MAX_LIST_SIZE; ++i) {
     TloError error;
     if (testCopy) {
       IntPtr intPtr;
@@ -384,7 +386,7 @@ void testListIntPtrPushFrontOncePopFrontOnce(TloList *intPtrs) {
       tloListHasFunctions(intPtrs, TLO_LIST_PUSH_FRONT | TLO_LIST_POP_FRONT));
 
   IntPtr intPtr;
-  TloError error = intPtrConstruct(&intPtr, SOME_NUMBER);
+  TloError error = intPtrConstruct(&intPtr, MAX_LIST_SIZE);
   TLO_ASSERT(!error);
   error = tlovListPushFront(intPtrs, &intPtr);
   TLO_ASSERT(!error);
@@ -402,7 +404,7 @@ void testListIntPtrPushFrontManyTimesPopFrontUntilEmpty(TloList *intPtrs) {
   TLO_ASSERT(
       tloListHasFunctions(intPtrs, TLO_LIST_PUSH_FRONT | TLO_LIST_POP_FRONT));
 
-  for (size_t i = 0; i < SOME_NUMBER; ++i) {
+  for (size_t i = 0; i < MAX_LIST_SIZE; ++i) {
     IntPtr intPtr;
     TloError error = intPtrConstruct(&intPtr, (int)i);
     TLO_ASSERT(!error);
@@ -411,7 +413,7 @@ void testListIntPtrPushFrontManyTimesPopFrontUntilEmpty(TloList *intPtrs) {
     tloPtrDestruct(&intPtr);
   }
 
-  for (size_t i = SOME_NUMBER - 1; i <= SOME_NUMBER - 1; --i) {
+  for (size_t i = MAX_LIST_SIZE - 1; i <= MAX_LIST_SIZE - 1; --i) {
     EXPECT_LIST_PROPERTIES(intPtrs, i + 1, false, &intPtrType,
                            &countingAllocator);
     EXPECT_LIST_INTPTR_ELEMENTS(intPtrs, (int)i, 0, i, 0);

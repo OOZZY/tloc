@@ -5,7 +5,7 @@
 #include <tlo/test.h>
 #include "util.h"
 
-enum { SOME_NUMBER = 42 };
+enum { MAX_LIST_SIZE = 42 };
 
 #define EXPECT_LIST_PROPERTIES(_list, _size, _isEmpty, _valueType, _allocator) \
   do {                                                                         \
