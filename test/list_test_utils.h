@@ -52,25 +52,25 @@ enum { MAX_LIST_SIZE = 42 };
 void testListDeleteWithNull(void);
 void testListHasFunctions(TloList *list, unsigned char functions);
 
-void testListIntPushOrMoveBackOnce(TloList *ints, bool testCopy);
-void testListIntPushOrMoveBackManyTimes(TloList *ints, bool testCopy);
+void testListIntPushBackOnce(TloList *ints, bool testCopy);
+void testListIntPushBackManyTimes(TloList *ints, bool testCopy);
 void testListIntPushBackOncePopBackOnce(TloList *ints);
 void testListIntPushBackManyTimesPopBackUntilEmpty(TloList *ints);
-void testListIntPushOrMoveFrontOnce(TloList *ints, bool testCopy);
-void testListIntPushOrMoveFrontManyTimes(TloList *ints, bool testCopy);
+void testListIntPushFrontOnce(TloList *ints, bool testCopy);
+void testListIntPushFrontManyTimes(TloList *ints, bool testCopy);
 void testListIntPushFrontOncePopFrontOnce(TloList *ints);
 void testListIntPushFrontManyTimesPopFrontUntilEmpty(TloList *ints);
 
-void testListIntPtrPushOrMoveBackOnce(TloList *intPtrs, bool testCopy);
-void testListIntPtrPushOrMoveBackManyTimes(TloList *intPtrs, bool testCopy);
+void testListIntPtrPushBackOnce(TloList *intPtrs, bool testCopy);
+void testListIntPtrPushBackManyTimes(TloList *intPtrs, bool testCopy);
 void testListIntPtrPushBackOncePopBackOnce(TloList *intPtrs);
 void testListIntPtrPushBackManyTimesPopBackUntilEmpty(TloList *intPtrs);
 void testListIntPtrPushBackManyTimesUnorderedRemoveBackUntilEmpty(
     TloList *intPtrs);
 void testListIntPtrPushBackManyTimesUnorderedRemoveFrontUntilEmpty(
     TloList *intPtrs);
-void testListIntPtrPushOrMoveFrontOnce(TloList *intPtrs, bool testCopy);
-void testListIntPtrPushOrMoveFrontManyTimes(TloList *intPtrs, bool testCopy);
+void testListIntPtrPushFrontOnce(TloList *intPtrs, bool testCopy);
+void testListIntPtrPushFrontManyTimes(TloList *intPtrs, bool testCopy);
 void testListIntPtrPushFrontOncePopFrontOnce(TloList *intPtrs);
 void testListIntPtrPushFrontManyTimesPopFrontUntilEmpty(TloList *intPtrs);
 

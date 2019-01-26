@@ -8,7 +8,7 @@ void testListHasFunctions(TloList *list, unsigned char functions) {
   tloListDelete(list);
 }
 
-void testListIntPushOrMoveBackOnce(TloList *ints, bool testCopy) {
+void testListIntPushBackOnce(TloList *ints, bool testCopy) {
   TLO_ASSERT(ints);
 
   TloError error;
@@ -29,7 +29,7 @@ void testListIntPushOrMoveBackOnce(TloList *ints, bool testCopy) {
   tloListDelete(ints);
 }
 
-void testListIntPushOrMoveBackManyTimes(TloList *ints, bool testCopy) {
+void testListIntPushBackManyTimes(TloList *ints, bool testCopy) {
   TLO_ASSERT(ints);
 
   for (size_t i = 0; i < MAX_LIST_SIZE; ++i) {
@@ -88,7 +88,7 @@ void testListIntPushBackManyTimesPopBackUntilEmpty(TloList *ints) {
   tloListDelete(ints);
 }
 
-void testListIntPushOrMoveFrontOnce(TloList *ints, bool testCopy) {
+void testListIntPushFrontOnce(TloList *ints, bool testCopy) {
   TLO_ASSERT(ints);
   TLO_ASSERT(tloListHasFunctions(ints, TLO_LIST_PUSH_FRONT));
 
@@ -110,7 +110,7 @@ void testListIntPushOrMoveFrontOnce(TloList *ints, bool testCopy) {
   tloListDelete(ints);
 }
 
-void testListIntPushOrMoveFrontManyTimes(TloList *ints, bool testCopy) {
+void testListIntPushFrontManyTimes(TloList *ints, bool testCopy) {
   TLO_ASSERT(ints);
   TLO_ASSERT(tloListHasFunctions(ints, TLO_LIST_PUSH_FRONT));
 
@@ -172,7 +172,7 @@ void testListIntPushFrontManyTimesPopFrontUntilEmpty(TloList *ints) {
   tloListDelete(ints);
 }
 
-void testListIntPtrPushOrMoveBackOnce(TloList *intPtrs, bool testCopy) {
+void testListIntPtrPushBackOnce(TloList *intPtrs, bool testCopy) {
   TLO_ASSERT(intPtrs);
 
   TloError error;
@@ -196,7 +196,7 @@ void testListIntPtrPushOrMoveBackOnce(TloList *intPtrs, bool testCopy) {
   tloListDelete(intPtrs);
 }
 
-void testListIntPtrPushOrMoveBackManyTimes(TloList *intPtrs, bool testCopy) {
+void testListIntPtrPushBackManyTimes(TloList *intPtrs, bool testCopy) {
   TLO_ASSERT(intPtrs);
 
   for (size_t i = 0; i < MAX_LIST_SIZE; ++i) {
@@ -328,7 +328,7 @@ void testListIntPtrPushBackManyTimesUnorderedRemoveFrontUntilEmpty(
   tloListDelete(intPtrs);
 }
 
-void testListIntPtrPushOrMoveFrontOnce(TloList *intPtrs, bool testCopy) {
+void testListIntPtrPushFrontOnce(TloList *intPtrs, bool testCopy) {
   TLO_ASSERT(intPtrs);
   TLO_ASSERT(tloListHasFunctions(intPtrs, TLO_LIST_PUSH_FRONT));
 
@@ -353,7 +353,7 @@ void testListIntPtrPushOrMoveFrontOnce(TloList *intPtrs, bool testCopy) {
   tloListDelete(intPtrs);
 }
 
-void testListIntPtrPushOrMoveFrontManyTimes(TloList *intPtrs, bool testCopy) {
+void testListIntPtrPushFrontManyTimes(TloList *intPtrs, bool testCopy) {
   TLO_ASSERT(intPtrs);
   TLO_ASSERT(tloListHasFunctions(intPtrs, TLO_LIST_PUSH_FRONT));
 

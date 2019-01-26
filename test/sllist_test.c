@@ -164,25 +164,25 @@ void testSLList(void) {
 
   testListHasFunctions(makeListInt(), TLO_LIST_PUSH_FRONT | TLO_LIST_POP_FRONT);
 
-  testListIntPushOrMoveBackOnce(makeListInt(), true);
-  testListIntPushOrMoveBackOnce(makeListInt(), false);
-  testListIntPushOrMoveBackManyTimes(makeListInt(), true);
-  testListIntPushOrMoveBackManyTimes(makeListInt(), false);
-  testListIntPushOrMoveFrontOnce(makeListInt(), true);
-  testListIntPushOrMoveFrontOnce(makeListInt(), false);
-  testListIntPushOrMoveFrontManyTimes(makeListInt(), true);
-  testListIntPushOrMoveFrontManyTimes(makeListInt(), false);
+  testListIntPushBackOnce(makeListInt(), true);
+  testListIntPushBackOnce(makeListInt(), false);
+  testListIntPushBackManyTimes(makeListInt(), true);
+  testListIntPushBackManyTimes(makeListInt(), false);
+  testListIntPushFrontOnce(makeListInt(), true);
+  testListIntPushFrontOnce(makeListInt(), false);
+  testListIntPushFrontManyTimes(makeListInt(), true);
+  testListIntPushFrontManyTimes(makeListInt(), false);
   testListIntPushFrontOncePopFrontOnce(makeListInt());
   testListIntPushFrontManyTimesPopFrontUntilEmpty(makeListInt());
 
-  testListIntPtrPushOrMoveBackOnce(makeListIntPtr(), true);
-  testListIntPtrPushOrMoveBackOnce(makeListIntPtr(), false);
-  testListIntPtrPushOrMoveBackManyTimes(makeListIntPtr(), true);
-  testListIntPtrPushOrMoveBackManyTimes(makeListIntPtr(), false);
-  testListIntPtrPushOrMoveFrontOnce(makeListIntPtr(), true);
-  testListIntPtrPushOrMoveFrontOnce(makeListIntPtr(), false);
-  testListIntPtrPushOrMoveFrontManyTimes(makeListIntPtr(), true);
-  testListIntPtrPushOrMoveFrontManyTimes(makeListIntPtr(), false);
+  testListIntPtrPushBackOnce(makeListIntPtr(), true);
+  testListIntPtrPushBackOnce(makeListIntPtr(), false);
+  testListIntPtrPushBackManyTimes(makeListIntPtr(), true);
+  testListIntPtrPushBackManyTimes(makeListIntPtr(), false);
+  testListIntPtrPushFrontOnce(makeListIntPtr(), true);
+  testListIntPtrPushFrontOnce(makeListIntPtr(), false);
+  testListIntPtrPushFrontManyTimes(makeListIntPtr(), true);
+  testListIntPtrPushFrontManyTimes(makeListIntPtr(), false);
   testListIntPtrPushFrontOncePopFrontOnce(makeListIntPtr());
   testListIntPtrPushFrontManyTimesPopFrontUntilEmpty(makeListIntPtr());
 

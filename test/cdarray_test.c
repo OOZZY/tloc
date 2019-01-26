@@ -254,33 +254,33 @@ void testCDArray(void) {
                            TLO_LIST_PUSH_FRONT | TLO_LIST_POP_FRONT |
                            TLO_LIST_POP_BACK | TLO_LIST_UNORDERED_REMOVE);
 
-  testListIntPushOrMoveBackOnce(makeListInt(), true);
-  testListIntPushOrMoveBackOnce(makeListInt(), false);
-  testListIntPushOrMoveBackManyTimes(makeListInt(), true);
-  testListIntPushOrMoveBackManyTimes(makeListInt(), false);
+  testListIntPushBackOnce(makeListInt(), true);
+  testListIntPushBackOnce(makeListInt(), false);
+  testListIntPushBackManyTimes(makeListInt(), true);
+  testListIntPushBackManyTimes(makeListInt(), false);
   testListIntPushBackOncePopBackOnce(makeListInt());
   testListIntPushBackManyTimesPopBackUntilEmpty(makeListInt());
-  testListIntPushOrMoveFrontOnce(makeListInt(), true);
-  testListIntPushOrMoveFrontOnce(makeListInt(), false);
-  testListIntPushOrMoveFrontManyTimes(makeListInt(), true);
-  testListIntPushOrMoveFrontManyTimes(makeListInt(), false);
+  testListIntPushFrontOnce(makeListInt(), true);
+  testListIntPushFrontOnce(makeListInt(), false);
+  testListIntPushFrontManyTimes(makeListInt(), true);
+  testListIntPushFrontManyTimes(makeListInt(), false);
   testListIntPushFrontOncePopFrontOnce(makeListInt());
   testListIntPushFrontManyTimesPopFrontUntilEmpty(makeListInt());
 
-  testListIntPtrPushOrMoveBackOnce(makeListIntPtr(), true);
-  testListIntPtrPushOrMoveBackOnce(makeListIntPtr(), false);
-  testListIntPtrPushOrMoveBackManyTimes(makeListIntPtr(), true);
-  testListIntPtrPushOrMoveBackManyTimes(makeListIntPtr(), false);
+  testListIntPtrPushBackOnce(makeListIntPtr(), true);
+  testListIntPtrPushBackOnce(makeListIntPtr(), false);
+  testListIntPtrPushBackManyTimes(makeListIntPtr(), true);
+  testListIntPtrPushBackManyTimes(makeListIntPtr(), false);
   testListIntPtrPushBackOncePopBackOnce(makeListIntPtr());
   testListIntPtrPushBackManyTimesPopBackUntilEmpty(makeListIntPtr());
   testListIntPtrPushBackManyTimesUnorderedRemoveBackUntilEmpty(
       makeListIntPtr());
   testListIntPtrPushBackManyTimesUnorderedRemoveFrontUntilEmpty(
       makeListIntPtr());
-  testListIntPtrPushOrMoveFrontOnce(makeListIntPtr(), true);
-  testListIntPtrPushOrMoveFrontOnce(makeListIntPtr(), false);
-  testListIntPtrPushOrMoveFrontManyTimes(makeListIntPtr(), true);
-  testListIntPtrPushOrMoveFrontManyTimes(makeListIntPtr(), false);
+  testListIntPtrPushFrontOnce(makeListIntPtr(), true);
+  testListIntPtrPushFrontOnce(makeListIntPtr(), false);
+  testListIntPtrPushFrontManyTimes(makeListIntPtr(), true);
+  testListIntPtrPushFrontManyTimes(makeListIntPtr(), false);
   testListIntPtrPushFrontOncePopFrontOnce(makeListIntPtr());
   testListIntPtrPushFrontManyTimesPopFrontUntilEmpty(makeListIntPtr());
 

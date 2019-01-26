@@ -187,17 +187,17 @@ void testDArray(void) {
                                           TLO_LIST_POP_BACK |
                                           TLO_LIST_UNORDERED_REMOVE);
 
-  testListIntPushOrMoveBackOnce(makeListInt(), true);
-  testListIntPushOrMoveBackOnce(makeListInt(), false);
-  testListIntPushOrMoveBackManyTimes(makeListInt(), true);
-  testListIntPushOrMoveBackManyTimes(makeListInt(), false);
+  testListIntPushBackOnce(makeListInt(), true);
+  testListIntPushBackOnce(makeListInt(), false);
+  testListIntPushBackManyTimes(makeListInt(), true);
+  testListIntPushBackManyTimes(makeListInt(), false);
   testListIntPushBackOncePopBackOnce(makeListInt());
   testListIntPushBackManyTimesPopBackUntilEmpty(makeListInt());
 
-  testListIntPtrPushOrMoveBackOnce(makeListIntPtr(), true);
-  testListIntPtrPushOrMoveBackOnce(makeListIntPtr(), false);
-  testListIntPtrPushOrMoveBackManyTimes(makeListIntPtr(), true);
-  testListIntPtrPushOrMoveBackManyTimes(makeListIntPtr(), false);
+  testListIntPtrPushBackOnce(makeListIntPtr(), true);
+  testListIntPtrPushBackOnce(makeListIntPtr(), false);
+  testListIntPtrPushBackManyTimes(makeListIntPtr(), true);
+  testListIntPtrPushBackManyTimes(makeListIntPtr(), false);
   testListIntPtrPushBackOncePopBackOnce(makeListIntPtr());
   testListIntPtrPushBackManyTimesPopBackUntilEmpty(makeListIntPtr());
   testListIntPtrPushBackManyTimesUnorderedRemoveBackUntilEmpty(
