@@ -33,10 +33,16 @@ typedef struct TloSCHTableMap {
   TloSCHTable table;
 } TloSCHTableMap;
 
-void tloSCHTableSetConstruct(TloSCHTableSet *table, const TloType *valueType,
+void tloSCHTableSetConstruct(TloSCHTableSet *table, const TloType *keyType,
                              const TloAllocator *allocator);
 void tloSCHTableMapConstruct(TloSCHTableMap *table, const TloType *keyType,
                              const TloType *valueType,
                              const TloAllocator *allocator);
+
+TloSCHTableSet *tloSCHTableSetMake(const TloType *keyType,
+                                   const TloAllocator *allocator);
+TloSCHTableMap *tloSCHTableMapMake(const TloType *keyType,
+                                   const TloType *valueType,
+                                   const TloAllocator *allocator);
 
 #endif  // TLO_SCHTABLE_H

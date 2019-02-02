@@ -587,3 +587,43 @@ void tloSCHTableMapConstruct(TloSCHTableMap *htmap, const TloType *keyType,
   tloMapConstruct(&htmap->map, &mapVTable, keyType, valueType, allocator);
   schtableConstruct(&htmap->table);
 }
+
+TloSCHTableSet *tloSCHTableSetMake(const TloType *keyType,
+                                   const TloAllocator *allocator) {
+  assert(typeIsValid(keyType));
+
+  if (!allocator) {
+    allocator = &tloCStdLibAllocator;
+  }
+
+  assert(allocatorIsValid(allocator));
+
+  TloSCHTableSet *htset = allocator->malloc(sizeof(*htset));
+  if (!htset) {
+    return NULL;
+  }
+
+  tloSCHTableSetConstruct(htset, keyType, allocator);
+  return htset;
+}
+
+TloSCHTableMap *tloSCHTableMapMake(const TloType *keyType,
+                                   const TloType *valueType,
+                                   const TloAllocator *allocator) {
+  assert(typeIsValid(keyType));
+  assert(typeIsValid(valueType));
+
+  if (!allocator) {
+    allocator = &tloCStdLibAllocator;
+  }
+
+  assert(allocatorIsValid(allocator));
+
+  TloSCHTableMap *htmap = allocator->malloc(sizeof(*htmap));
+  if (!htmap) {
+    return NULL;
+  }
+
+  tloSCHTableMapConstruct(htmap, keyType, valueType, allocator);
+  return htmap;
+}
