@@ -9,6 +9,8 @@ unsigned long countingAllocatorMallocCount(void);
 unsigned long countingAllocatorFreeCount(void);
 unsigned long countingAllocatorTotalByteCount(void);
 void countingAllocatorPrintCounts(void);
+void testInitialCounts(void);
+void testFinalCounts(void);
 
 int *makeInt(int value);
 

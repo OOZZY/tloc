@@ -2,6 +2,7 @@
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <tlo/test.h>
 
 static unsigned long mallocCount = 0;
 static unsigned long freeCount = 0;
@@ -40,6 +41,20 @@ void countingAllocatorPrintCounts(void) {
   printf("malloc count: %lu\n", mallocCount);
   printf("free count: %lu\n", freeCount);
   printf("Total bytes allocated: %lu\n", totalByteCount);
+}
+
+void testInitialCounts(void) {
+  countingAllocatorResetCounts();
+  TLO_EXPECT(countingAllocatorMallocCount() == 0);
+  TLO_EXPECT(countingAllocatorMallocCount() == countingAllocatorFreeCount());
+  TLO_EXPECT(countingAllocatorTotalByteCount() == 0);
+}
+
+void testFinalCounts(void) {
+  TLO_EXPECT(countingAllocatorMallocCount() > 0);
+  TLO_EXPECT(countingAllocatorMallocCount() == countingAllocatorFreeCount());
+  TLO_EXPECT(countingAllocatorTotalByteCount() > 0);
+  countingAllocatorPrintCounts();
 }
 
 int *makeInt(int value) {

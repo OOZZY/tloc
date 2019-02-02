@@ -6,13 +6,6 @@
 #include "list_test_utils.h"
 #include "util.h"
 
-static void testDLListInitialCounts() {
-  countingAllocatorResetCounts();
-  TLO_EXPECT(countingAllocatorMallocCount() == 0);
-  TLO_EXPECT(countingAllocatorMallocCount() == countingAllocatorFreeCount());
-  TLO_EXPECT(countingAllocatorTotalByteCount() == 0);
-}
-
 static void testDLListIntConstructDestruct(void) {
   TloDLList ints;
 
@@ -135,16 +128,6 @@ static void testDLListIntCopy(void) {
   tloListDelete(&copy->list);
 }
 
-static void testDLListFinalCounts() {
-  TLO_EXPECT(countingAllocatorMallocCount() > 0);
-  TLO_EXPECT(countingAllocatorMallocCount() == countingAllocatorFreeCount());
-  TLO_EXPECT(countingAllocatorTotalByteCount() > 0);
-
-  printf("sizeof(TloDLList): %zu\n", sizeof(TloDLList));
-  printf("sizeof(TloDLLNode): %zu\n", sizeof(TloDLLNode));
-  countingAllocatorPrintCounts();
-}
-
 static TloList *makeListInt(void) {
   return (TloList *)tloDLListMake(&tloInt, &countingAllocator);
 }
@@ -154,7 +137,7 @@ static TloList *makeListIntPtr(void) {
 }
 
 void testDLList(void) {
-  testDLListInitialCounts();
+  testInitialCounts();
 
   testDLListIntConstructDestruct();
   testDLListIntMakeDelete();
@@ -191,7 +174,9 @@ void testDLList(void) {
   testListIntPtrPushFrontOncePopFrontOnce(makeListIntPtr());
   testListIntPtrPushFrontManyTimesPopFrontUntilEmpty(makeListIntPtr());
 
-  testDLListFinalCounts();
+  printf("sizeof(TloDLList): %zu\n", sizeof(TloDLList));
+  printf("sizeof(TloDLLNode): %zu\n", sizeof(TloDLLNode));
+  testFinalCounts();
   puts("==================");
   puts("DLList tests done.");
   puts("==================");

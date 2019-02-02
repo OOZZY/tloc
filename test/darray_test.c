@@ -6,13 +6,6 @@
 #include "list_test_utils.h"
 #include "util.h"
 
-static void testDArrayInitialCounts(void) {
-  countingAllocatorResetCounts();
-  TLO_EXPECT(countingAllocatorMallocCount() == 0);
-  TLO_EXPECT(countingAllocatorMallocCount() == countingAllocatorFreeCount());
-  TLO_EXPECT(countingAllocatorTotalByteCount() == 0);
-}
-
 static void testDArrayIntConstructDestruct(void) {
   TloDArray ints;
 
@@ -155,15 +148,6 @@ static void testDArrayIntCopy(void) {
   tloListDelete(&copy->list);
 }
 
-static void testDArrayFinalCounts() {
-  TLO_EXPECT(countingAllocatorMallocCount() > 0);
-  TLO_EXPECT(countingAllocatorMallocCount() == countingAllocatorFreeCount());
-  TLO_EXPECT(countingAllocatorTotalByteCount() > 0);
-
-  printf("sizeof(TloDArray): %zu\n", sizeof(TloDArray));
-  countingAllocatorPrintCounts();
-}
-
 static TloList *makeListInt(void) {
   return (TloList *)tloDArrayMake(&tloInt, &countingAllocator, 0);
 }
@@ -173,7 +157,7 @@ static TloList *makeListIntPtr(void) {
 }
 
 void testDArray(void) {
-  testDArrayInitialCounts();
+  testInitialCounts();
 
   testDArrayIntConstructDestruct();
   testDArrayIntConstructWithCapacityDestruct();
@@ -205,7 +189,8 @@ void testDArray(void) {
   testListIntPtrPushBackManyTimesUnorderedRemoveFrontUntilEmpty(
       makeListIntPtr());
 
-  testDArrayFinalCounts();
+  printf("sizeof(TloDArray): %zu\n", sizeof(TloDArray));
+  testFinalCounts();
   puts("==================");
   puts("DArray tests done.");
   puts("==================");

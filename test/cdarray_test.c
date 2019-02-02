@@ -6,13 +6,6 @@
 #include "list_test_utils.h"
 #include "util.h"
 
-static void testCDArrayInitialCounts(void) {
-  countingAllocatorResetCounts();
-  TLO_EXPECT(countingAllocatorMallocCount() == 0);
-  TLO_EXPECT(countingAllocatorMallocCount() == countingAllocatorFreeCount());
-  TLO_EXPECT(countingAllocatorTotalByteCount() == 0);
-}
-
 static void testCDArrayIntConstructDestruct(void) {
   TloCDArray ints;
 
@@ -221,15 +214,6 @@ static void testCDArrayIntShrinkWhenElementsWrapAround(void) {
   tloListDelete(&ints->list);
 }
 
-static void testCDArrayFinalCounts() {
-  TLO_EXPECT(countingAllocatorMallocCount() > 0);
-  TLO_EXPECT(countingAllocatorMallocCount() == countingAllocatorFreeCount());
-  TLO_EXPECT(countingAllocatorTotalByteCount() > 0);
-
-  printf("sizeof(TloCDArray): %zu\n", sizeof(TloCDArray));
-  countingAllocatorPrintCounts();
-}
-
 static TloList *makeListInt(void) {
   return (TloList *)tloCDArrayMake(&tloInt, &countingAllocator, 0);
 }
@@ -239,7 +223,7 @@ static TloList *makeListIntPtr(void) {
 }
 
 void testCDArray(void) {
-  testCDArrayInitialCounts();
+  testInitialCounts();
 
   testCDArrayIntConstructDestruct();
   testCDArrayIntConstructWithCapacityDestruct();
@@ -285,7 +269,9 @@ void testCDArray(void) {
   testListIntPtrPushFrontManyTimesPopFrontUntilEmpty(makeListIntPtr());
 
   testCDArrayIntShrinkWhenElementsWrapAround();
-  testCDArrayFinalCounts();
+
+  printf("sizeof(TloCDArray): %zu\n", sizeof(TloCDArray));
+  testFinalCounts();
   puts("===================");
   puts("CDArray tests done.");
   puts("===================");
