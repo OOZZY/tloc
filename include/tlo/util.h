@@ -87,6 +87,9 @@ typedef struct TloAllocator {
   void (*free)(void *memory);
 } TloAllocator;
 
+void *tloAllocatorMallocAndZeroInitialize(const TloAllocator *allocator,
+                                          size_t size);
+
 extern const TloAllocator tloCStdLibAllocator;
 
 void tloPtrDestruct(void *ptr);

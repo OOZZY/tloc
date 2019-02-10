@@ -70,6 +70,19 @@ static int intCompare(const void *object1, const void *object2) {
 
 const TloType tloInt = {.size = sizeof(int), .compare = intCompare};
 
+void *tloAllocatorMallocAndZeroInitialize(const TloAllocator *allocator,
+                                          size_t size) {
+  assert(allocatorIsValid(allocator));
+
+  void *memory = allocator->malloc(size);
+  if (!memory) {
+    return NULL;
+  }
+
+  memset(memory, 0, size);
+  return memory;
+}
+
 const TloAllocator tloCStdLibAllocator = {.malloc = malloc, .free = free};
 
 void tloPtrDestruct(void *ptr) {

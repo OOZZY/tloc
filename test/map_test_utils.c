@@ -44,3 +44,48 @@ void testMapIntIntInsertOnce(TloMap *intsToInts, bool testCopy) {
 
   tloMapDelete(intsToInts);
 }
+
+void testMapIntIntInsertManyTimes(TloMap *intsToInts, bool testCopy) {
+  TLO_ASSERT(intsToInts);
+
+  for (size_t i = 0; i < MAX_MAP_SIZE; ++i) {
+    TloError error;
+
+    if (testCopy) {
+      int key = (int)i;
+      int value = keyToValue(key);
+
+      error = tlovMapInsert(intsToInts, &key, &value);
+      TLO_ASSERT(!error);
+
+      error = tlovMapInsert(intsToInts, &key, &value);
+      TLO_ASSERT(error == TLO_DUPLICATE);
+    } else {
+      int *key = makeInt((int)i);
+      TLO_ASSERT(key);
+      int *value = makeInt(keyToValue(*key));
+      TLO_ASSERT(value);
+      error = tlovMapMoveInsert(intsToInts, key, value);
+      TLO_ASSERT(!error);
+
+      key = makeInt((int)i);
+      TLO_ASSERT(key);
+      value = makeInt(keyToValue(*key));
+      TLO_ASSERT(value);
+      error = tlovMapMoveInsert(intsToInts, key, value);
+      TLO_ASSERT(error == TLO_DUPLICATE);
+      countingAllocator.free(key);
+      countingAllocator.free(value);
+    }
+
+    EXPECT_MAP_PROPERTIES(intsToInts, i + 1, false, &tloInt, &tloInt,
+                          &countingAllocator);
+
+    int key = (int)i;
+    int value = keyToValue(key);
+    const void *result = tlovMapFind(intsToInts, &key);
+    TLO_EXPECT(result && *(const int *)result == value);
+  }
+
+  tloMapDelete(intsToInts);
+}

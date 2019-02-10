@@ -295,13 +295,10 @@ enum { STARTING_CAPACITY = 1 };
 static TloError allocateArrayIfNeeded(TloSCHTable *table,
                                       const TloAllocator *allocator) {
   if (!table->array) {
-    table->array = allocator->malloc(STARTING_CAPACITY * sizeof(*table->array));
+    table->array = tloAllocatorMallocAndZeroInitialize(
+        allocator, STARTING_CAPACITY * sizeof(*table->array));
     if (!table->array) {
       return TLO_ERROR;
-    }
-
-    for (int i = 0; i < STARTING_CAPACITY; ++i) {
-      table->array[i] = NULL;
     }
 
     table->capacity = STARTING_CAPACITY;
@@ -330,8 +327,8 @@ static TloError expandArrayIfNeeded(TloSCHTable *table, const TloType *keyType,
 
     newTable.size = 0;
     newTable.capacity = table->capacity * 2;
-    newTable.array =
-        allocator->malloc(newTable.capacity * sizeof(*newTable.array));
+    newTable.array = tloAllocatorMallocAndZeroInitialize(
+        allocator, newTable.capacity * sizeof(*newTable.array));
     if (!newTable.array) {
       return TLO_ERROR;
     }
@@ -487,8 +484,8 @@ static void shrinkArrayIfNeeded(TloSCHTable *table, const TloType *keyType,
 
     newTable.size = 0;
     newTable.capacity = table->capacity / 2;
-    newTable.array =
-        allocator->malloc(newTable.capacity * sizeof(*newTable.array));
+    newTable.array = tloAllocatorMallocAndZeroInitialize(
+        allocator, newTable.capacity * sizeof(*newTable.array));
     if (!newTable.array) {
       return;
     }
