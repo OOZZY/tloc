@@ -36,7 +36,7 @@ void tloSetDelete(TloSet *set) {
   set->allocator->free(set);
 }
 
-const TloType *tloSetValueType(const TloSet *set) {
+const TloType *tloSetKeyType(const TloSet *set) {
   assert(setIsValid(set));
 
   return set->keyType;

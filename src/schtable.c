@@ -120,8 +120,14 @@ typedef struct FindResult {
 static void find(const TloSCHTable *table, const TloType *keyType,
                  const void *key, FindResult *result) {
   result->hash = tloTypeHash(keyType, key);
-  result->index = result->hash % table->capacity;
   result->prev = NULL;
+  result->node = NULL;
+
+  if (!table->capacity) {
+    return;
+  }
+
+  result->index = result->hash % table->capacity;
 
   for (TloSCHTNode *node = table->array[result->index]; node;
        node = node->next) {
@@ -134,7 +140,6 @@ static void find(const TloSCHTable *table, const TloType *keyType,
   }
 
   result->prev = NULL;
-  result->node = NULL;
 }
 
 static const void *schtableSetFind(const TloSet *set, const void *key) {
@@ -543,7 +548,8 @@ static bool schtableMapRemove(TloMap *map, const void *key) {
   return true;
 }
 
-static const TloSetVTable setVTable = {.destruct = schtableSetDestruct,
+static const TloSetVTable setVTable = {.type = "TloSCHTableSet",
+                                       .destruct = schtableSetDestruct,
                                        .size = schtableSetSize,
                                        .isEmpty = schtableSetIsEmpty,
                                        .find = schtableSetFind,
@@ -551,7 +557,8 @@ static const TloSetVTable setVTable = {.destruct = schtableSetDestruct,
                                        .moveInsert = schtableSetMoveInsert,
                                        .remove = schtableSetRemove};
 
-static const TloMapVTable mapVTable = {.destruct = schtableMapDestruct,
+static const TloMapVTable mapVTable = {.type = "TloSCHTableMap",
+                                       .destruct = schtableMapDestruct,
                                        .size = schtableMapSize,
                                        .isEmpty = schtableMapIsEmpty,
                                        .find = schtableMapFind,

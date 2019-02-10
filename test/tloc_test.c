@@ -5,6 +5,7 @@
 #include "darray_test.h"
 #include "dllist_test.h"
 #include "list_test_utils.h"
+#include "schtable_test.h"
 #include "sllist_test.h"
 #include "statistics_test.h"
 
@@ -25,6 +26,7 @@ int main(void) {
   testCDArray();
   testDLList();
   testStatistics();
+  testSCHTable();
   tloStopwatchStop(&stopwatch);
 
   puts("===============");

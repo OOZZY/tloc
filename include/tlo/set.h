@@ -34,7 +34,7 @@ void tloSetConstruct(TloSet *set, const TloSetVTable *vTable,
  */
 void tloSetDelete(TloSet *set);
 
-const TloType *tloSetValueType(const TloSet *set);
+const TloType *tloSetKeyType(const TloSet *set);
 const TloAllocator *tloSetAllocator(const TloSet *set);
 
 const char *tlovSetType(const TloSet *set);
