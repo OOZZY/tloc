@@ -23,7 +23,7 @@ static void checkCollisions(TloHashFunction hashFunction, size_t numBuckets,
 }
 
 #define CHECK_COLLISIONS(_hashFunction, _numBuckets, _numElements) \
-  checkCollisions(_hashFunction, _numBuckets, _numElements, #_hashFunction);
+  checkCollisions(_hashFunction, _numBuckets, _numElements, #_hashFunction)
 
 int main(int argc, char *argv[]) {
   if (argc < 3) {
