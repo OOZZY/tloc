@@ -11,24 +11,24 @@ void testMapIntIntInsertOnce(TloMap *intsToInts, bool testCopy) {
     int key = MAX_MAP_SIZE;
     int value = keyToValue(key);
 
-    error = tlovMapInsert(intsToInts, &key, &value);
+    error = tlovMapInsert(intsToInts, TLO_COPY, &key, TLO_COPY, &value);
     TLO_ASSERT(!error);
 
-    error = tlovMapInsert(intsToInts, &key, &value);
+    error = tlovMapInsert(intsToInts, TLO_COPY, &key, TLO_COPY, &value);
     TLO_ASSERT(error == TLO_DUPLICATE);
   } else {
     int *key = makeInt(MAX_MAP_SIZE);
     TLO_ASSERT(key);
     int *value = makeInt(keyToValue(*key));
     TLO_ASSERT(value);
-    error = tlovMapMoveInsert(intsToInts, key, value);
+    error = tlovMapInsert(intsToInts, TLO_MOVE, key, TLO_MOVE, value);
     TLO_ASSERT(!error);
 
     key = makeInt(MAX_MAP_SIZE);
     TLO_ASSERT(key);
     value = makeInt(keyToValue(*key));
     TLO_ASSERT(value);
-    error = tlovMapMoveInsert(intsToInts, key, value);
+    error = tlovMapInsert(intsToInts, TLO_MOVE, key, TLO_MOVE, value);
     TLO_ASSERT(error == TLO_DUPLICATE);
     countingAllocator.free(key);
     countingAllocator.free(value);
@@ -55,24 +55,24 @@ void testMapIntIntInsertManyTimes(TloMap *intsToInts, bool testCopy) {
       int key = (int)i;
       int value = keyToValue(key);
 
-      error = tlovMapInsert(intsToInts, &key, &value);
+      error = tlovMapInsert(intsToInts, TLO_COPY, &key, TLO_COPY, &value);
       TLO_ASSERT(!error);
 
-      error = tlovMapInsert(intsToInts, &key, &value);
+      error = tlovMapInsert(intsToInts, TLO_COPY, &key, TLO_COPY, &value);
       TLO_ASSERT(error == TLO_DUPLICATE);
     } else {
       int *key = makeInt((int)i);
       TLO_ASSERT(key);
       int *value = makeInt(keyToValue(*key));
       TLO_ASSERT(value);
-      error = tlovMapMoveInsert(intsToInts, key, value);
+      error = tlovMapInsert(intsToInts, TLO_MOVE, key, TLO_MOVE, value);
       TLO_ASSERT(!error);
 
       key = makeInt((int)i);
       TLO_ASSERT(key);
       value = makeInt(keyToValue(*key));
       TLO_ASSERT(value);
-      error = tlovMapMoveInsert(intsToInts, key, value);
+      error = tlovMapInsert(intsToInts, TLO_MOVE, key, TLO_MOVE, value);
       TLO_ASSERT(error == TLO_DUPLICATE);
       countingAllocator.free(key);
       countingAllocator.free(value);

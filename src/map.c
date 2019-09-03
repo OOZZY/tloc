@@ -4,8 +4,7 @@
 
 static bool mapVTableIsValid(const TloMapVTable *vTable) {
   return vTable && vTable->type && vTable->destruct && vTable->size &&
-         vTable->isEmpty && vTable->find && vTable->insert &&
-         vTable->moveInsert && vTable->remove;
+         vTable->isEmpty && vTable->find && vTable->insert && vTable->remove;
 }
 
 void tloMapConstruct(TloMap *map, const TloMapVTable *vTable,
@@ -93,16 +92,12 @@ void *tlovMapFindMutable(TloMap *map, const void *key) {
   return map->vTable->findMutable(map, key);
 }
 
-TloError tlovMapInsert(TloMap *map, const void *key, const void *value) {
+TloError tlovMapInsert(TloMap *map, TloInsertMethod keyInsertMethod, void *key,
+                       TloInsertMethod valueInsertMethod, void *value) {
   assert(mapIsValid(map));
 
-  return map->vTable->insert(map, key, value);
-}
-
-TloError tlovMapMoveInsert(TloMap *map, void *key, void *value) {
-  assert(mapIsValid(map));
-
-  return map->vTable->moveInsert(map, key, value);
+  return map->vTable->insert(map, keyInsertMethod, key, valueInsertMethod,
+                             value);
 }
 
 bool tlovMapRemove(TloMap *map, const void *key) {

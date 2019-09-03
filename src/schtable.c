@@ -214,42 +214,6 @@ error0:
   return NULL;
 }
 
-static TloSCHTNode *makeMapNodeWithCopiedData(const TloMap *map,
-                                              const void *key,
-                                              const void *value) {
-  TloSCHTNode *node = map->allocator->malloc(sizeof(*node));
-  if (!node) {
-    goto error0;
-  }
-
-  node->data =
-      map->allocator->malloc(map->keyType->size + map->valueType->size);
-  if (!node->data) {
-    goto error1;
-  }
-
-  if (tloTypeConstructCopy(map->keyType, node->data, key) != TLO_SUCCESS) {
-    goto error2;
-  }
-
-  if (tloTypeConstructCopy(map->valueType, node->data + map->keyType->size,
-                           value) != TLO_SUCCESS) {
-    goto error3;
-  }
-
-  node->next = NULL;
-  return node;
-
-error3:
-  tloTypeDestruct(map->keyType, node->data);
-error2:
-  map->allocator->free(node->data);
-error1:
-  map->allocator->free(node);
-error0:
-  return NULL;
-}
-
 static TloSCHTNode *makeSetNodeWithMovedData(const TloAllocator *allocator,
                                              void *key) {
   TloSCHTNode *node = allocator->malloc(sizeof(*node));
@@ -262,8 +226,10 @@ static TloSCHTNode *makeSetNodeWithMovedData(const TloAllocator *allocator,
   return node;
 }
 
-static TloSCHTNode *makeMapNodeWithMovedData(const TloMap *map, void *key,
-                                             void *value) {
+static TloSCHTNode *makeMapNode(const TloMap *map,
+                                TloInsertMethod keyInsertMethod, void *key,
+                                TloInsertMethod valueInsertMethod,
+                                void *value) {
   TloSCHTNode *node = map->allocator->malloc(sizeof(*node));
   if (!node) {
     goto error0;
@@ -275,15 +241,36 @@ static TloSCHTNode *makeMapNodeWithMovedData(const TloMap *map, void *key,
     goto error1;
   }
 
-  memcpy(node->data, key, map->keyType->size);
-  map->allocator->free(key);
+  if (keyInsertMethod == TLO_COPY) {
+    if (tloTypeConstructCopy(map->keyType, node->data, key) != TLO_SUCCESS) {
+      goto error2;
+    }
+  } else if (valueInsertMethod == TLO_MOVE) {
+    memcpy(node->data, key, map->keyType->size);
+    map->allocator->free(key);
+  } else {
+    goto error2;
+  }
 
-  memcpy(node->data + map->keyType->size, value, map->valueType->size);
-  map->allocator->free(value);
+  if (valueInsertMethod == TLO_COPY) {
+    if (tloTypeConstructCopy(map->valueType, node->data + map->keyType->size,
+                             value) != TLO_SUCCESS) {
+      goto error3;
+    }
+  } else if (valueInsertMethod == TLO_MOVE) {
+    memcpy(node->data + map->keyType->size, value, map->valueType->size);
+    map->allocator->free(value);
+  } else {
+    goto error3;
+  }
 
   node->next = NULL;
   return node;
 
+error3:
+  tloTypeDestruct(map->keyType, node->data);
+error2:
+  map->allocator->free(node->data);
 error1:
   map->allocator->free(node);
 error0:
@@ -396,34 +383,6 @@ static TloError schtableSetInsert(TloSet *set, const void *key) {
   return TLO_SUCCESS;
 }
 
-static TloError schtableMapInsert(TloMap *map, const void *key,
-                                  const void *value) {
-  assert(schtableMapIsValid(map));
-  assert(key);
-  assert(value);
-
-  FindResult result;
-  TloSCHTableMap *htmap = (TloSCHTableMap *)map;
-
-  find(&htmap->table, map->keyType, key, &result);
-  if (result.node) {
-    return TLO_DUPLICATE;
-  }
-
-  TloSCHTNode *newNode = makeMapNodeWithCopiedData(map, key, value);
-  if (!newNode) {
-    return TLO_ERROR;
-  }
-
-  if (insertNode(&htmap->table, map->keyType, map->allocator, &result.hash,
-                 newNode) != TLO_SUCCESS) {
-    deleteMapNode(map, newNode);
-    return TLO_ERROR;
-  }
-
-  return TLO_SUCCESS;
-}
-
 static TloError schtableSetMoveInsert(TloSet *set, void *key) {
   assert(schtableSetIsValid(set));
   assert(key);
@@ -450,7 +409,9 @@ static TloError schtableSetMoveInsert(TloSet *set, void *key) {
   return TLO_SUCCESS;
 }
 
-static TloError schtableMapMoveInsert(TloMap *map, void *key, void *value) {
+static TloError schtableMapInsert(TloMap *map, TloInsertMethod keyInsertMethod,
+                                  void *key, TloInsertMethod valueInsertMethod,
+                                  void *value) {
   assert(schtableMapIsValid(map));
   assert(key);
   assert(value);
@@ -463,7 +424,8 @@ static TloError schtableMapMoveInsert(TloMap *map, void *key, void *value) {
     return TLO_DUPLICATE;
   }
 
-  TloSCHTNode *newNode = makeMapNodeWithMovedData(map, key, value);
+  TloSCHTNode *newNode =
+      makeMapNode(map, keyInsertMethod, key, valueInsertMethod, value);
   if (!newNode) {
     return TLO_ERROR;
   }
@@ -561,7 +523,6 @@ static const TloMapVTable mapVTable = {.type = "TloSCHTableMap",
                                        .find = schtableMapFind,
                                        .findMutable = schtableMapFindMutable,
                                        .insert = schtableMapInsert,
-                                       .moveInsert = schtableMapMoveInsert,
                                        .remove = schtableMapRemove};
 
 static void schtableConstruct(TloSCHTable *table) {

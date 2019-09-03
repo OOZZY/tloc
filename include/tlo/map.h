@@ -5,6 +5,8 @@
 
 typedef struct TloMap TloMap;
 
+typedef enum TloInsertMethod { TLO_COPY, TLO_MOVE } TloInsertMethod;
+
 typedef struct TloMapVTable {
   // private
 
@@ -15,8 +17,8 @@ typedef struct TloMapVTable {
   bool (*isEmpty)(const TloMap *map);
   const void *(*find)(const TloMap *map, const void *key);
   void *(*findMutable)(TloMap *map, const void *key);
-  TloError (*insert)(TloMap *map, const void *key, const void *value);
-  TloError (*moveInsert)(TloMap *map, void *key, void *value);
+  TloError (*insert)(TloMap *map, TloInsertMethod keyInsertMethod, void *key,
+                     TloInsertMethod valueInsertMethod, void *value);
   bool (*remove)(TloMap *map, const void *key);
 } TloMapVTable;
 
@@ -55,18 +57,16 @@ const void *tlovMapFind(const TloMap *map, const void *key);
 void *tlovMapFindMutable(TloMap *map, const void *key);
 
 /*
- * - deep copies key using key type's constructCopy if it is not null
- * - deep copies value using value type's constructCopy if it is not null
- * - uses memcpy if type's constructCopy is null
+ * - if insert method is TLO_COPY:
+ *   - deep copies using key or value type's constructCopy if it is not null
+ *   - uses memcpy if type's constructCopy is null
+ * - if insert method is TLO_MOVE:
+ *   - assumes key or value points to object whose memory was allocated by
+ *     allocator's malloc
+ *   - takes ownership of the objects
  */
-TloError tlovMapInsert(TloMap *map, const void *key, const void *value);
-
-/*
- * - assumes key and value point to objects whose memory was allocated by
- *   allocator's malloc
- * - takes ownership of the objects
- */
-TloError tlovMapMoveInsert(TloMap *map, void *key, void *value);
+TloError tlovMapInsert(TloMap *map, TloInsertMethod keyInsertMethod, void *key,
+                       TloInsertMethod valueInsertMethod, void *value);
 
 /*
  * - uses key type's destruct if it is not NULL
