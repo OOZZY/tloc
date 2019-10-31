@@ -89,3 +89,54 @@ void testMapIntIntInsertManyTimes(TloMap *intsToInts, bool testCopy) {
 
   tloMapDelete(intsToInts);
 }
+
+void testMapIntIntInsertOnceRemoveOnce(TloMap *intsToInts) {
+  TLO_ASSERT(intsToInts);
+
+  int key = MAX_MAP_SIZE;
+  int value = keyToValue(key);
+
+  TloError error = tlovMapInsert(intsToInts, TLO_COPY, &key, TLO_COPY, &value);
+  TLO_ASSERT(!error);
+
+  bool removed = tlovMapRemove(intsToInts, &key);
+  TLO_ASSERT(removed);
+
+  EXPECT_MAP_PROPERTIES(intsToInts, 0, true, &tloInt, &tloInt,
+                        &countingAllocator);
+
+  const void *result = tlovMapFind(intsToInts, &key);
+  TLO_EXPECT(!result);
+
+  tloMapDelete(intsToInts);
+}
+
+void testMapIntIntInsertManyTimesRemoveUntilEmpty(TloMap *intsToInts) {
+  TLO_ASSERT(intsToInts);
+
+  for (size_t i = 0; i < MAX_MAP_SIZE; ++i) {
+    int key = (int)i;
+    int value = keyToValue(key);
+
+    TloError error =
+        tlovMapInsert(intsToInts, TLO_COPY, &key, TLO_COPY, &value);
+    TLO_ASSERT(!error);
+  }
+
+  for (size_t i = MAX_MAP_SIZE - 1; i <= MAX_MAP_SIZE - 1; --i) {
+    EXPECT_MAP_PROPERTIES(intsToInts, i + 1, false, &tloInt, &tloInt,
+                          &countingAllocator);
+
+    int key = (int)i;
+    bool removed = tlovMapRemove(intsToInts, &key);
+    TLO_ASSERT(removed);
+
+    const void *result = tlovMapFind(intsToInts, &key);
+    TLO_EXPECT(!result);
+  }
+
+  EXPECT_MAP_PROPERTIES(intsToInts, 0, true, &tloInt, &tloInt,
+                        &countingAllocator);
+
+  tloMapDelete(intsToInts);
+}

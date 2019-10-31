@@ -20,11 +20,15 @@ void testSCHTable(void) {
   testSetIntInsertOnce(makeSetInt(), false);
   testSetIntInsertManyTimes(makeSetInt(), true);
   testSetIntInsertManyTimes(makeSetInt(), false);
+  testSetIntInsertOnceRemoveOnce(makeSetInt());
+  testSetIntInsertManyTimesRemoveUntilEmpty(makeSetInt());
 
   testMapIntIntInsertOnce(makeMapIntInt(), true);
   testMapIntIntInsertOnce(makeMapIntInt(), false);
   testMapIntIntInsertManyTimes(makeMapIntInt(), true);
   testMapIntIntInsertManyTimes(makeMapIntInt(), false);
+  testMapIntIntInsertOnceRemoveOnce(makeMapIntInt());
+  testMapIntIntInsertManyTimesRemoveUntilEmpty(makeMapIntInt());
 
   printf("sizeof(TloSCHTableSet): %zu\n", sizeof(TloSCHTableSet));
   printf("sizeof(TloSCHTableMap): %zu\n", sizeof(TloSCHTableMap));

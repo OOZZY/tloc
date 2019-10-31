@@ -19,8 +19,7 @@ enum { MAX_MAP_SIZE = 42 };
 
 void testMapIntIntInsertOnce(TloMap *intsToInts, bool testCopy);
 void testMapIntIntInsertManyTimes(TloMap *intsToInts, bool testCopy);
-void testMapIntIntInsertOnceRemoveOnce(TloMap *intsToInts, bool testCopy);
-void testMapIntIntInsertManyTimesRemoveUntilEmpty(TloMap *intsToInts,
-                                                  bool testCopy);
+void testMapIntIntInsertOnceRemoveOnce(TloMap *intsToInts);
+void testMapIntIntInsertManyTimesRemoveUntilEmpty(TloMap *intsToInts);
 
 #endif  // TEST_MAP_TEST_UTILS_H

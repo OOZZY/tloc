@@ -17,7 +17,7 @@ enum { MAX_SET_SIZE = 42 };
 
 void testSetIntInsertOnce(TloSet *ints, bool testCopy);
 void testSetIntInsertManyTimes(TloSet *ints, bool testCopy);
-void testSetIntInsertOnceRemoveOnce(TloSet *ints, bool testCopy);
-void testSetIntInsertManyTimesRemoveUntilEmpty(TloSet *ints, bool testCopy);
+void testSetIntInsertOnceRemoveOnce(TloSet *ints);
+void testSetIntInsertManyTimesRemoveUntilEmpty(TloSet *ints);
 
 #endif  // TEST_SET_TEST_UTILS_H

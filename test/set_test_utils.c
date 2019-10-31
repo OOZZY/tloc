@@ -69,3 +69,46 @@ void testSetIntInsertManyTimes(TloSet *ints, bool testCopy) {
 
   tloSetDelete(ints);
 }
+
+void testSetIntInsertOnceRemoveOnce(TloSet *ints) {
+  TLO_ASSERT(ints);
+
+  int key = MAX_SET_SIZE;
+  TloError error = tlovSetInsert(ints, &key);
+  TLO_ASSERT(!error);
+
+  bool removed = tlovSetRemove(ints, &key);
+  TLO_ASSERT(removed);
+
+  EXPECT_SET_PROPERTIES(ints, 0, true, &tloInt, &countingAllocator);
+
+  const void *result = tlovSetFind(ints, &key);
+  TLO_EXPECT(!result);
+
+  tloSetDelete(ints);
+}
+
+void testSetIntInsertManyTimesRemoveUntilEmpty(TloSet *ints) {
+  TLO_ASSERT(ints);
+
+  for (size_t i = 0; i < MAX_SET_SIZE; ++i) {
+    int key = (int)i;
+    TloError error = tlovSetInsert(ints, &key);
+    TLO_ASSERT(!error);
+  }
+
+  for (size_t i = MAX_SET_SIZE - 1; i <= MAX_SET_SIZE - 1; --i) {
+    EXPECT_SET_PROPERTIES(ints, i + 1, false, &tloInt, &countingAllocator);
+
+    int key = (int)i;
+    bool removed = tlovSetRemove(ints, &key);
+    TLO_ASSERT(removed);
+
+    const void *result = tlovSetFind(ints, &key);
+    TLO_EXPECT(!result);
+  }
+
+  EXPECT_SET_PROPERTIES(ints, 0, true, &tloInt, &countingAllocator);
+
+  tloSetDelete(ints);
+}
